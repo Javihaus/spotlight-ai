@@ -1,1 +1,0 @@
-# SpotlightAI - AI Tools Aggregator
