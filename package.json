@@ -1,1 +1,16 @@
-
+{
+  "name": "spotlight-ai",
+  "version": "1.0.0",
+  "description": "SpotlightAI - Next-Generation Autonomous Intelligence",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve .",
+    "build": "echo 'No build step required for static site'"
+  },
+  "keywords": ["ai", "spotlight", "autonomous", "intelligence"],
+  "author": "Javier Marin",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
