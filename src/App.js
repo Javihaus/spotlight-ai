@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import MathFramework from './components/MathFramework';
 
 function App() {
   return (
@@ -9,14 +10,16 @@ function App() {
           <div className="logo-icon"></div>
           <h1>SpotlightAI</h1>
         </div>
-        <p>Next-Generation Autonomous Intelligence</p>
+        <p>Mathematical Foundation of Autonomous Intelligence</p>
       </header>
       
       <main>
         <section className="hero-section">
-          <h2>The Future of AI is Autonomous</h2>
-          <p>Experience intelligent agents that coordinate, learn, and adapt without human intervention.</p>
+          <h2>How Agents Actually Coordinate</h2>
+          <p>The mathematical framework behind emergent intelligence.</p>
         </section>
+        
+        <MathFramework />
       </main>
     </div>
   );
