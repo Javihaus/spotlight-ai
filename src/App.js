@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import SpotlightDemo from './components/SpotlightDemo';
 
 function App() {
   return (
@@ -14,8 +13,6 @@ function App() {
       </header>
       
       <main>
-        <SpotlightDemo />
-        
         <section className="hero-section">
           <h2>The Future of AI is Autonomous</h2>
           <p>Experience intelligent agents that coordinate, learn, and adapt without human intervention.</p>
