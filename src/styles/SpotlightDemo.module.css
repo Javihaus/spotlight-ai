@@ -1,0 +1,54 @@
+.demoContainer {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  margin: 4rem 0;
+}
+
+.glassCard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.glassCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+.chatbotDemo, .autonomousDemo {
+  flex: 1;
+  max-width: 400px;
+}
+
+.aiNetwork {
+  position: relative;
+  height: 200px;
+  background: linear-gradient(45deg, #00d4ff, #ff006e);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.aiNode {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.aiNode.active {
+  box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  transform: scale(1.5);
+}
+
+@media (max-width: 768px) {
+  .demoContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+}
