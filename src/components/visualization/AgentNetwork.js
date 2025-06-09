@@ -10,11 +10,9 @@ const AgentNetwork = ({
   task = ""
 }) => {
   const svgRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: 600, height: 400 });
-  const [simulation, setSimulation] = useState(null);
-  const [currentCommunication, setCurrentCommunication] = useState(null);
+  const [dimensions] = useState({ width: 600, height: 400 });
 
-  // Prepare agent data for D3 with fixed positions
+  // Prepare agent data with static positions (no D3 simulation)
   const agentNodes = useMemo(() => {
     const width = dimensions.width;
     const height = dimensions.height;
@@ -34,9 +32,7 @@ const AgentNetwork = ({
         configured: !!agent.task.trim(),
         status: isRunning ? 'active' : 'idle',
         x,
-        y,
-        fx: x, // Fix x position
-        fy: y  // Fix y position
+        y
       };
     });
   }, [agents, dimensions, isRunning]);
@@ -47,8 +43,8 @@ const AgentNetwork = ({
     for (let i = 0; i < agentNodes.length; i++) {
       for (let j = i + 1; j < agentNodes.length; j++) {
         links.push({
-          source: agentNodes[i].id,
-          target: agentNodes[j].id,
+          source: agentNodes[i],
+          target: agentNodes[j],
           strength: 0.1,
           active: false
         });
@@ -57,22 +53,10 @@ const AgentNetwork = ({
     return links;
   }, [agentNodes]);
 
-  // Initialize D3 simulation
+  // Initialize static SVG visualization (NO D3 SIMULATION)
   useEffect(() => {
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
-
-    // Dimensions are now handled in agentNodes useMemo
-
-    // Create a minimal simulation that stops immediately 
-    const sim = d3.forceSimulation(agentNodes)
-      .force("link", d3.forceLink(agentLinks).id(d => d.id).strength(0))
-      .alpha(0) // Set alpha to 0 to stop immediately
-      .alphaTarget(0)
-      .alphaDecay(1) // Fast decay to stop quickly
-      .stop(); // Explicitly stop the simulation
-
-    setSimulation(sim);
 
     // Create groups
     const container = svg.append("g").attr("class", "network-container");
@@ -90,55 +74,38 @@ const AgentNetwork = ({
     
     gradient.append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", "#ff006e");
-
-    // Create communication gradient
-    const commGradient = defs.append("linearGradient")
-      .attr("id", "communicationGradient")
-      .attr("gradientUnits", "objectBoundingBox");
-    
-    commGradient.append("stop")
-      .attr("offset", "0%")
-      .attr("stop-color", "#00d4ff")
-      .attr("stop-opacity", 0.8);
-    
-    commGradient.append("stop")
-      .attr("offset", "50%")
-      .attr("stop-color", "#ffffff")
-      .attr("stop-opacity", 1);
-    
-    commGradient.append("stop")
-      .attr("offset", "100%")
       .attr("stop-color", "#ff006e")
       .attr("stop-opacity", 0.8);
 
-    // Create links
-    const links = container.selectAll(".link")
+    // Create static links between agents
+    container.selectAll(".link")
       .data(agentLinks)
       .enter().append("line")
       .attr("class", "link")
       .attr("stroke", "rgba(255, 255, 255, 0.1)")
-      .attr("stroke-width", 2);
+      .attr("stroke-width", 2)
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
 
     // Create communication particles container
     container.append("g").attr("class", "particles");
 
-    // Create agent nodes
+    // Create static agent nodes (NO SIMULATION - STATIC POSITIONING)
     const nodes = container.selectAll(".agent-node")
       .data(agentNodes)
       .enter().append("g")
       .attr("class", "agent-node")
+      .attr("transform", d => `translate(${d.x},${d.y})`)
+      .style("cursor", "pointer")
       .on("click", (event, d) => {
         event.stopPropagation();
         if (onAgentClick && !isRunning) {
           console.log('Agent clicked:', d.id); // Debug log
           onAgentClick(d.id);
         }
-      })
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
+      });
 
     // Agent circles
     nodes.append("circle")
@@ -148,7 +115,7 @@ const AgentNetwork = ({
       .attr("stroke-width", 3)
       .attr("class", "agent-circle");
 
-    // Agent status indicator
+    // Agent status indicator (yellow dot for configuration)
     nodes.append("circle")
       .attr("r", 8)
       .attr("cx", 25)
@@ -169,51 +136,11 @@ const AgentNetwork = ({
     nodes.append("title")
       .text(d => d.task || "Click to configure");
 
-    // Set initial positions without tick updates (static positioning)
-    links
-      .attr("x1", d => agentNodes.find(n => n.id === d.source.id || n.id === d.source)?.x || 0)
-      .attr("y1", d => agentNodes.find(n => n.id === d.source.id || n.id === d.source)?.y || 0)
-      .attr("x2", d => agentNodes.find(n => n.id === d.target.id || n.id === d.target)?.x || 0)
-      .attr("y2", d => agentNodes.find(n => n.id === d.target.id || n.id === d.target)?.y || 0);
+  }, [agentNodes, agentLinks, onAgentClick, isRunning]);
 
-    nodes
-      .attr("transform", d => `translate(${d.x},${d.y})`);
-
-    function dragstarted(event, d) {
-      // Disable dragging for stable positioning
-      event.subject.fx = event.subject.x;
-      event.subject.fy = event.subject.y;
-    }
-
-    function dragged(event, d) {
-      // Allow minimal dragging but keep position fixed
-      event.subject.fx = event.x;
-      event.subject.fy = event.y;
-      // Update visual position immediately
-      d3.select(event.sourceEvent.target.parentNode)
-        .attr("transform", `translate(${event.x},${event.y})`);
-    }
-
-    function dragended(event, d) {
-      // Return to fixed position after drag
-      const originalNode = agentNodes.find(n => n.id === event.subject.id);
-      event.subject.fx = originalNode.x;
-      event.subject.fy = originalNode.y;
-      // Snap back to original position
-      d3.select(event.sourceEvent.target.parentNode)
-        .transition()
-        .duration(200)
-        .attr("transform", `translate(${originalNode.x},${originalNode.y})`);
-    }
-
-    return () => {
-      sim.stop();
-    };
-  }, [agentNodes, agentLinks, dimensions, onAgentClick, isRunning]);
-
-  // Animate communications
+  // Animate communications (simplified for static visualization)
   useEffect(() => {
-    if (!simulation || !isRunning) return;
+    if (!isRunning) return;
 
     const svg = d3.select(svgRef.current);
     const container = svg.select(".network-container");
@@ -223,26 +150,39 @@ const AgentNetwork = ({
     links
       .transition()
       .duration(500)
-      .attr("stroke", "url(#communicationGradient)")
-      .attr("stroke-width", 4)
-      .attr("opacity", 0.8);
+      .attr("stroke", "rgba(0, 212, 255, 0.6)")
+      .attr("stroke-width", 3)
+      .transition()
+      .duration(500)
+      .attr("stroke", "rgba(255, 255, 255, 0.1)")
+      .attr("stroke-width", 2);
 
-    // Create communication particles
-    const createParticle = (link) => {
+    // Animate agents pulsing
+    const nodes = container.selectAll(".agent-circle");
+    nodes
+      .transition()
+      .duration(1000)
+      .attr("r", 45)
+      .transition()
+      .duration(1000)
+      .attr("r", 40);
+
+    // Create communication particles with static coordinates
+    const createParticle = (sourceNode, targetNode) => {
       const particle = container.select(".particles")
         .append("circle")
         .attr("r", 4)
         .attr("fill", "#00d4ff")
-        .attr("cx", link.source.x)
-        .attr("cy", link.source.y)
+        .attr("cx", sourceNode.x)
+        .attr("cy", sourceNode.y)
         .attr("opacity", 0);
 
       particle
         .transition()
         .duration(2000)
         .ease(d3.easeLinear)
-        .attr("cx", link.target.x)
-        .attr("cy", link.target.y)
+        .attr("cx", targetNode.x)
+        .attr("cy", targetNode.y)
         .attr("opacity", 1)
         .transition()
         .duration(500)
@@ -253,48 +193,21 @@ const AgentNetwork = ({
     // Animate particles on all links
     agentLinks.forEach((link, index) => {
       setTimeout(() => {
-        if (simulation) createParticle(link);
+        createParticle(link.source, link.target);
       }, index * 500);
     });
 
-    // Pulse agent nodes
-    const nodes = container.selectAll(".agent-circle");
-    nodes
-      .transition()
-      .duration(1000)
-      .attr("r", 45)
-      .transition()
-      .duration(1000)
-      .attr("r", 40);
-
-  }, [isRunning, simulation, agentLinks]);
+  }, [isRunning, agentLinks]);
 
   // Handle communication logs
   useEffect(() => {
-    if (communicationLogs.length > 0) {
-      const latest = communicationLogs[communicationLogs.length - 1];
-      setCurrentCommunication(latest);
-      setTimeout(() => setCurrentCommunication(null), 3000);
-    }
+    if (communicationLogs.length === 0) return;
+    
+    const latestLog = communicationLogs[communicationLogs.length - 1];
+    console.log('Latest communication:', latestLog);
+    
+    // You could add visual feedback here based on communication logs
   }, [communicationLogs]);
-
-  // Handle resize
-  useEffect(() => {
-    const handleResize = () => {
-      const container = svgRef.current?.parentElement;
-      if (container) {
-        setDimensions({
-          width: container.offsetWidth,
-          height: Math.max(400, container.offsetHeight)
-        });
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   return (
     <div className="agent-network-container">
@@ -310,30 +223,16 @@ const AgentNetwork = ({
       <div className="network-visualization">
         <svg
           ref={svgRef}
+          className="agent-network-svg"
           width={dimensions.width}
           height={dimensions.height}
-          className="agent-network-svg"
-        >
-        </svg>
-        
-        {currentCommunication && (
-          <div className="communication-overlay">
-            <div className="communication-bubble">
-              <div className="comm-from">
-                {currentCommunication.from} → {currentCommunication.to}
-              </div>
-              <div className="comm-message">
-                {currentCommunication.message}
-              </div>
-            </div>
-          </div>
-        )}
+          viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        />
       </div>
-
+      
       {isRunning && (
-        <div className="network-status">
-          <div className="status-indicator pulsing"></div>
-          <span>Agents are communicating...</span>
+        <div className="communication-status">
+          <span className="status-indicator">🔄 Agents communicating...</span>
         </div>
       )}
     </div>
