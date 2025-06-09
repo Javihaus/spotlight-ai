@@ -1,26 +1,25 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+import Homepage from './components/pages/Homepage';
+import ThreeActs from './components/pages/ThreeActs';
+import Newsletter from './components/pages/Newsletter';
+import Resources from './components/pages/Resources';
 import './App.css';
-import MathFramework from './components/MathFramework';
 
 function App() {
   return (
     <div className="App">
-      <header className="app-header">
-        <div className="logo">
-          <div className="logo-icon"></div>
-          <h1>SpotlightAI</h1>
-        </div>
-        <p>Mathematical Foundation of Autonomous Intelligence</p>
-      </header>
-      
-      <main>
-        <section className="hero-section">
-          <h2>How Agents Actually Coordinate</h2>
-          <p>The mathematical framework behind emergent intelligence.</p>
-        </section>
-        
-        <MathFramework />
-      </main>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Homepage />} />
+            <Route path="three-acts" element={<ThreeActs />} />
+            <Route path="newsletter" element={<Newsletter />} />
+            <Route path="resources" element={<Resources />} />
+          </Route>
+        </Routes>
+      </Router>
     </div>
   );
 }

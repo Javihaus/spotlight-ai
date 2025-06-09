@@ -1,3 +1,12 @@
+/* CSS Variables for consistent theming */
+:root {
+  --primary-cyan: #00d4ff;
+  --primary-magenta: #ff006e;
+  --dark-space: #0a0a0a;
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+}
+
 .App {
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
   background-attachment: fixed;
