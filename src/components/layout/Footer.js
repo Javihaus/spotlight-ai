@@ -10,8 +10,11 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="footer-section">
             <div className="footer-logo">
-              <div className="logo-icon"></div>
-              <span>SpotlightAI</span>
+              <img 
+                src="/SpotlightAI-logo-03.png" 
+                alt="SpotlightAI" 
+                className="footer-logo-image"
+              />
             </div>
             <p className="footer-description">
               Understanding the mathematical foundation of autonomous intelligence 

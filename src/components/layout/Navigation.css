@@ -21,38 +21,21 @@
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   text-decoration: none;
-  color: var(--primary-cyan);
-  font-weight: 700;
-  font-size: 1.5rem;
   transition: all 0.3s ease;
 }
 
 .nav-logo:hover {
-  color: var(--primary-magenta);
+  transform: translateY(-1px);
+  filter: brightness(1.1);
 }
 
-.logo-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
-  border-radius: 8px;
-  position: relative;
-  animation: logoGlow 3s ease-in-out infinite alternate;
+.logo-image {
+  height: 40px;
+  width: auto;
+  transition: all 0.3s ease;
 }
 
-.logo-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 16px;
-  height: 16px;
-  background: var(--dark-space);
-  border-radius: 4px;
-}
 
 /* Desktop Navigation */
 .nav-menu {
@@ -182,27 +165,8 @@
     display: flex;
   }
 
-  .nav-logo {
-    font-size: 1.25rem;
-  }
-
-  .logo-icon {
-    width: 28px;
-    height: 28px;
-  }
-
-  .logo-icon::after {
-    width: 14px;
-    height: 14px;
+  .logo-image {
+    height: 32px;
   }
 }
 
-/* Animations */
-@keyframes logoGlow {
-  0% {
-    box-shadow: 0 0 5px rgba(0, 212, 255, 0.3);
-  }
-  100% {
-    box-shadow: 0 0 20px rgba(255, 0, 110, 0.5), 0 0 30px rgba(0, 212, 255, 0.3);
-  }
-}

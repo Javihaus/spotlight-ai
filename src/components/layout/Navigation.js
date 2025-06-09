@@ -21,8 +21,11 @@ const Navigation = () => {
       <div className="nav-container">
         {/* Logo */}
         <Link to="/" className="nav-logo">
-          <div className="logo-icon"></div>
-          <span>SpotlightAI</span>
+          <img 
+            src="/SpotlightAI-logo-03.png" 
+            alt="SpotlightAI" 
+            className="logo-image"
+          />
         </Link>
 
         {/* Desktop Navigation */}

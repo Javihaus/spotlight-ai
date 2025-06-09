@@ -30,31 +30,17 @@
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
   margin-bottom: 1rem;
-  color: var(--primary-cyan);
-  font-weight: 700;
-  font-size: 1.25rem;
 }
 
-.footer-logo .logo-icon {
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
-  border-radius: 6px;
-  position: relative;
+.footer-logo-image {
+  height: 32px;
+  width: auto;
+  transition: all 0.3s ease;
 }
 
-.footer-logo .logo-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 14px;
-  height: 14px;
-  background: var(--dark-space);
-  border-radius: 3px;
+.footer-logo-image:hover {
+  filter: brightness(1.1);
 }
 
 .footer-description {
@@ -170,6 +156,10 @@
 
   .footer-logo {
     justify-content: center;
+  }
+
+  .footer-logo-image {
+    height: 28px;
   }
 
   .footer-cta {
