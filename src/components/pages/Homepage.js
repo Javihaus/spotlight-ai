@@ -47,12 +47,11 @@ const Homepage = () => {
           <motion.div className="hero-content" variants={itemVariants}>
             <h1 className="hero-title">
               99% of AI's potential is 
-              <span className="gradient-text"> untapped</span>
+              <span className="gradient-text"> agentic</span>
             </h1>
             <p className="hero-subtitle">
-              Discover the mathematical foundation of autonomous intelligence through 
-              our three-act transformation guide. Join 5,300+ readers understanding 
-              what agentic AI really means.
+              Discover how autonomous intelligence works through 
+              our three-act transformation guide. 
             </p>
           </motion.div>
 
@@ -67,7 +66,7 @@ const Homepage = () => {
                       <div key={i} className="avatar"></div>
                     ))}
                   </div>
-                  <span className="reader-count">5,300+ readers</span>
+                  <span className="reader-count">Join our readers list</span>
                 </div>
               </div>
 
