@@ -57,7 +57,14 @@ const Footer = () => {
         <div className="footer-bottom">
           <p>&copy; 2024 SpotlightAI. All rights reserved.</p>
           <div className="footer-meta">
-            <span>Made for the Generative AI Association in Spain</span>
+            <span>Made for</span>
+            <div className="association-logo">
+              <img 
+                src="/GenAiA-Logo-Horizontal-1.png" 
+                alt="Generative AI Association Spain" 
+                className="genai-logo"
+              />
+            </div>
           </div>
         </div>
       </div>

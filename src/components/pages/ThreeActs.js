@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import MathFramework from '../MathFramework';
+// import MathFramework from '../MathFramework'; // Removed for Act 3 redesign
 import './ThreeActs.css';
 
 const ThreeActs = () => {
@@ -8,6 +8,63 @@ const ThreeActs = () => {
   const [progress, setProgress] = useState(0);
   const [userInteracted, setUserInteracted] = useState(false);
   const [agentDemo, setAgentDemo] = useState('idle');
+  const [userTask, setUserTask] = useState('');
+  const [agentTasks, setAgentTasks] = useState({
+    agent1: { name: 'Agent A', task: '', placeholder: 'Define Agent A behavior...' },
+    agent2: { name: 'Agent B', task: '', placeholder: 'Define Agent B behavior...' },
+    agent3: { name: 'Agent C', task: '', placeholder: 'Define Agent C behavior...' }
+  });
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [showInsights, setShowInsights] = useState({});
+  const [selectedConcept, setSelectedConcept] = useState(null);
+  
+  const mathematicalConcepts = {
+    energy: {
+      title: 'Energy Dynamics',
+      description: 'How agents minimize collective energy through distributed optimization',
+      details: {
+        overview: 'Agents naturally seek energy-efficient states through mathematical optimization principles. This drives them toward coordination without central control.',
+        principles: [
+          'Collective Energy Minimization: Agents work together to reduce system-wide energy consumption',
+          'Distributed Optimization: No single agent controls the process, yet optimal solutions emerge',
+          'Energy Landscapes: Agents navigate complex solution spaces seeking global minima',
+          'Thermodynamic Analogies: Agent systems follow principles similar to physical energy systems'
+        ],
+        mathematics: 'E_total = Σ(E_individual + E_interaction), where energy minimization drives coordination',
+        realWorld: 'Like molecules forming crystals or birds flocking - individual actions create collective order'
+      }
+    },
+    coordination: {
+      title: 'Coordination Mechanisms',
+      description: 'Mathematical foundations of how distributed systems achieve synchronization',
+      details: {
+        overview: 'Agents develop sophisticated communication protocols and coordination strategies through mathematical optimization, enabling complex collective behaviors.',
+        principles: [
+          'Information Propagation: Agents share state information through optimal communication channels',
+          'Consensus Algorithms: Mathematical protocols ensure agents reach agreement without central authority',
+          'Synchronization Patterns: Agents naturally align their behaviors through coupling mechanisms',
+          'Network Topology: Communication structure emerges to optimize information flow'
+        ],
+        mathematics: 'C(i→j) = f(S_i, S_j, channel_ij) - Communication function between agents',
+        realWorld: 'Similar to how neurons coordinate in the brain or how internet protocols enable global connectivity'
+      }
+    },
+    emergence: {
+      title: 'Emergent Intelligence',
+      description: 'How collective behaviors transcend individual agent capabilities',
+      details: {
+        overview: 'The most fascinating aspect: when simple agents interact according to mathematical rules, intelligence emerges at the system level that no individual agent possesses.',
+        principles: [
+          'Collective Intelligence: System-level intelligence emerges from agent interactions',
+          'Non-linear Dynamics: Small changes in agent behavior can cause dramatic system shifts',
+          'Self-Organization: Complex structures form without external control or planning',
+          'Phase Transitions: Systems can suddenly shift between different operational modes'
+        ],
+        mathematics: 'E(t+1) = T(S_1(t), S_2(t), ..., S_n(t)) - Transformation function creating emergence',
+        realWorld: 'Like consciousness emerging from neurons, or market intelligence from individual traders'
+      }
+    }
+  };
 
   const acts = {
     1: {
@@ -43,8 +100,35 @@ const ThreeActs = () => {
   };
 
   const triggerAgentDemo = () => {
+    if (!userTask.trim()) {
+      alert('Please define a task for the agents first!');
+      return;
+    }
+    
+    const undefindedAgents = Object.values(agentTasks).filter(agent => !agent.task.trim());
+    if (undefindedAgents.length > 0) {
+      alert('Please define tasks for all agents first!');
+      return;
+    }
+    
     setAgentDemo('running');
-    setTimeout(() => setAgentDemo('complete'), 3000);
+    setTimeout(() => {
+      setAgentDemo('complete');
+      setShowInsights({ coordination: true, emergence: true });
+    }, 4000);
+  };
+  
+  const handleAgentTaskUpdate = (agentId, task) => {
+    setAgentTasks(prev => ({
+      ...prev,
+      [agentId]: { ...prev[agentId], task }
+    }));
+    setSelectedAgent(null);
+  };
+  
+  const resetDemo = () => {
+    setAgentDemo('idle');
+    setShowInsights({});
   };
 
   const containerVariants = {
@@ -77,7 +161,7 @@ const ThreeActs = () => {
           variants={containerVariants}
         >
           <motion.h1 variants={itemVariants}>
-            SpotlightAI Three-Act Transformation Guide
+            SpotlightAI Agents in 3 Acts Transformation Guide
           </motion.h1>
           <motion.p variants={itemVariants}>
             Experience the complete journey from misconception to mastery
@@ -179,10 +263,148 @@ const ThreeActs = () => {
             {currentAct === 2 && (
               <div className="act-2-content">
                 <div className="interactive-demo">
-                  <h3>Deploy Three Agents: One Simple Task</h3>
-                  <p>Task: Optimize resource distribution across a network</p>
+                  <h3>Design Your Agent System</h3>
+                  <div className="demo-explanation">
+                    <p>
+                      You're about to witness true emergence. Define a task and configure three agents 
+                      to work together. Watch as they develop coordination strategies that nobody programmed.
+                    </p>
+                  </div>
                   
-                  <div className="agent-playground">
+                  {/* Task Definition */}
+                  <div className="task-definition">
+                    <h4>1. Define the Main Task</h4>
+                    <div className="task-input-container">
+                      <input
+                        type="text"
+                        value={userTask}
+                        onChange={(e) => setUserTask(e.target.value)}
+                        placeholder="Describe the task for your agents (e.g., 'Optimize supply chain logistics', 'Coordinate emergency response', 'Manage traffic flow')..."
+                        className="task-input"
+                        disabled={agentDemo === 'running'}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Agent Configuration */}
+                  <div className="agent-configuration">
+                    <h4>2. Configure Individual Agents</h4>
+                    <p>Click on each agent to define their specific role and capabilities:</p>
+                    
+                    <div className={`agent-playground triangle-layout ${agentDemo}`}>
+                      {/* Triangle Formation */}
+                      <div 
+                        className={`agent agent-1 ${selectedAgent === 'agent1' ? 'selected' : ''} ${
+                          agentTasks.agent1.task ? 'configured' : ''
+                        }`}
+                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent1' ? null : 'agent1')}
+                      >
+                        <div className="agent-core"></div>
+                        <div className="agent-label">
+                          <strong>{agentTasks.agent1.name}</strong>
+                          <span>{agentTasks.agent1.task || 'Click to configure'}</span>
+                        </div>
+                      </div>
+                      
+                      <div 
+                        className={`agent agent-2 ${selectedAgent === 'agent2' ? 'selected' : ''} ${
+                          agentTasks.agent2.task ? 'configured' : ''
+                        }`}
+                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent2' ? null : 'agent2')}
+                      >
+                        <div className="agent-core"></div>
+                        <div className="agent-label">
+                          <strong>{agentTasks.agent2.name}</strong>
+                          <span>{agentTasks.agent2.task || 'Click to configure'}</span>
+                        </div>
+                      </div>
+                      
+                      <div 
+                        className={`agent agent-3 ${selectedAgent === 'agent3' ? 'selected' : ''} ${
+                          agentTasks.agent3.task ? 'configured' : ''
+                        }`}
+                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent3' ? null : 'agent3')}
+                      >
+                        <div className="agent-core"></div>
+                        <div className="agent-label">
+                          <strong>{agentTasks.agent3.name}</strong>
+                          <span>{agentTasks.agent3.task || 'Click to configure'}</span>
+                        </div>
+                      </div>
+                      
+                      {/* Arrow Connections */}
+                      {(agentDemo === 'running' || agentDemo === 'complete') && (
+                        <>
+                          <div className="arrow-connection arrow-1-2">
+                            <svg viewBox="0 0 100 20" className="arrow-svg">
+                              <defs>
+                                <marker id="arrowhead1" markerWidth="10" markerHeight="7" 
+                                 refX="9" refY="3.5" orient="auto">
+                                  <polygon points="0 0, 10 3.5, 0 7" fill="url(#connectionGradient)" />
+                                </marker>
+                                <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                  <stop offset="0%" stopColor="var(--primary-cyan)" />
+                                  <stop offset="100%" stopColor="var(--primary-magenta)" />
+                                </linearGradient>
+                              </defs>
+                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
+                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
+                            </svg>
+                          </div>
+                          <div className="arrow-connection arrow-2-3">
+                            <svg viewBox="0 0 100 20" className="arrow-svg">
+                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
+                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
+                            </svg>
+                          </div>
+                          <div className="arrow-connection arrow-3-1">
+                            <svg viewBox="0 0 100 20" className="arrow-svg">
+                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
+                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
+                            </svg>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Agent Task Input Modal */}
+                  {selectedAgent && (
+                    <div className="agent-modal-overlay" onClick={() => setSelectedAgent(null)}>
+                      <div className="agent-modal" onClick={(e) => e.stopPropagation()}>
+                        <h4>Configure {agentTasks[selectedAgent].name}</h4>
+                        <p>Define this agent's specific role and capabilities:</p>
+                        <textarea
+                          value={agentTasks[selectedAgent].task}
+                          onChange={(e) => setAgentTasks(prev => ({
+                            ...prev,
+                            [selectedAgent]: { ...prev[selectedAgent], task: e.target.value }
+                          }))}
+                          placeholder={agentTasks[selectedAgent].placeholder}
+                          className="agent-task-input"
+                          rows="4"
+                        />
+                        <div className="modal-actions">
+                          <button 
+                            className="btn btn-secondary"
+                            onClick={() => setSelectedAgent(null)}
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            className="btn btn-primary"
+                            onClick={() => handleAgentTaskUpdate(selectedAgent, agentTasks[selectedAgent].task)}
+                          >
+                            Save Configuration
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Deploy Controls */}
+                  <div className="deploy-section">
+                    <h4>3. Deploy & Observe</h4>
                     <div className="agent-controls">
                       <button 
                         className="deploy-btn"
@@ -192,49 +414,52 @@ const ThreeActs = () => {
                         }}
                         disabled={agentDemo === 'running'}
                       >
-                        {agentDemo === 'idle' ? 'Deploy Agents' : 
-                         agentDemo === 'running' ? 'Agents Working...' : 
-                         'Deploy New Scenario'}
+                        {agentDemo === 'idle' ? 'Deploy Agent System' : 
+                         agentDemo === 'running' ? 'Agents Coordinating...' : 
+                         'Deploy New System'}
                       </button>
-                    </div>
-
-                    <div className={`agent-visualization ${agentDemo}`}>
-                      <div className="agent agent-1">
-                        <div className="agent-core"></div>
-                        <span>Agent A: Resource Scanner</span>
-                      </div>
-                      <div className="agent agent-2">
-                        <div className="agent-core"></div>
-                        <span>Agent B: Distribution Optimizer</span>
-                      </div>
-                      <div className="agent agent-3">
-                        <div className="agent-core"></div>
-                        <span>Agent C: Efficiency Monitor</span>
-                      </div>
-                      
-                      {agentDemo === 'running' && (
-                        <>
-                          <div className="connection-line line-1-2"></div>
-                          <div className="connection-line line-2-3"></div>
-                          <div className="connection-line line-1-3"></div>
-                        </>
+                      {agentDemo === 'complete' && (
+                        <button 
+                          className="reset-btn"
+                          onClick={resetDemo}
+                        >
+                          Reset & Try Again
+                        </button>
                       )}
                     </div>
+                  </div>
 
-                    {agentDemo === 'complete' && (
-                      <div className="emergence-revelation">
-                        <h4>🤯 The Emergence</h4>
+                  {/* Emergence Results */}
+                  {agentDemo === 'complete' && (
+                    <div className="emergence-revelation">
+                      <h4>🤯 Emergent Coordination Detected!</h4>
+                      <div className="emergence-analysis">
                         <p>
-                          The agents developed a <strong>triangular communication protocol</strong> 
-                          that no human programmed. Agent A began sharing partial data, 
-                          Agent B created dynamic routing algorithms, and Agent C developed 
-                          predictive efficiency metrics. Together, they evolved a 
-                          <strong>distributed optimization strategy</strong> that exceeded 
-                          any individual agent's capabilities.
+                          <strong>Task:</strong> {userTask}
                         </p>
                         
+                        <div className="agent-behaviors">
+                          <h5>Observed Agent Behaviors:</h5>
+                          {Object.entries(agentTasks).map(([id, agent]) => (
+                            <div key={id} className="agent-behavior">
+                              <strong>{agent.name}:</strong> Developed autonomous protocols for "{agent.task}" 
+                              and began coordinating with other agents without explicit programming.
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div className="emergence-insights">
+                          <h5>🔬 What Just Happened:</h5>
+                          <ul>
+                            <li><strong>Self-Organization:</strong> Agents formed a triangular communication network spontaneously</li>
+                            <li><strong>Distributed Intelligence:</strong> No single agent controlled the system, yet coordinated behavior emerged</li>
+                            <li><strong>Adaptive Protocols:</strong> Communication patterns evolved based on task requirements</li>
+                            <li><strong>Emergent Efficiency:</strong> Collective performance exceeded individual agent capabilities</li>
+                          </ul>
+                        </div>
+                        
                         <div className="next-act-prompt">
-                          <p>This wasn't programmed. It <em>emerged</em>.</p>
+                          <p>This coordination wasn't programmed—it <em>emerged</em> from mathematical principles.</p>
                           <button 
                             className="advance-btn"
                             onClick={() => handleActChange(3)}
@@ -243,8 +468,8 @@ const ThreeActs = () => {
                           </button>
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -254,35 +479,76 @@ const ThreeActs = () => {
               <div className="act-3-content">
                 <div className="mathematical-insights">
                   <h3>The Mathematical Foundation</h3>
-                  <p>Now you've seen emergence in action. Here's the mathematics that explains it:</p>
+                  <p>Now you've seen emergence in action. Here are the three fundamental principles that explain it:</p>
                   
-                  <MathFramework />
-                  
-                  <div className="insights-grid">
-                    <div className="insight-card">
-                      <h4>Energy Dynamics</h4>
-                      <p>
-                        The agents minimize collective energy through distributed optimization, 
-                        naturally finding efficient coordination patterns.
-                      </p>
-                    </div>
-                    
-                    <div className="insight-card">
-                      <h4>Coordination Mechanisms</h4>
-                      <p>
-                        Communication functions enable agents to share state information 
-                        and develop synchronized behaviors without central control.
-                      </p>
-                    </div>
-                    
-                    <div className="insight-card">
-                      <h4>Emergent Intelligence</h4>
-                      <p>
-                        The transformation function T creates collective behaviors 
-                        that transcend individual agent capabilities.
-                      </p>
-                    </div>
+                  <div className="concept-cards-grid">
+                    {Object.entries(mathematicalConcepts).map(([key, concept]) => (
+                      <motion.div 
+                        key={key}
+                        className="concept-card"
+                        whileHover={{ y: -4 }}
+                        onClick={() => setSelectedConcept(key)}
+                      >
+                        <div className="concept-icon">
+                          {key === 'energy' && '⚡'}
+                          {key === 'coordination' && '🔄'}
+                          {key === 'emergence' && '🎆'}
+                        </div>
+                        <h4>{concept.title}</h4>
+                        <p>{concept.description}</p>
+                        <button className="explore-btn">Explore Deeper →</button>
+                      </motion.div>
+                    ))}
                   </div>
+
+                  {/* Concept Detail Modal */}
+                  {selectedConcept && (
+                    <div className="concept-modal-overlay" onClick={() => setSelectedConcept(null)}>
+                      <div className="concept-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                          <h3>{mathematicalConcepts[selectedConcept].title}</h3>
+                          <button 
+                            className="close-btn"
+                            onClick={() => setSelectedConcept(null)}
+                          >
+                            ×
+                          </button>
+                        </div>
+                        
+                        <div className="modal-content">
+                          <div className="concept-overview">
+                            <h4>Overview</h4>
+                            <p>{mathematicalConcepts[selectedConcept].details.overview}</p>
+                          </div>
+                          
+                          <div className="concept-principles">
+                            <h4>Key Principles</h4>
+                            <ul>
+                              {mathematicalConcepts[selectedConcept].details.principles.map((principle, index) => (
+                                <li key={index}>{principle}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div className="concept-mathematics">
+                            <h4>Mathematical Representation</h4>
+                            <div className="math-formula">
+                              {mathematicalConcepts[selectedConcept].details.mathematics}
+                            </div>
+                          </div>
+                          
+                          <div className="concept-real-world">
+                            <h4>Real-World Analogy</h4>
+                            <p>{mathematicalConcepts[selectedConcept].details.realWorld}</p>
+                          </div>
+                          
+                          <div className="modal-note">
+                            <p><em>This section will be enhanced with more detailed mathematical derivations and interactive visualizations.</em></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
                   <div className="transformation-complete">
                     <h3>🎯 Transformation Complete</h3>

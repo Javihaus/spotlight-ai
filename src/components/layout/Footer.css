@@ -115,7 +115,24 @@
 
 .footer-meta {
   display: flex;
+  align-items: center;
   gap: 1rem;
+}
+
+.association-logo {
+  display: flex;
+  align-items: center;
+}
+
+.genai-logo {
+  height: 24px;
+  width: auto;
+  filter: brightness(0.8);
+  transition: filter 0.3s ease;
+}
+
+.genai-logo:hover {
+  filter: brightness(1);
 }
 
 .footer-meta span {

@@ -1,4 +1,5 @@
 /* Three Acts Page Styles */
+@import './ThreeActsEnhanced.css';
 .three-acts-page {
   min-height: 100vh;
   background: var(--dark-space);

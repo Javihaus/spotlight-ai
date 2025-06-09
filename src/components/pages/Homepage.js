@@ -112,7 +112,7 @@ const Homepage = () => {
       >
         <div className="section-container">
           <motion.div className="section-header" variants={itemVariants}>
-            <h2 className="section-title">The Three-Act Transformation</h2>
+            <h2 className="section-title">Agents in 3 Acts Transformation</h2>
             <p className="section-subtitle">
               Experience the complete journey from misconception to mastery
             </p>
@@ -167,7 +167,7 @@ const Homepage = () => {
 
           <motion.div className="cta-section" variants={itemVariants}>
             <Link to="/three-acts" className="btn btn-primary">
-              Start the Journey
+              Experience Agents in Action
             </Link>
             <p className="cta-subtitle">
               Transform your understanding in 30 minutes
