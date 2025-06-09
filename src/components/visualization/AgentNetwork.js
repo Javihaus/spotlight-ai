@@ -14,18 +14,32 @@ const AgentNetwork = ({
   const [simulation, setSimulation] = useState(null);
   const [currentCommunication, setCurrentCommunication] = useState(null);
 
-  // Prepare agent data for D3
-  const agentNodes = Object.entries(agents).map(([id, agent], index) => ({
-    id,
-    name: agent.name,
-    task: agent.task,
-    configured: !!agent.task.trim(),
-    status: isRunning ? 'active' : 'idle',
-    x: 300 + 150 * Math.cos((index * 2 * Math.PI) / 3),
-    y: 200 + 150 * Math.sin((index * 2 * Math.PI) / 3),
-    fx: null, // Allow initial positioning
-    fy: null
-  }));
+  // Prepare agent data for D3 with fixed positions
+  const agentNodes = useMemo(() => {
+    const width = dimensions.width;
+    const height = dimensions.height;
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const radius = 120;
+    
+    return Object.entries(agents).map(([id, agent], index) => {
+      const angle = (index * 2 * Math.PI) / 3 - Math.PI / 2; // Start from top
+      const x = centerX + radius * Math.cos(angle);
+      const y = centerY + radius * Math.sin(angle);
+      
+      return {
+        id,
+        name: agent.name,
+        task: agent.task,
+        configured: !!agent.task.trim(),
+        status: isRunning ? 'active' : 'idle',
+        x,
+        y,
+        fx: x, // Fix x position
+        fy: y  // Fix y position
+      };
+    });
+  }, [agents, dimensions, isRunning]);
 
   // Create links between all agents (full mesh)
   const agentLinks = useMemo(() => {
@@ -48,15 +62,15 @@ const AgentNetwork = ({
     const svg = d3.select(svgRef.current);
     svg.selectAll("*").remove();
 
-    const width = dimensions.width;
-    const height = dimensions.height;
+    // Dimensions are now handled in agentNodes useMemo
 
-    // Create simulation
+    // Create a minimal simulation that stops immediately 
     const sim = d3.forceSimulation(agentNodes)
-      .force("link", d3.forceLink(agentLinks).id(d => d.id).strength(0.1))
-      .force("charge", d3.forceManyBody().strength(-300))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius(60));
+      .force("link", d3.forceLink(agentLinks).id(d => d.id).strength(0))
+      .alpha(0) // Set alpha to 0 to stop immediately
+      .alphaTarget(0)
+      .alphaDecay(1) // Fast decay to stop quickly
+      .stop(); // Explicitly stop the simulation
 
     setSimulation(sim);
 
@@ -114,15 +128,17 @@ const AgentNetwork = ({
       .data(agentNodes)
       .enter().append("g")
       .attr("class", "agent-node")
+      .on("click", (event, d) => {
+        event.stopPropagation();
+        if (onAgentClick && !isRunning) {
+          console.log('Agent clicked:', d.id); // Debug log
+          onAgentClick(d.id);
+        }
+      })
       .call(d3.drag()
         .on("start", dragstarted)
         .on("drag", dragged)
-        .on("end", dragended))
-      .on("click", (event, d) => {
-        if (onAgentClick && !isRunning) {
-          onAgentClick(d.id);
-        }
-      });
+        .on("end", dragended));
 
     // Agent circles
     nodes.append("circle")
@@ -153,33 +169,41 @@ const AgentNetwork = ({
     nodes.append("title")
       .text(d => d.task || "Click to configure");
 
-    // Update simulation on tick
-    sim.on("tick", () => {
-      links
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
+    // Set initial positions without tick updates (static positioning)
+    links
+      .attr("x1", d => agentNodes.find(n => n.id === d.source.id || n.id === d.source)?.x || 0)
+      .attr("y1", d => agentNodes.find(n => n.id === d.source.id || n.id === d.source)?.y || 0)
+      .attr("x2", d => agentNodes.find(n => n.id === d.target.id || n.id === d.target)?.x || 0)
+      .attr("y2", d => agentNodes.find(n => n.id === d.target.id || n.id === d.target)?.y || 0);
 
-      nodes
-        .attr("transform", d => `translate(${d.x},${d.y})`);
-    });
+    nodes
+      .attr("transform", d => `translate(${d.x},${d.y})`);
 
     function dragstarted(event, d) {
-      if (!event.active) sim.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
+      // Disable dragging for stable positioning
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
     }
 
     function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
+      // Allow minimal dragging but keep position fixed
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+      // Update visual position immediately
+      d3.select(event.sourceEvent.target.parentNode)
+        .attr("transform", `translate(${event.x},${event.y})`);
     }
 
     function dragended(event, d) {
-      if (!event.active) sim.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
+      // Return to fixed position after drag
+      const originalNode = agentNodes.find(n => n.id === event.subject.id);
+      event.subject.fx = originalNode.x;
+      event.subject.fy = originalNode.y;
+      // Snap back to original position
+      d3.select(event.sourceEvent.target.parentNode)
+        .transition()
+        .duration(200)
+        .attr("transform", `translate(${originalNode.x},${originalNode.y})`);
     }
 
     return () => {
