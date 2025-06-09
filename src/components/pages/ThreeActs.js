@@ -18,7 +18,6 @@ const ThreeActs = () => {
     agent3: { name: 'Agent C', task: '', placeholder: 'Define Agent C behavior...' }
   });
   const [selectedAgent, setSelectedAgent] = useState(null);
-  const [showInsights, setShowInsights] = useState({});
   const [selectedConcept, setSelectedConcept] = useState(null);
   const [communicationLog, setCommunicationLog] = useState([]);
   const [isLLMConfigured, setIsLLMConfigured] = useState(false);
@@ -130,7 +129,6 @@ const ThreeActs = () => {
         if (result.success) {
           setCommunicationLog(result.communicationLog);
           setAgentDemo('complete');
-          setShowInsights({ coordination: true, emergence: true });
         } else {
           throw new Error(result.error);
         }
@@ -212,7 +210,6 @@ const ThreeActs = () => {
     }
     
     setAgentDemo('complete');
-    setShowInsights({ coordination: true, emergence: true });
   };
   
   const handleAgentTaskUpdate = (agentId, task) => {
@@ -225,7 +222,6 @@ const ThreeActs = () => {
   
   const resetDemo = () => {
     setAgentDemo('idle');
-    setShowInsights({});
     setCommunicationLog([]);
     setIsLLMConfigured(false);
   };
@@ -402,10 +398,10 @@ const ThreeActs = () => {
                     <div className="agent-network-container">
                       <AgentNetwork 
                         agents={agentTasks}
-                        status={agentDemo}
+                        isRunning={agentDemo === 'running' || agentDemo === 'complete'}
                         onAgentClick={(agentId) => agentDemo === 'idle' && setSelectedAgent(agentId)}
                         selectedAgent={selectedAgent}
-                        communicationLog={communicationLog}
+                        communicationLogs={communicationLog}
                       />
                     </div>
                   </div>

@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import * as d3 from 'd3';
-import { v4 as uuidv4 } from 'uuid';
 import './AgentNetwork.css';
 
 const AgentNetwork = ({ 
@@ -29,17 +28,20 @@ const AgentNetwork = ({
   }));
 
   // Create links between all agents (full mesh)
-  const agentLinks = [];
-  for (let i = 0; i < agentNodes.length; i++) {
-    for (let j = i + 1; j < agentNodes.length; j++) {
-      agentLinks.push({
-        source: agentNodes[i].id,
-        target: agentNodes[j].id,
-        strength: 0.1,
-        active: false
-      });
+  const agentLinks = useMemo(() => {
+    const links = [];
+    for (let i = 0; i < agentNodes.length; i++) {
+      for (let j = i + 1; j < agentNodes.length; j++) {
+        links.push({
+          source: agentNodes[i].id,
+          target: agentNodes[j].id,
+          strength: 0.1,
+          active: false
+        });
+      }
     }
-  }
+    return links;
+  }, [agentNodes]);
 
   // Initialize D3 simulation
   useEffect(() => {
@@ -105,7 +107,7 @@ const AgentNetwork = ({
       .attr("stroke-width", 2);
 
     // Create communication particles container
-    const particleContainer = container.append("g").attr("class", "particles");
+    container.append("g").attr("class", "particles");
 
     // Create agent nodes
     const nodes = container.selectAll(".agent-node")
@@ -183,7 +185,7 @@ const AgentNetwork = ({
     return () => {
       sim.stop();
     };
-  }, [agentNodes.length, dimensions, onAgentClick, isRunning]);
+  }, [agentNodes, agentLinks, dimensions, onAgentClick, isRunning]);
 
   // Animate communications
   useEffect(() => {

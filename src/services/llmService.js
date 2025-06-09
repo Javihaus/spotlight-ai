@@ -280,4 +280,5 @@ ${allAnalyses}`,
   }
 }
 
-export default new LLMService();
+const llmServiceInstance = new LLMService();
+export default llmServiceInstance;
