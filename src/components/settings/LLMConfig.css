@@ -1,0 +1,267 @@
+/* LLM Configuration Modal Styles */
+.llm-config-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(10px);
+}
+
+.llm-config-modal {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.config-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.config-header h2 {
+  color: var(--primary-cyan);
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.config-content {
+  padding: 2rem;
+}
+
+.config-section {
+  margin-bottom: 1.5rem;
+}
+
+.config-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.config-section label {
+  display: block;
+  color: var(--primary-cyan);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.config-input,
+.config-select {
+  width: 100%;
+  padding: 0.875rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.config-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.config-input:focus,
+.config-select:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+.config-select option {
+  background: var(--dark-space);
+  color: white;
+}
+
+.config-help {
+  display: block;
+  margin-top: 0.5rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.status-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-success {
+  background: rgba(76, 175, 80, 0.2);
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  color: #81c784;
+}
+
+.status-error {
+  background: rgba(244, 67, 54, 0.2);
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  color: #e57373;
+}
+
+.status-info {
+  background: rgba(0, 212, 255, 0.2);
+  border: 1px solid rgba(0, 212, 255, 0.5);
+  color: var(--primary-cyan);
+}
+
+.config-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.test-btn,
+.save-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.test-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.test-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary-cyan);
+}
+
+.test-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
+  color: white;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+}
+
+.config-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.config-info h3 {
+  color: var(--primary-cyan);
+  margin: 0 0 1rem 0;
+  font-size: 1rem;
+}
+
+.config-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.config-info li {
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+}
+
+.config-info li:last-child {
+  margin-bottom: 0;
+}
+
+.config-info a {
+  color: var(--primary-cyan);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.config-info a:hover {
+  color: var(--primary-magenta);
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .llm-config-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+
+  .config-header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .config-content {
+    padding: 1.5rem;
+  }
+
+  .config-row {
+    grid-template-columns: 1fr;
+  }
+
+  .config-actions {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .config-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .config-input,
+  .config-select {
+    padding: 0.75rem;
+  }
+}

@@ -1,0 +1,307 @@
+/* Enhanced Three Acts - Real-time Communication Styles */
+
+/* LLM Integration Badge */
+.llm-badge {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(0, 212, 255, 0.2));
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #81c784;
+  font-weight: 500;
+}
+
+/* Communication Timeline */
+.communication-timeline {
+  margin: 2rem 0;
+}
+
+.communication-timeline h5 {
+  color: var(--primary-cyan);
+  margin-bottom: 1.5rem;
+  font-size: 1.125rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, var(--primary-cyan), var(--primary-magenta));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2rem;
+  animation: timelineSlideIn 0.5s ease-out;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary-cyan);
+  border: 3px solid var(--dark-space);
+  z-index: 2;
+}
+
+.timeline-item.analysis .timeline-marker {
+  background: #4caf50;
+}
+
+.timeline-item.coordination .timeline-marker {
+  background: var(--primary-cyan);
+}
+
+.timeline-item.synthesis .timeline-marker {
+  background: var(--primary-magenta);
+}
+
+.timeline-item.error .timeline-marker {
+  background: #f44336;
+}
+
+.timeline-content {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.timeline-content::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 1rem;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent rgba(255, 255, 255, 0.1) transparent transparent;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.timeline-header strong {
+  color: white;
+  font-size: 0.875rem;
+}
+
+.timeline-phase {
+  font-size: 0.75rem;
+  color: var(--primary-cyan);
+  background: rgba(0, 212, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.timeline-message {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+/* Configuration Prompt */
+.config-prompt {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  color: #ffb74d;
+  text-align: center;
+  font-weight: 500;
+  animation: configPulse 2s ease-in-out infinite;
+}
+
+/* Enhanced Agent Behaviors */
+.agent-behavior {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 3px solid var(--primary-cyan);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
+}
+
+.agent-behavior:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--primary-magenta);
+}
+
+.agent-behavior strong {
+  color: var(--primary-cyan);
+  margin-right: 0.5rem;
+}
+
+/* Animations */
+@keyframes timelineSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes configPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 193, 7, 0);
+  }
+}
+
+/* Real-time Indicators */
+.realtime-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #81c784;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.realtime-indicator::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #4caf50;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Enhanced Modal Styles */
+.agent-modal {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.agent-modal h4 {
+  color: var(--primary-cyan);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.agent-task-input {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.agent-task-input:focus {
+  outline: none;
+  border-color: var(--primary-cyan);
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .timeline {
+    padding-left: 1.5rem;
+  }
+
+  .timeline::before {
+    left: 0.75rem;
+  }
+
+  .timeline-marker {
+    left: -1.5rem;
+  }
+
+  .timeline-content {
+    margin-left: 0.5rem;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .communication-timeline h5 {
+    font-size: 1rem;
+  }
+
+  .agent-modal {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .llm-badge {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .timeline-content {
+    padding: 0.75rem;
+  }
+
+  .timeline-message {
+    font-size: 0.75rem;
+  }
+
+  .config-prompt {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}

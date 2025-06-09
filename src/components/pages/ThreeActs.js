@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AgentNetwork from '../visualization/AgentNetwork';
+import llmService from '../../services/llmService';
 // import MathFramework from '../MathFramework'; // Removed for Act 3 redesign
 import './ThreeActs.css';
+import './ThreeActsRealTime.css';
 
 const ThreeActs = () => {
   const [currentAct, setCurrentAct] = useState(1);
@@ -17,6 +20,8 @@ const ThreeActs = () => {
   const [selectedAgent, setSelectedAgent] = useState(null);
   const [showInsights, setShowInsights] = useState({});
   const [selectedConcept, setSelectedConcept] = useState(null);
+  const [communicationLog, setCommunicationLog] = useState([]);
+  const [isLLMConfigured, setIsLLMConfigured] = useState(false);
   
   const mathematicalConcepts = {
     energy: {
@@ -99,23 +104,115 @@ const ThreeActs = () => {
     setProgress(currentAct * 33.33);
   };
 
-  const triggerAgentDemo = () => {
+  const triggerAgentDemo = async () => {
     if (!userTask.trim()) {
       alert('Please define a task for the agents first!');
       return;
     }
     
-    const undefindedAgents = Object.values(agentTasks).filter(agent => !agent.task.trim());
-    if (undefindedAgents.length > 0) {
+    const undefinedAgents = Object.values(agentTasks).filter(agent => !agent.task.trim());
+    if (undefinedAgents.length > 0) {
       alert('Please define tasks for all agents first!');
       return;
     }
     
     setAgentDemo('running');
-    setTimeout(() => {
-      setAgentDemo('complete');
-      setShowInsights({ coordination: true, emergence: true });
-    }, 4000);
+    setCommunicationLog([]);
+    
+    try {
+      // Check if LLM is configured
+      if (llmService.isConfigured()) {
+        setIsLLMConfigured(true);
+        
+        // Use real LLM communication
+        const result = await llmService.simulateAgentConversation(userTask, agentTasks);
+        
+        if (result.success) {
+          setCommunicationLog(result.communicationLog);
+          setAgentDemo('complete');
+          setShowInsights({ coordination: true, emergence: true });
+        } else {
+          throw new Error(result.error);
+        }
+      } else {
+        // Fall back to simulation
+        setIsLLMConfigured(false);
+        await simulateAgentCommunication();
+      }
+    } catch (error) {
+      console.error('Agent communication failed:', error);
+      // Fall back to simulation on error
+      await simulateAgentCommunication();
+      alert(`LLM communication failed: ${error.message}. Showing simulation instead.`);
+    }
+  };
+  
+  const simulateAgentCommunication = async () => {
+    const mockLog = [
+      {
+        id: 1,
+        timestamp: new Date(),
+        from: agentTasks.agent1.name,
+        to: 'System',
+        type: 'analysis',
+        message: `Analyzing task: "${userTask}" - I will focus on ${agentTasks.agent1.task}`,
+        phase: 'Task Analysis'
+      },
+      {
+        id: 2,
+        timestamp: new Date(Date.now() + 1000),
+        from: agentTasks.agent2.name,
+        to: 'System',
+        type: 'analysis',
+        message: `Task received. My role: ${agentTasks.agent2.task}. Ready to coordinate.`,
+        phase: 'Task Analysis'
+      },
+      {
+        id: 3,
+        timestamp: new Date(Date.now() + 2000),
+        from: agentTasks.agent3.name,
+        to: 'System',
+        type: 'analysis',
+        message: `Understanding task scope. Will handle: ${agentTasks.agent3.task}`,
+        phase: 'Task Analysis'
+      },
+      {
+        id: 4,
+        timestamp: new Date(Date.now() + 3000),
+        from: agentTasks.agent1.name,
+        to: agentTasks.agent2.name,
+        type: 'coordination',
+        message: `Requesting coordination on shared resources and timing.`,
+        phase: 'Agent Coordination'
+      },
+      {
+        id: 5,
+        timestamp: new Date(Date.now() + 4000),
+        from: agentTasks.agent2.name,
+        to: agentTasks.agent3.name,
+        type: 'coordination',
+        message: `Sharing optimization parameters and resource allocation.`,
+        phase: 'Agent Coordination'
+      },
+      {
+        id: 6,
+        timestamp: new Date(Date.now() + 5000),
+        from: 'System',
+        to: 'All Agents',
+        type: 'synthesis',
+        message: `Collective strategy achieved: Distributed coordination protocol established with emergent efficiency gains.`,
+        phase: 'Collective Strategy'
+      }
+    ];
+    
+    // Simulate real-time message appearance
+    for (let i = 0; i < mockLog.length; i++) {
+      await new Promise(resolve => setTimeout(resolve, 800));
+      setCommunicationLog(prev => [...prev, mockLog[i]]);
+    }
+    
+    setAgentDemo('complete');
+    setShowInsights({ coordination: true, emergence: true });
   };
   
   const handleAgentTaskUpdate = (agentId, task) => {
@@ -129,6 +226,8 @@ const ThreeActs = () => {
   const resetDemo = () => {
     setAgentDemo('idle');
     setShowInsights({});
+    setCommunicationLog([]);
+    setIsLLMConfigured(false);
   };
 
   const containerVariants = {
@@ -291,80 +390,23 @@ const ThreeActs = () => {
                     <h4>2. Configure Individual Agents</h4>
                     <p>Click on each agent to define their specific role and capabilities:</p>
                     
-                    <div className={`agent-playground triangle-layout ${agentDemo}`}>
-                      {/* Triangle Formation */}
-                      <div 
-                        className={`agent agent-1 ${selectedAgent === 'agent1' ? 'selected' : ''} ${
-                          agentTasks.agent1.task ? 'configured' : ''
-                        }`}
-                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent1' ? null : 'agent1')}
-                      >
-                        <div className="agent-core"></div>
-                        <div className="agent-label">
-                          <strong>{agentTasks.agent1.name}</strong>
-                          <span>{agentTasks.agent1.task || 'Click to configure'}</span>
-                        </div>
+                    {/* LLM Status Badge */}
+                    {isLLMConfigured && (
+                      <div className="llm-badge">
+                        <span className="realtime-indicator">Live LLM Integration</span>
+                        <span>Real Claude API communication enabled</span>
                       </div>
-                      
-                      <div 
-                        className={`agent agent-2 ${selectedAgent === 'agent2' ? 'selected' : ''} ${
-                          agentTasks.agent2.task ? 'configured' : ''
-                        }`}
-                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent2' ? null : 'agent2')}
-                      >
-                        <div className="agent-core"></div>
-                        <div className="agent-label">
-                          <strong>{agentTasks.agent2.name}</strong>
-                          <span>{agentTasks.agent2.task || 'Click to configure'}</span>
-                        </div>
-                      </div>
-                      
-                      <div 
-                        className={`agent agent-3 ${selectedAgent === 'agent3' ? 'selected' : ''} ${
-                          agentTasks.agent3.task ? 'configured' : ''
-                        }`}
-                        onClick={() => agentDemo === 'idle' && setSelectedAgent(selectedAgent === 'agent3' ? null : 'agent3')}
-                      >
-                        <div className="agent-core"></div>
-                        <div className="agent-label">
-                          <strong>{agentTasks.agent3.name}</strong>
-                          <span>{agentTasks.agent3.task || 'Click to configure'}</span>
-                        </div>
-                      </div>
-                      
-                      {/* Arrow Connections */}
-                      {(agentDemo === 'running' || agentDemo === 'complete') && (
-                        <>
-                          <div className="arrow-connection arrow-1-2">
-                            <svg viewBox="0 0 100 20" className="arrow-svg">
-                              <defs>
-                                <marker id="arrowhead1" markerWidth="10" markerHeight="7" 
-                                 refX="9" refY="3.5" orient="auto">
-                                  <polygon points="0 0, 10 3.5, 0 7" fill="url(#connectionGradient)" />
-                                </marker>
-                                <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                  <stop offset="0%" stopColor="var(--primary-cyan)" />
-                                  <stop offset="100%" stopColor="var(--primary-magenta)" />
-                                </linearGradient>
-                              </defs>
-                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
-                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
-                            </svg>
-                          </div>
-                          <div className="arrow-connection arrow-2-3">
-                            <svg viewBox="0 0 100 20" className="arrow-svg">
-                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
-                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
-                            </svg>
-                          </div>
-                          <div className="arrow-connection arrow-3-1">
-                            <svg viewBox="0 0 100 20" className="arrow-svg">
-                              <line x1="5" y1="10" x2="85" y2="10" stroke="url(#connectionGradient)" 
-                                    strokeWidth="2" markerEnd="url(#arrowhead1)" />
-                            </svg>
-                          </div>
-                        </>
-                      )}
+                    )}
+                    
+                    {/* Enhanced Agent Network Visualization */}
+                    <div className="agent-network-container">
+                      <AgentNetwork 
+                        agents={agentTasks}
+                        status={agentDemo}
+                        onAgentClick={(agentId) => agentDemo === 'idle' && setSelectedAgent(agentId)}
+                        selectedAgent={selectedAgent}
+                        communicationLog={communicationLog}
+                      />
                     </div>
                   </div>
 
@@ -427,7 +469,40 @@ const ThreeActs = () => {
                         </button>
                       )}
                     </div>
+                    
+                    {/* Configuration Prompt for LLM Setup */}
+                    {!isLLMConfigured && agentDemo === 'idle' && (
+                      <div className="config-prompt">
+                        💡 Configure your LLM API key in settings to see real agent communication!
+                      </div>
+                    )}
                   </div>
+
+                  {/* Real-time Communication Timeline */}
+                  {communicationLog.length > 0 && (
+                    <div className="communication-timeline">
+                      <h5>Agent Communication Timeline</h5>
+                      <div className="timeline">
+                        {communicationLog.map((entry) => (
+                          <div 
+                            key={entry.id} 
+                            className={`timeline-item ${entry.type}`}
+                          >
+                            <div className="timeline-marker"></div>
+                            <div className="timeline-content">
+                              <div className="timeline-header">
+                                <strong>{entry.from} → {entry.to}</strong>
+                                <span className="timeline-phase">{entry.phase}</span>
+                              </div>
+                              <div className="timeline-message">
+                                {entry.message}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Emergence Results */}
                   {agentDemo === 'complete' && (
@@ -437,6 +512,17 @@ const ThreeActs = () => {
                         <p>
                           <strong>Task:</strong> {userTask}
                         </p>
+                        
+                        {/* Show Real vs Simulated Communication */}
+                        {isLLMConfigured && (
+                          <div className="llm-insights">
+                            <h5>🔬 Real LLM Analysis:</h5>
+                            <p>
+                              You just witnessed actual AI agents communicating through Claude API. 
+                              Each response was generated independently, yet coordination patterns emerged naturally.
+                            </p>
+                          </div>
+                        )}
                         
                         <div className="agent-behaviors">
                           <h5>Observed Agent Behaviors:</h5>
@@ -451,15 +537,21 @@ const ThreeActs = () => {
                         <div className="emergence-insights">
                           <h5>🔬 What Just Happened:</h5>
                           <ul>
-                            <li><strong>Self-Organization:</strong> Agents formed a triangular communication network spontaneously</li>
+                            <li><strong>Self-Organization:</strong> Agents formed communication networks spontaneously</li>
                             <li><strong>Distributed Intelligence:</strong> No single agent controlled the system, yet coordinated behavior emerged</li>
                             <li><strong>Adaptive Protocols:</strong> Communication patterns evolved based on task requirements</li>
                             <li><strong>Emergent Efficiency:</strong> Collective performance exceeded individual agent capabilities</li>
+                            {isLLMConfigured && (
+                              <li><strong>Real AI Coordination:</strong> Actual language models demonstrated natural coordination without explicit coordination programming</li>
+                            )}
                           </ul>
                         </div>
                         
                         <div className="next-act-prompt">
-                          <p>This coordination wasn't programmed—it <em>emerged</em> from mathematical principles.</p>
+                          <p>
+                            This coordination wasn't programmed—it <em>emerged</em> from mathematical principles.
+                            {isLLMConfigured && " You saw real AI agents discover coordination strategies naturally."}
+                          </p>
                           <button 
                             className="advance-btn"
                             onClick={() => handleActChange(3)}

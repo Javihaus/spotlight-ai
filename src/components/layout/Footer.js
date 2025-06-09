@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import LLMConfig from '../settings/LLMConfig';
 import './Footer.css';
 
 const Footer = () => {
+  const [showLLMConfig, setShowLLMConfig] = useState(false);
+
   return (
+    <>
+      <LLMConfig isOpen={showLLMConfig} onClose={() => setShowLLMConfig(false)} />
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
@@ -27,9 +32,15 @@ const Footer = () => {
             <h3>Navigate</h3>
             <div className="footer-links">
               <Link to="/">Home</Link>
-              <Link to="/three-acts">3 Acts</Link>
+              <Link to="/three-acts">Agents in 3 Acts</Link>
               <Link to="/newsletter">Newsletter</Link>
               <Link to="/resources">Resources</Link>
+              <button 
+                className="footer-link-btn"
+                onClick={() => setShowLLMConfig(true)}
+              >
+                LLM Settings
+              </button>
             </div>
           </div>
 
@@ -72,6 +83,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    </>
   );
 };
 
