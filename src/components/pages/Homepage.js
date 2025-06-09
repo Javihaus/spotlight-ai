@@ -113,7 +113,7 @@ const Homepage = () => {
           <motion.div className="section-header" variants={itemVariants}>
             <h2 className="section-title">Agents in 3 Acts Transformation</h2>
             <p className="section-subtitle">
-              Experience the complete journey from misconception to mastery
+              Experience the complete journey from zero to mastery
             </p>
           </motion.div>
 
