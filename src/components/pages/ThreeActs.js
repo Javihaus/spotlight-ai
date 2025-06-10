@@ -12,6 +12,7 @@ const ThreeActs = () => {
   const [userInteracted, setUserInteracted] = useState(false);
   const [emailScenarioRunning, setEmailScenarioRunning] = useState(false);
   const [selectedConcept, setSelectedConcept] = useState(null);
+  const [communicationRadius, setCommunicationRadius] = useState(120);
   
   const mathematicalConcepts = {
     energy: {
@@ -258,11 +259,15 @@ const ThreeActs = () => {
                   <EmailAgentScenario 
                     isRunning={emailScenarioRunning}
                     onComplete={onScenarioComplete}
+                    communicationRadius={communicationRadius}
+                    onRadiusChange={setCommunicationRadius}
                   />
 
                   {/* Lower Part: Geometric Foundation */}
                   <GeometricFoundation 
                     isActive={currentAct === 2}
+                    communicationRadius={communicationRadius}
+                    onRadiusChange={setCommunicationRadius}
                   />
 
                   {/* Transition to Act 3 */}

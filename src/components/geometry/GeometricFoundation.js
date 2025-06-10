@@ -3,12 +3,11 @@ import { motion } from 'framer-motion';
 import * as d3 from 'd3';
 import './GeometricFoundation.css';
 
-const GeometricFoundation = ({ isActive }) => {
+const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChange }) => {
   const svgRef = useRef();
-  const [communicationRadius, setCommunicationRadius] = useState(120);
   const [numAgents, setNumAgents] = useState(3);
   const [taskComplexity, setTaskComplexity] = useState(50);
-  const [dimensions] = useState({ width: 600, height: 400 });
+  const [dimensions] = useState({ width: 500, height: 350 });
   const [coordinationState, setCoordinationState] = useState('analyzing');
 
   // Agent positions in metric space
@@ -284,108 +283,111 @@ const GeometricFoundation = ({ isActive }) => {
       </div>
 
       <div className="geometry-workspace">
-        {/* Interactive Visualization */}
-        <div className="geometry-viz">
-          <div className="viz-header">
-            <h4>Metric Space Dynamics</h4>
-            <div className="coordination-status">
-              <div 
-                className="status-indicator"
-                style={{ backgroundColor: getPhaseColor() }}
+        {/* Left: Interactive Controls and Visualization */}
+        <div className="geometry-left">
+          <div className="geometry-controls">
+            <h4>Geometric Parameters</h4>
+            
+            <div className="control-group">
+              <label htmlFor="comm-radius">
+                Communication Radius: <span className="value">{communicationRadius}px</span>
+              </label>
+              <input
+                id="comm-radius"
+                type="range"
+                min="50"
+                max="200"
+                value={communicationRadius}
+                onChange={(e) => onRadiusChange && onRadiusChange(parseInt(e.target.value))}
+                className="control-slider"
               />
-              <span className="status-text">{coordinationState.toUpperCase()}</span>
+              <div className="control-description">
+                Distance threshold for agent coordination. Watch how small changes create phase transitions.
+              </div>
+            </div>
+
+            <div className="control-group">
+              <label htmlFor="num-agents">
+                Number of Agents: <span className="value">{numAgents}</span>
+              </label>
+              <input
+                id="num-agents"
+                type="range"
+                min="2"
+                max="8"
+                value={numAgents}
+                onChange={(e) => setNumAgents(parseInt(e.target.value))}
+                className="control-slider"
+              />
+              <div className="control-description">
+                Agent density affects coordination complexity. More agents require larger communication radius.
+              </div>
+            </div>
+
+            <div className="control-group">
+              <label htmlFor="task-complexity">
+                Task Complexity: <span className="value">{taskComplexity}%</span>
+              </label>
+              <input
+                id="task-complexity"
+                type="range"
+                min="0"
+                max="100"
+                value={taskComplexity}
+                onChange={(e) => setTaskComplexity(parseInt(e.target.value))}
+                className="control-slider"
+              />
+              <div className="control-description">
+                Environmental complexity deforms the metric space, affecting coordination requirements.
+              </div>
             </div>
           </div>
-          
-          <svg
-            ref={svgRef}
-            width={dimensions.width}
-            height={dimensions.height}
-            className="geometry-svg"
-            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-          />
-          
-          <div className="coordination-description">
-            {getCoordinationDescription()}
+
+          <div className="geometry-viz">
+            <div className="viz-header">
+              <h4>Metric Space Dynamics</h4>
+              <div className="coordination-status">
+                <div 
+                  className="status-indicator"
+                  style={{ backgroundColor: getPhaseColor() }}
+                />
+                <span className="status-text">{coordinationState.toUpperCase()}</span>
+              </div>
+            </div>
+            
+            <svg
+              ref={svgRef}
+              width={dimensions.width}
+              height={dimensions.height}
+              className="geometry-svg"
+              viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+            />
+            
+            <div className="coordination-description">
+              {getCoordinationDescription()}
+            </div>
           </div>
         </div>
 
-        {/* Interactive Controls */}
-        <div className="geometry-controls">
-          <h4>Geometric Parameters</h4>
-          
-          <div className="control-group">
-            <label htmlFor="comm-radius">
-              Communication Radius: <span className="value">{communicationRadius}px</span>
-            </label>
-            <input
-              id="comm-radius"
-              type="range"
-              min="50"
-              max="200"
-              value={communicationRadius}
-              onChange={(e) => setCommunicationRadius(parseInt(e.target.value))}
-              className="control-slider"
-            />
-            <div className="control-description">
-              Distance threshold for agent coordination. Watch how small changes create phase transitions.
+        {/* Right: Mathematical Insights */}
+        <div className="geometry-right">
+          <div className="mathematical-insights">
+            <h4>The Geometric Necessity</h4>
+            <div className="insights-grid">
+              {Object.entries(insights).map(([key, insight]) => (
+                <motion.div
+                  key={key}
+                  className="insight-card"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="insight-title">{insight.title}</div>
+                  <div className="insight-equation">{insight.equation}</div>
+                  <div className="insight-description">{insight.description}</div>
+                </motion.div>
+              ))}
             </div>
           </div>
-
-          <div className="control-group">
-            <label htmlFor="num-agents">
-              Number of Agents: <span className="value">{numAgents}</span>
-            </label>
-            <input
-              id="num-agents"
-              type="range"
-              min="2"
-              max="8"
-              value={numAgents}
-              onChange={(e) => setNumAgents(parseInt(e.target.value))}
-              className="control-slider"
-            />
-            <div className="control-description">
-              Agent density affects coordination complexity. More agents require larger communication radius.
-            </div>
-          </div>
-
-          <div className="control-group">
-            <label htmlFor="task-complexity">
-              Task Complexity: <span className="value">{taskComplexity}%</span>
-            </label>
-            <input
-              id="task-complexity"
-              type="range"
-              min="0"
-              max="100"
-              value={taskComplexity}
-              onChange={(e) => setTaskComplexity(parseInt(e.target.value))}
-              className="control-slider"
-            />
-            <div className="control-description">
-              Environmental complexity deforms the metric space, affecting coordination requirements.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mathematical Insights */}
-      <div className="mathematical-insights">
-        <h4>The Geometric Necessity</h4>
-        <div className="insights-grid">
-          {Object.entries(insights).map(([key, insight]) => (
-            <motion.div
-              key={key}
-              className="insight-card"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <div className="insight-title">{insight.title}</div>
-              <div className="insight-equation">{insight.equation}</div>
-              <div className="insight-description">{insight.description}</div>
-            </motion.div>
-          ))}
         </div>
       </div>
 
@@ -405,9 +407,8 @@ const GeometricFoundation = ({ isActive }) => {
               that govern information flow in multi-agent systems.
             </p>
             <div className="key-insight">
-              <strong>The profound truth:</strong> True agency emerges from geometric necessity, 
-              not programmed intelligence. The same mathematics governs crystal formation, 
-              flock coordination, and effective team organization.
+              <strong>Mathematical revelation:</strong> Understanding the geometric structure beneath agent interactions 
+              transforms unpredictable AI behavior into predictable patterns that we can visualize, analyze, and control.
             </div>
           </div>
         </div>

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './EmailAgentScenario.css';
 
-const EmailAgentScenario = ({ isRunning, onComplete }) => {
+const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadiusChange }) => {
   const [emails] = useState([
     {
       id: 1,
@@ -41,27 +41,24 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
   const [agents] = useState({
     reader: {
       id: 'reader',
-      name: 'MailReader Agent',
+      name: 'MailReader',
       role: 'Scans and parses incoming emails',
-      position: { x: 100, y: 150 },
-      status: 'idle',
-      communicationRadius: 200
+      position: { x: 80, y: 100 },
+      status: 'idle'
     },
     classifier: {
       id: 'classifier', 
-      name: 'Classifier Agent',
+      name: 'Classifier',
       role: 'Analyzes content and assigns priority levels',
-      position: { x: 400, y: 150 },
-      status: 'idle',
-      communicationRadius: 180
+      position: { x: 200, y: 100 },
+      status: 'idle'
     },
     responder: {
       id: 'responder',
-      name: 'Responder Agent', 
+      name: 'Responder', 
       role: 'Handles responses and escalations',
-      position: { x: 700, y: 150 },
-      status: 'idle',
-      communicationRadius: 190
+      position: { x: 320, y: 100 },
+      status: 'idle'
     }
   });
 
@@ -69,6 +66,12 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
   const [communicationLog, setCommunicationLog] = useState([]);
   const [currentStep, setCurrentStep] = useState(0);
   const [agentStates, setAgentStates] = useState(agents);
+  const [showCayleyExplanation, setShowCayleyExplanation] = useState(false);
+  const [communicationMetrics, setCommunicationMetrics] = useState({
+    efficiency: 0,
+    messages: 0,
+    coordination: 'none'
+  });
 
   const steps = [
     "Initializing agent network...",
@@ -79,6 +82,46 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
     "Responder: Processing responses and escalations...",
     "Generating user report for critical decisions..."
   ];
+
+  const getAgentDistance = (agent1, agent2) => {
+    const dx = agent1.position.x - agent2.position.x;
+    const dy = agent1.position.y - agent2.position.y;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const canCommunicate = (agent1, agent2) => {
+    const distance = getAgentDistance(agent1, agent2);
+    return distance <= communicationRadius;
+  };
+
+  const calculateCommunicationMetrics = () => {
+    const connections = [];
+    Object.values(agentStates).forEach((agent1, i) => {
+      Object.values(agentStates).forEach((agent2, j) => {
+        if (i < j && canCommunicate(agent1, agent2)) {
+          connections.push({ agent1: agent1.name, agent2: agent2.name });
+        }
+      });
+    });
+
+    const totalPossibleConnections = 3; // For 3 agents: 3 possible pairs
+    const efficiency = Math.round((connections.length / totalPossibleConnections) * 100);
+    
+    let coordination = 'isolated';
+    if (connections.length === 3) coordination = 'optimal';
+    else if (connections.length >= 2) coordination = 'coordinated';
+    else if (connections.length === 1) coordination = 'fragmented';
+
+    setCommunicationMetrics({
+      efficiency,
+      messages: connections.length * 2, // Bidirectional
+      coordination
+    });
+  };
+
+  useEffect(() => {
+    calculateCommunicationMetrics();
+  }, [communicationRadius, agentStates]);
 
   useEffect(() => {
     if (!isRunning) return;
@@ -92,12 +135,9 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
       await delay(1000);
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
-
-      // Step 2: Reader scans emails
-      await delay(1500);
       addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');
       
-      // Step 3: Reader → Classifier communication
+      // Step 2: Reader → Classifier communication
       await delay(1000);
       setCurrentStep(2);
       updateAgentStatus('classifier', 'active');
@@ -110,71 +150,48 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
         );
       }
 
-      // Step 4: Classifier analysis
+      // Continue with remaining steps...
       await delay(1000);
       setCurrentStep(3);
       addCommunication('classifier', 'system', 'Analyzing semantic content and extracting priority signals...', 'analysis');
 
-      // Step 5: Classifier → Responder
       await delay(1500);
       setCurrentStep(4);
       updateAgentStatus('responder', 'active');
 
       const classifications = [
-        { emailId: 1, priority: 'critical', confidence: 0.95, reasoning: 'Revenue impact mentioned, server outage keywords detected' },
-        { emailId: 2, priority: 'low', confidence: 0.88, reasoning: 'Marketing content, no urgency indicators' },
-        { emailId: 3, priority: 'high', confidence: 0.82, reasoning: 'Legal deadline today, contract keywords' },
-        { emailId: 4, priority: 'medium', confidence: 0.91, reasoning: 'Internal HR communication, routine update' }
+        { emailId: 1, priority: 'critical', confidence: 0.95, reasoning: 'Revenue impact detected' },
+        { emailId: 2, priority: 'low', confidence: 0.88, reasoning: 'Marketing content, no urgency' },
+        { emailId: 3, priority: 'high', confidence: 0.82, reasoning: 'Legal deadline today' },
+        { emailId: 4, priority: 'medium', confidence: 0.91, reasoning: 'Internal communication' }
       ];
 
       for (let classification of classifications) {
         await delay(600);
         const email = emails.find(e => e.id === classification.emailId);
         addCommunication('classifier', 'responder',
-          `Email "${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}. Reasoning: ${classification.reasoning}`,
+          `"${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}`,
           'coordination'
         );
       }
 
-      // Step 6: Responder processing
       await delay(1000);
       setCurrentStep(5);
-      addCommunication('responder', 'system', 'Processing responses for non-critical emails and escalating critical decisions...', 'synthesis');
+      addCommunication('responder', 'system', 'Processing responses and escalations...', 'synthesis');
 
-      // Generate responses
       await delay(1500);
       const responses = [
-        {
-          emailId: 1,
-          action: 'escalate',
-          response: 'ESCALATED TO USER: Critical server outage requiring immediate technical decision.',
-          reasoning: 'Revenue impact $50K/hour exceeds agent authority threshold'
-        },
-        {
-          emailId: 2, 
-          action: 'respond',
-          response: 'Thank you for reaching out. I\'ll review our partnership materials and get back to you within 2 business days.',
-          reasoning: 'Standard marketing inquiry, automated response appropriate'
-        },
-        {
-          emailId: 3,
-          action: 'escalate', 
-          response: 'ESCALATED TO USER: Contract review with same-day deadline requires executive approval.',
-          reasoning: 'Legal implications beyond agent decision scope'
-        },
-        {
-          emailId: 4,
-          action: 'respond',
-          response: 'Received the handbook update. Will review and provide feedback by end of week.',
-          reasoning: 'Internal HR communication, acknowledgment sufficient'
-        }
+        { emailId: 1, action: 'escalate', response: 'ESCALATED: Critical server outage' },
+        { emailId: 2, action: 'respond', response: 'Thank you for reaching out...' },
+        { emailId: 3, action: 'escalate', response: 'ESCALATED: Contract review needed' },
+        { emailId: 4, action: 'respond', response: 'Received handbook update...' }
       ];
 
       for (let response of responses) {
         await delay(700);
         const email = emails.find(e => e.id === response.emailId);
         addCommunication('responder', 'user',
-          `Email "${email.subject}": ${response.action.toUpperCase()} - ${response.reasoning}`,
+          `"${email.subject}": ${response.action.toUpperCase()}`,
           response.action === 'escalate' ? 'escalation' : 'response'
         );
         
@@ -185,16 +202,13 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
         }]);
       }
 
-      // Step 7: Generate report
       await delay(1000);
       setCurrentStep(6);
       addCommunication('system', 'user',
-        'Processing complete. 2 emails escalated for user decision, 2 emails handled automatically. Coordination efficiency: 94%',
+        `Processing complete. Efficiency: ${communicationMetrics.efficiency}%`,
         'report'
       );
 
-      // Complete
-      await delay(1000);
       setAgentStates(prev => ({
         reader: { ...prev.reader, status: 'complete' },
         classifier: { ...prev.classifier, status: 'complete' },
@@ -205,7 +219,7 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
     };
 
     processEmails();
-  }, [isRunning, emails, onComplete]);
+  }, [isRunning, emails, onComplete, communicationMetrics.efficiency]);
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -223,175 +237,230 @@ const EmailAgentScenario = ({ isRunning, onComplete }) => {
       to,
       message,
       type,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
+      efficiency: communicationMetrics.efficiency
     };
     setCommunicationLog(prev => [...prev, newComm]);
-  };
-
-  const getAgentDistance = (agent1, agent2) => {
-    const dx = agent1.position.x - agent2.position.x;
-    const dy = agent1.position.y - agent2.position.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  const canCommunicate = (agent1, agent2) => {
-    const distance = getAgentDistance(agent1, agent2);
-    return distance <= Math.min(agent1.communicationRadius, agent2.communicationRadius);
   };
 
   return (
     <div className="email-scenario-container">
       <div className="scenario-header">
         <h3>Real Agent Coordination: Email Processing System</h3>
-        <p>Watch three autonomous agents coordinate to process emails using only geometric proximity rules</p>
+        <p>Watch three autonomous agents coordinate through geometric proximity rules</p>
       </div>
 
       <div className="agent-workspace">
-        {/* Agent Network Visualization */}
-        <div className="agent-network">
-          <svg width="800" height="300" className="agent-svg">
-            {/* Communication radius circles */}
-            {Object.values(agentStates).map(agent => (
-              <circle
-                key={`radius-${agent.id}`}
-                cx={agent.position.x}
-                cy={agent.position.y}
-                r={agent.communicationRadius}
-                fill="rgba(0, 212, 255, 0.1)"
-                stroke="rgba(0, 212, 255, 0.3)"
-                strokeWidth="1"
-                strokeDasharray="5,5"
-              />
-            ))}
+        <div className="workspace-grid">
+          {/* Left: Agent Network Visualization */}
+          <div className="agent-network">
+            <div className="cayley-header">
+              <button 
+                className="cayley-annotation"
+                onClick={() => setShowCayleyExplanation(true)}
+              >
+                Cayley Graph
+              </button>
+            </div>
             
-            {/* Communication links */}
-            {Object.values(agentStates).map((agent1, i) => 
-              Object.values(agentStates).slice(i + 1).map(agent2 => {
-                const canComm = canCommunicate(agent1, agent2);
-                return (
-                  <line
-                    key={`link-${agent1.id}-${agent2.id}`}
-                    x1={agent1.position.x}
-                    y1={agent1.position.y}
-                    x2={agent2.position.x}
-                    y2={agent2.position.y}
-                    stroke={canComm ? "rgba(0, 212, 255, 0.6)" : "rgba(255, 255, 255, 0.1)"}
-                    strokeWidth={canComm ? "3" : "1"}
-                    className={canComm ? "active-link" : ""}
+            <div className="radius-control">
+              <label>
+                Communication Radius: <span className="radius-value">{communicationRadius}px</span>
+              </label>
+              <input
+                type="range"
+                min="50"
+                max="200"
+                value={communicationRadius}
+                onChange={(e) => onRadiusChange && onRadiusChange(parseInt(e.target.value))}
+                className="radius-slider"
+              />
+            </div>
+
+            <svg width="400" height="280" className="agent-svg">
+              {/* Communication radius circles */}
+              {Object.values(agentStates).map(agent => (
+                <circle
+                  key={`radius-${agent.id}`}
+                  cx={agent.position.x}
+                  cy={agent.position.y}
+                  r={communicationRadius}
+                  fill="rgba(0, 212, 255, 0.1)"
+                  stroke="rgba(0, 212, 255, 0.3)"
+                  strokeWidth="1"
+                  strokeDasharray="5,5"
+                />
+              ))}
+              
+              {/* Communication links */}
+              {Object.values(agentStates).map((agent1, i) => 
+                Object.values(agentStates).slice(i + 1).map(agent2 => {
+                  const canComm = canCommunicate(agent1, agent2);
+                  return (
+                    <line
+                      key={`link-${agent1.id}-${agent2.id}`}
+                      x1={agent1.position.x}
+                      y1={agent1.position.y}
+                      x2={agent2.position.x}
+                      y2={agent2.position.y}
+                      stroke={canComm ? "rgba(0, 212, 255, 0.6)" : "rgba(255, 255, 255, 0.1)"}
+                      strokeWidth={canComm ? "3" : "1"}
+                      className={canComm ? "active-link" : ""}
+                    />
+                  );
+                })
+              )}
+
+              {/* Agent nodes */}
+              {Object.values(agentStates).map(agent => (
+                <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
+                  <circle
+                    r="25"
+                    fill={
+                      agent.status === 'active' ? "url(#activeGradient)" :
+                      agent.status === 'complete' ? "url(#completeGradient)" :
+                      "rgba(255, 255, 255, 0.2)"
+                    }
+                    stroke={
+                      agent.status === 'active' ? "#00d4ff" :
+                      agent.status === 'complete' ? "#4caf50" :
+                      "rgba(255, 255, 255, 0.3)"
+                    }
+                    strokeWidth="2"
+                    className="agent-node"
                   />
-                );
-              })
-            )}
+                  <text
+                    textAnchor="middle"
+                    dy="0.35em"
+                    fill="white"
+                    fontSize="8"
+                    fontWeight="bold"
+                  >
+                    {agent.name}
+                  </text>
+                  <circle
+                    cx="18"
+                    cy="-18"
+                    r="5"
+                    fill={
+                      agent.status === 'active' ? "#ffc107" :
+                      agent.status === 'complete' ? "#4caf50" :
+                      "#666"
+                    }
+                  />
+                </g>
+              ))}
 
-            {/* Agent nodes */}
-            {Object.values(agentStates).map(agent => (
-              <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
-                <circle
-                  r="30"
-                  fill={
-                    agent.status === 'active' ? "url(#activeGradient)" :
-                    agent.status === 'complete' ? "url(#completeGradient)" :
-                    "rgba(255, 255, 255, 0.2)"
-                  }
-                  stroke={
-                    agent.status === 'active' ? "#00d4ff" :
-                    agent.status === 'complete' ? "#4caf50" :
-                    "rgba(255, 255, 255, 0.3)"
-                  }
-                  strokeWidth="2"
-                  className="agent-node"
-                />
-                <text
-                  textAnchor="middle"
-                  dy="0.35em"
-                  fill="white"
-                  fontSize="10"
-                  fontWeight="bold"
+              {/* Gradients */}
+              <defs>
+                <linearGradient id="activeGradient">
+                  <stop offset="0%" stopColor="#00d4ff" />
+                  <stop offset="100%" stopColor="#ff006e" />
+                </linearGradient>
+                <linearGradient id="completeGradient">
+                  <stop offset="0%" stopColor="#4caf50" />
+                  <stop offset="100%" stopColor="#81c784" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            {/* Communication Metrics */}
+            <div className="communication-metrics">
+              <div className="metric">
+                <span className="metric-label">Efficiency:</span>
+                <span className="metric-value">{communicationMetrics.efficiency}%</span>
+              </div>
+              <div className="metric">
+                <span className="metric-label">Messages:</span>
+                <span className="metric-value">{communicationMetrics.messages}</span>
+              </div>
+              <div className="metric">
+                <span className="metric-label">State:</span>
+                <span className={`metric-value state-${communicationMetrics.coordination}`}>
+                  {communicationMetrics.coordination}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Real-time Communication */}
+          <div className="communication-panel">
+            <h4>Real-time Agent Communication</h4>
+            <div className="current-step">
+              <div className="step-indicator">Step {currentStep + 1}/{steps.length}</div>
+              <div className="step-description">{steps[currentStep]}</div>
+            </div>
+            
+            <div className="communication-log">
+              {communicationLog.map(comm => (
+                <motion.div 
+                  key={comm.id}
+                  className={`communication-entry ${comm.type}`}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  {agent.name.split(' ')[0]}
-                </text>
-                <circle
-                  cx="20"
-                  cy="-20"
-                  r="6"
-                  fill={
-                    agent.status === 'active' ? "#ffc107" :
-                    agent.status === 'complete' ? "#4caf50" :
-                    "#666"
-                  }
-                />
-              </g>
-            ))}
-
-            {/* Gradients */}
-            <defs>
-              <linearGradient id="activeGradient">
-                <stop offset="0%" stopColor="#00d4ff" />
-                <stop offset="100%" stopColor="#ff006e" />
-              </linearGradient>
-              <linearGradient id="completeGradient">
-                <stop offset="0%" stopColor="#4caf50" />
-                <stop offset="100%" stopColor="#81c784" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-
-        {/* Current Step Display */}
-        <div className="current-step">
-          <div className="step-indicator">
-            Step {currentStep + 1} of {steps.length}
-          </div>
-          <div className="step-description">
-            {steps[currentStep]}
+                  <div className="comm-header">
+                    <span className="comm-from">{comm.from}</span>
+                    <span className="comm-arrow">→</span>
+                    <span className="comm-to">{comm.to}</span>
+                    <span className="comm-efficiency">E:{comm.efficiency}%</span>
+                  </div>
+                  <div className="comm-message">{comm.message}</div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Communication Log */}
-      <div className="communication-panel">
-        <h4>Real-time Agent Communication</h4>
-        <div className="communication-log">
-          {communicationLog.map(comm => (
-            <motion.div 
-              key={comm.id}
-              className={`communication-entry ${comm.type}`}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
+      {/* Cayley Graph Explanation Modal */}
+      <AnimatePresence>
+        {showCayleyExplanation && (
+          <motion.div
+            className="cayley-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCayleyExplanation(false)}
+          >
+            <motion.div
+              className="cayley-modal"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="comm-header">
-                <span className="comm-from">{comm.from}</span>
-                <span className="comm-arrow">→</span>
-                <span className="comm-to">{comm.to}</span>
-                <span className="comm-type">[{comm.type}]</span>
+              <div className="modal-header">
+                <h3>Cayley Graph</h3>
+                <button 
+                  className="close-btn"
+                  onClick={() => setShowCayleyExplanation(false)}
+                >
+                  ×
+                </button>
               </div>
-              <div className="comm-message">{comm.message}</div>
+              <div className="modal-content">
+                <p>
+                  A Cayley graph is simply a mathematical map that shows all the possible ways things can connect and interact. Imagine you have a robot that can only make three basic moves: step left, step right, or step forward. If you draw a dot for every position the robot can reach and connect each dot with lines showing which moves are possible, you create a Cayley graph.
+                </p>
+                <p>
+                  The beautiful insight is that the shape of this graph tells you everything about what the robot can accomplish. In our agent system, each artificial agent is like that robot, but instead of physical steps, their basic moves are sending messages, receiving information, and updating their understanding.
+                </p>
+                <p>
+                  The Cayley graph reveals all possible ways agents can coordinate with each other through these simple communication moves. What makes this profound is that complex coordination emerges naturally from the geometric structure itself, not from explicit programming.
+                </p>
+                <p>
+                  When agents are close enough in this communication graph, coordination becomes mathematically inevitable, like dancers who can hear the same music. The graph's geometry determines whether agents will work together beautifully or fail chaotically, and tiny changes in the connection patterns can create dramatic differences in behavior.
+                </p>
+                <p>
+                  This is why understanding the mathematical structure beneath agent interactions is so powerful: it transforms unpredictable AI behavior into predictable geometric patterns that we can visualize, analyze, and control.
+                </p>
+              </div>
             </motion.div>
-          ))}
-        </div>
-      </div>
-
-      {/* Results Summary */}
-      {processedEmails.length > 0 && (
-        <div className="results-summary">
-          <h4>Processing Results</h4>
-          <div className="results-grid">
-            {processedEmails.map(email => (
-              <div key={email.id} className={`result-card ${email.priority}`}>
-                <div className="result-header">
-                  <span className="email-subject">{email.subject}</span>
-                  <span className={`action-badge ${email.action}`}>{email.action}</span>
-                </div>
-                <div className="result-reasoning">{email.reasoning}</div>
-                {email.response && (
-                  <div className="result-response">"{email.response}"</div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
