@@ -1,0 +1,343 @@
+/* Email Agent Scenario Styles */
+
+.email-scenario-container {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2rem 0;
+}
+
+.scenario-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.scenario-header h3 {
+  color: var(--primary-cyan);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.scenario-header p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.agent-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.agent-network {
+  background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 70%);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.agent-svg {
+  width: 100%;
+  height: auto;
+}
+
+.agent-node {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.agent-node:hover {
+  filter: brightness(1.2);
+}
+
+.active-link {
+  animation: pulse-link 2s ease-in-out infinite;
+}
+
+@keyframes pulse-link {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.current-step {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.step-indicator {
+  color: var(--primary-cyan);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.communication-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.communication-panel h4 {
+  color: var(--primary-cyan);
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.communication-log {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.communication-entry {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 3px solid var(--primary-cyan);
+  transition: all 0.3s ease;
+}
+
+.communication-entry.analysis {
+  border-left-color: #4caf50;
+}
+
+.communication-entry.data_transfer {
+  border-left-color: #00d4ff;
+}
+
+.communication-entry.coordination {
+  border-left-color: #ff006e;
+}
+
+.communication-entry.synthesis {
+  border-left-color: #ffc107;
+}
+
+.communication-entry.escalation {
+  border-left-color: #f44336;
+  background: rgba(244, 67, 54, 0.1);
+}
+
+.communication-entry.response {
+  border-left-color: #2196f3;
+}
+
+.communication-entry.report {
+  border-left-color: #9c27b0;
+  background: rgba(156, 39, 176, 0.1);
+}
+
+.comm-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.comm-from {
+  color: var(--primary-cyan);
+}
+
+.comm-arrow {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.comm-to {
+  color: var(--primary-magenta);
+}
+
+.comm-type {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: auto;
+}
+
+.comm-message {
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+  font-size: 0.875rem;
+}
+
+.results-summary {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.results-summary h4 {
+  color: var(--primary-cyan);
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.result-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.result-card.critical {
+  border-left: 3px solid #f44336;
+}
+
+.result-card.high {
+  border-left: 3px solid #ff9800;
+}
+
+.result-card.medium {
+  border-left: 3px solid #ffc107;
+}
+
+.result-card.low {
+  border-left: 3px solid #4caf50;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+}
+
+.email-subject {
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex: 1;
+}
+
+.action-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.action-badge.escalate {
+  background: rgba(244, 67, 54, 0.2);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.action-badge.respond {
+  background: rgba(33, 150, 243, 0.2);
+  color: #2196f3;
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.result-reasoning {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+  font-style: italic;
+}
+
+.result-response {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 2px solid var(--primary-cyan);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .email-scenario-container {
+    padding: 1rem;
+  }
+
+  .agent-network {
+    padding: 0.5rem;
+  }
+
+  .agent-svg {
+    height: 250px;
+  }
+
+  .communication-log {
+    max-height: 300px;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scenario-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .scenario-header p {
+    font-size: 0.875rem;
+  }
+
+  .comm-header {
+    flex-wrap: wrap;
+  }
+
+  .communication-entry {
+    padding: 0.75rem;
+  }
+
+  .result-card {
+    padding: 0.75rem;
+  }
+}
