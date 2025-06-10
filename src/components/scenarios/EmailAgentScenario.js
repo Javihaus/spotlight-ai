@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TfiPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
+import { FiPlay, FiSquare, FiRefreshCw } from 'react-icons/fi';
 import './EmailAgentScenario.css';
 
 const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadiusChange }) => {
@@ -325,7 +325,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             onClick={startSimulation}
             disabled={isPlaying}
           >
-            <TfiPlay />
+            <FiPlay />
             <span>Play</span>
           </button>
           <button 
@@ -333,14 +333,14 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             onClick={stopSimulation}
             disabled={!isPlaying}
           >
-            <TfiControlStop />
+            <FiSquare />
             <span>Stop</span>
           </button>
           <button 
             className="pro-control-btn refresh-btn"
             onClick={refreshSimulation}
           >
-            <TfiReload />
+            <FiRefreshCw />
             <span>Refresh</span>
           </button>
         </div>

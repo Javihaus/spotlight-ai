@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TfiMenu, TfiClose, TfiArrowRight } from 'react-icons/tfi';
+import { FiMenu, FiX, FiArrowRight } from 'react-icons/fi';
 import './ProfessionalHeader.css';
 
 const ProfessionalHeader = () => {
@@ -60,7 +60,7 @@ const ProfessionalHeader = () => {
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >
-            {isMobileMenuOpen ? <TfiClose /> : <TfiMenu />}
+            {isMobileMenuOpen ? <FiX /> : <FiMenu />}
           </button>
         </div>
       </motion.header>
@@ -98,7 +98,7 @@ const ProfessionalHeader = () => {
                       <span className="mobile-nav-label">{link.label}</span>
                       <span className="mobile-nav-description">{link.description}</span>
                     </div>
-                    <TfiArrowRight className="mobile-nav-arrow" />
+                    <FiArrowRight className="mobile-nav-arrow" />
                   </Link>
                 </motion.div>
               ))}
