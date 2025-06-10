@@ -33,47 +33,52 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
-.control-btn {
-  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
-  border: none;
+.pro-control-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  min-width: 100px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.01em;
 }
 
-.control-btn:hover:not(:disabled) {
+.pro-control-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 212, 255, 0.4);
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
-.control-btn:disabled {
-  opacity: 0.5;
+.pro-control-btn:disabled {
+  opacity: 0.4;
   cursor: not-allowed;
   transform: none;
 }
 
-.control-btn.active {
-  background: linear-gradient(135deg, #4caf50, #81c784);
-  animation: pulse-glow 2s ease-in-out infinite;
+.pro-control-btn.active {
+  background: linear-gradient(135deg, #00d4ff, #ff006e);
+  border-color: transparent;
+  color: white;
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(76, 175, 80, 0.8);
-  }
+.pro-control-btn.active:hover {
+  background: linear-gradient(135deg, #00d4ff, #ff006e);
+  box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+}
+
+.pro-control-btn svg {
+  font-size: 1rem;
 }
 
 .agent-workspace {

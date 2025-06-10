@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TfiPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
 import './EmailAgentScenario.css';
 
 const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadiusChange }) => {
@@ -167,7 +168,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       // Step 1: Initialize
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
       addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');
@@ -321,24 +321,27 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         
         <div className="simulation-controls">
           <button 
-            className={`control-btn play-btn ${isPlaying ? 'active' : ''}`}
+            className={`pro-control-btn play-btn ${isPlaying ? 'active' : ''}`}
             onClick={startSimulation}
             disabled={isPlaying}
           >
-            ▶ Play
+            <TfiPlay />
+            <span>Play</span>
           </button>
           <button 
-            className={`control-btn stop-btn`}
+            className={`pro-control-btn stop-btn`}
             onClick={stopSimulation}
             disabled={!isPlaying}
           >
-            ⏸ Stop
+            <TfiControlStop />
+            <span>Stop</span>
           </button>
           <button 
-            className="control-btn refresh-btn"
+            className="pro-control-btn refresh-btn"
             onClick={refreshSimulation}
           >
-            🔄 Refresh
+            <TfiReload />
+            <span>Refresh</span>
           </button>
         </div>
       </div>

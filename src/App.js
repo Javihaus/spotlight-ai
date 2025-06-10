@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/layout/Layout';
+import ProfessionalLayout from './components/layout/ProfessionalLayout';
 import Homepage from './components/pages/Homepage';
 import ThreeActs from './components/pages/ThreeActs';
 import Newsletter from './components/pages/Newsletter';
@@ -11,14 +11,14 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Homepage />} />
-            <Route path="three-acts" element={<ThreeActs />} />
-            <Route path="newsletter" element={<Newsletter />} />
-            <Route path="resources" element={<Resources />} />
-          </Route>
-        </Routes>
+        <ProfessionalLayout>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/three-acts" element={<ThreeActs />} />
+            <Route path="/newsletter" element={<Newsletter />} />
+            <Route path="/resources" element={<Resources />} />
+          </Routes>
+        </ProfessionalLayout>
       </Router>
     </div>
   );

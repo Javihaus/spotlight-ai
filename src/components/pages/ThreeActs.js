@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { TfiArrowRight, TfiPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
 import EmailAgentScenario from '../scenarios/EmailAgentScenario';
 import GeometricFoundation from '../geometry/GeometricFoundation';
-// import MathFramework from '../MathFramework'; // Removed for Act 3 redesign
-import './ThreeActs.css';
-import './ThreeActsRealTime.css';
+import './ThreeActsProfessional.css';
 
 const ThreeActs = () => {
   const [currentAct, setCurrentAct] = useState(1);
@@ -121,27 +120,38 @@ const ThreeActs = () => {
   };
 
   return (
-    <div className="three-acts-page">
-      <div className="acts-container">
-        {/* Progress Header */}
-        <motion.div 
-          className="acts-header"
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <motion.h1 variants={itemVariants}>
-            SpotlightAI Agents in 3 Acts Transformation Guide
+    <div className="three-acts-professional">
+      {/* Hero Section */}
+      <section className="acts-hero">
+        <div className="acts-hero-container">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            Agents in 3 Acts
           </motion.h1>
-          <motion.p variants={itemVariants}>
-            Experience the complete journey from misconception to mastery
+          <motion.p 
+            className="lead-text"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
+            Transform your understanding from misconception to mastery through interactive experience
           </motion.p>
           
-          <motion.div className="progress-container" variants={itemVariants}>
+          <motion.div 
+            className="progress-system"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+          >
             <div className="progress-track">
-              <div 
+              <motion.div 
                 className="progress-fill"
-                style={{ width: `${progress}%` }}
+                initial={{ width: 0 }}
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
               />
             </div>
             <div className="progress-labels">
@@ -150,37 +160,42 @@ const ThreeActs = () => {
               <span className={currentAct >= 3 ? 'active' : ''}>Transform</span>
             </div>
           </motion.div>
-        </motion.div>
-
-        {/* Act Navigation */}
-        <div className="acts-navigation">
-          {[1, 2, 3].map((actNum) => (
-            <button
-              key={actNum}
-              className={`act-nav-btn ${currentAct === actNum ? 'active' : ''} ${
-                actNum <= Math.max(2, currentAct) ? 'available' : 'locked'
-              }`}
-              onClick={() => handleActChange(actNum)}
-              disabled={actNum > Math.max(2, currentAct)}
-            >
-              <span className="act-number">{actNum}</span>
-              <div className="act-nav-content">
-                <h3>{acts[actNum].title}</h3>
-                <p>{acts[actNum].subtitle}</p>
-              </div>
-            </button>
-          ))}
         </div>
+      </section>
 
-        {/* Act Content */}
+      {/* Act Navigation */}
+      <section className="acts-navigation">
+        {[1, 2, 3].map((actNum, index) => (
+          <motion.div
+            key={actNum}
+            className={`act-nav-card ${currentAct === actNum ? 'active' : ''} ${
+              actNum <= Math.max(2, currentAct) ? '' : 'locked'
+            }`}
+            onClick={() => handleActChange(actNum)}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 + index * 0.1, ease: "easeOut" }}
+            whileHover={{ y: actNum <= Math.max(2, currentAct) ? -8 : 0 }}
+          >
+            <div className="act-number">{actNum}</div>
+            <div className="act-nav-content">
+              <h3>{acts[actNum].title}</h3>
+              <p>{acts[actNum].subtitle}</p>
+            </div>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Act Content */}
+      <section className="act-content-wrapper">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentAct}
             className="act-content"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <div className="act-header">
               <h2>{acts[currentAct].title}</h2>
@@ -215,55 +230,56 @@ const ThreeActs = () => {
                   </div>
                   
                   <div className="shatter-button-container">
-                    <button 
+                    <motion.button 
                       className="shatter-btn"
                       onClick={() => {
                         handleInteraction();
                         setTimeout(() => handleActChange(2), 1000);
                       }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       Shatter This Assumption
-                    </button>
+                    </motion.button>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* Act 2: Geometric AI - Distill.pub Style */}
+            {/* Act 2: Geometric AI - Professional Design */}
             {currentAct === 2 && (
-              <div className="act-2-content">
-                <div className="distill-demo">
-                  {/* Upper Part: Email Agent Scenario */}
-                  <EmailAgentScenario 
-                    isRunning={emailScenarioRunning}
-                    onComplete={onScenarioComplete}
-                    communicationRadius={communicationRadius}
-                    onRadiusChange={setCommunicationRadius}
-                  />
+              <div className="act-2-professional">
+                {/* Email Agent Scenario */}
+                <EmailAgentScenario 
+                  isRunning={emailScenarioRunning}
+                  onComplete={onScenarioComplete}
+                  communicationRadius={communicationRadius}
+                  onRadiusChange={setCommunicationRadius}
+                />
 
-                  {/* Lower Part: Geometric Foundation */}
-                  <GeometricFoundation 
-                    isActive={currentAct === 2}
-                    communicationRadius={communicationRadius}
-                    onRadiusChange={setCommunicationRadius}
-                  />
+                {/* Geometric Foundation */}
+                <GeometricFoundation 
+                  isActive={currentAct === 2}
+                  communicationRadius={communicationRadius}
+                  onRadiusChange={setCommunicationRadius}
+                />
 
-                  {/* Transition to Act 3 */}
-                  <div className="act-transition">
-                    <div className="transition-content">
-                      <h4>Ready for the Final Insight?</h4>
-                      <p>
-                        You've seen the practical coordination and the geometric necessity. 
-                        Now discover what this means for the future of AI systems.
-                      </p>
-                      <button 
-                        className="advance-btn"
-                        onClick={() => handleActChange(3)}
-                      >
-                        Complete the Transformation →
-                      </button>
-                    </div>
-                  </div>
+                {/* Transition to Act 3 */}
+                <div className="act-transition">
+                  <h4>Ready for the Final Insight?</h4>
+                  <p>
+                    You've seen the practical coordination and the geometric necessity. 
+                    Now discover what this means for the future of AI systems.
+                  </p>
+                  <motion.button 
+                    className="advance-btn"
+                    onClick={() => handleActChange(3)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Complete the Transformation
+                    <TfiArrowRight />
+                  </motion.button>
                 </div>
               </div>
             )}
@@ -369,7 +385,7 @@ const ThreeActs = () => {
             )}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </section>
     </div>
   );
 };

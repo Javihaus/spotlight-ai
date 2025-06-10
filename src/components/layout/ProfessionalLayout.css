@@ -1,0 +1,241 @@
+/* Professional Layout - Studio Inspired */
+
+.professional-layout {
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.main-content {
+  padding-top: 80px; /* Account for fixed header */
+  min-height: calc(100vh - 80px);
+}
+
+/* Typography System */
+.professional-layout h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.professional-layout h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+}
+
+.professional-layout h3 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+}
+
+.professional-layout h4 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+
+.professional-layout p {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 1rem;
+}
+
+.professional-layout .lead-text {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2rem;
+}
+
+.professional-layout .small-text {
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Section Spacing */
+.section {
+  padding: 6rem 0;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 4rem auto;
+}
+
+/* Grid System */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Professional Cards */
+.pro-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.4, 0.0, 0.2, 1);
+  backdrop-filter: blur(20px);
+}
+
+.pro-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Professional Buttons */
+.pro-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, #00d4ff, #ff006e);
+  color: white;
+}
+
+.pro-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 212, 255, 0.3);
+}
+
+.pro-btn.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.pro-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 12px 24px rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, #00d4ff, #ff006e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .main-content {
+    padding-top: 70px;
+  }
+
+  .section {
+    padding: 4rem 0;
+  }
+
+  .section-container {
+    padding: 0 1.5rem;
+  }
+
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .professional-layout h1 {
+    font-size: 2.5rem;
+  }
+
+  .professional-layout h2 {
+    font-size: 2rem;
+  }
+
+  .professional-layout h3 {
+    font-size: 1.5rem;
+  }
+
+  .section-container {
+    padding: 0 1rem;
+  }
+
+  .pro-card {
+    padding: 1.5rem;
+  }
+
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .professional-layout h1 {
+    font-size: 2rem;
+  }
+
+  .professional-layout h2 {
+    font-size: 1.75rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .pro-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
