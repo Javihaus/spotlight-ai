@@ -7,8 +7,15 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
   const svgRef = useRef();
   const [numAgents, setNumAgents] = useState(3);
   const [taskComplexity, setTaskComplexity] = useState(50);
+  const [agentSpecialization, setAgentSpecialization] = useState(50);
+  const [informationQuality, setInformationQuality] = useState(75);
   const [dimensions] = useState({ width: 500, height: 350 });
   const [coordinationState, setCoordinationState] = useState('analyzing');
+  const [realMetrics, setRealMetrics] = useState({
+    taskSuccessRate: 0,
+    coordinationOverhead: 0,
+    adaptationSpeed: 0
+  });
 
   // Agent positions in metric space
   const [agents, setAgents] = useState([
@@ -86,7 +93,49 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
     return visited.size === agents.length;
   }, [agents]);
 
-  // Update coordination state based on connectivity
+  // Calculate real AI metrics based on parameters
+  const calculateRealMetrics = useCallback(() => {
+    const connections = calculateConnections();
+    const connected = isNetworkConnected(connections);
+    const connectivity = connections.length / ((agents.length * (agents.length - 1)) / 2);
+    
+    // Task Success Rate: depends on coordination bandwidth, task complexity, and specialization balance
+    const bandwidthFactor = (communicationRadius - 50) / 150; // 0-1 scale
+    const complexityPenalty = taskComplexity / 100; // Higher complexity needs more coordination
+    const specializationBalance = 1 - Math.abs(agentSpecialization - 50) / 50; // Sweet spot around 50%
+    const qualityBonus = informationQuality / 100;
+    
+    let taskSuccessRate = Math.max(0, Math.min(100, 
+      (bandwidthFactor * 40 + // Bandwidth contribution
+       specializationBalance * 30 + // Specialization balance
+       qualityBonus * 20 + // Information quality
+       (connected ? 10 : 0)) * // Connection bonus
+      (1 - complexityPenalty * 0.3) // Complexity penalty
+    ));
+
+    // Coordination Overhead: higher when bandwidth is low but specialization is high
+    const overheadFromSpecialization = (agentSpecialization / 100) * (1 - bandwidthFactor);
+    const overheadFromComplexity = (taskComplexity / 100) * (1 - bandwidthFactor);
+    const coordinationOverhead = Math.max(0, Math.min(100,
+      (overheadFromSpecialization * 50 + overheadFromComplexity * 30 + 
+       (connected ? 0 : 20)) // Extra overhead if not connected
+    ));
+
+    // Adaptation Speed: how quickly network adjusts to changes
+    const adaptationSpeed = Math.max(0, Math.min(100,
+      bandwidthFactor * 40 + // Higher bandwidth = faster adaptation
+      (informationQuality / 100) * 30 + // Better info = faster decisions
+      connectivity * 30 // More connections = more adaptation paths
+    ));
+
+    setRealMetrics({
+      taskSuccessRate: Math.round(taskSuccessRate),
+      coordinationOverhead: Math.round(coordinationOverhead),
+      adaptationSpeed: Math.round(adaptationSpeed)
+    });
+  }, [agents, communicationRadius, taskComplexity, agentSpecialization, informationQuality, calculateConnections, isNetworkConnected]);
+
+  // Update coordination state and real metrics
   useEffect(() => {
     const connections = calculateConnections();
     const connected = isNetworkConnected(connections);
@@ -101,7 +150,9 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
     } else {
       setCoordinationState('isolated');
     }
-  }, [communicationRadius, agents, calculateConnections, isNetworkConnected]);
+
+    calculateRealMetrics();
+  }, [communicationRadius, agents, taskComplexity, agentSpecialization, informationQuality, calculateConnections, isNetworkConnected, calculateRealMetrics]);
 
   // D3 visualization
   useEffect(() => {
@@ -272,6 +323,27 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
     }
   };
 
+  const getComplexityLabel = (value) => {
+    if (value < 25) return 'Simple';
+    if (value < 50) return 'Moderate';
+    if (value < 75) return 'Complex';
+    return 'Intricate';
+  };
+
+  const getSpecializationLabel = (value) => {
+    if (value < 25) return 'Generalist';
+    if (value < 50) return 'Hybrid';
+    if (value < 75) return 'Focused';
+    return 'Specialist';
+  };
+
+  const getQualityLabel = (value) => {
+    if (value < 25) return 'Uncertain';
+    if (value < 50) return 'Noisy';
+    if (value < 75) return 'Clean';
+    return 'Precise';
+  };
+
   return (
     <div className="geometric-foundation">
       <div className="foundation-header">
@@ -285,14 +357,14 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
       <div className="geometry-workspace-new">
         {/* Top: Interactive Controls */}
         <div className="geometry-controls">
-          <h4>Geometric Parameters</h4>
+          <h4>Real AI System Parameters</h4>
           <div className="controls-row">
             <div className="control-group">
-              <label htmlFor="comm-radius">
-                Communication Radius: <span className="value">{communicationRadius}px</span>
+              <label htmlFor="coord-bandwidth">
+                Coordination Bandwidth: <span className="value">{communicationRadius}</span>
               </label>
               <input
-                id="comm-radius"
+                id="coord-bandwidth"
                 type="range"
                 min="50"
                 max="200"
@@ -301,31 +373,13 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
                 className="control-slider"
               />
               <div className="control-description">
-                Distance threshold for agent coordination. Watch how small changes create phase transitions.
-              </div>
-            </div>
-
-            <div className="control-group">
-              <label htmlFor="num-agents">
-                Number of Agents: <span className="value">{numAgents}</span>
-              </label>
-              <input
-                id="num-agents"
-                type="range"
-                min="2"
-                max="8"
-                value={numAgents}
-                onChange={(e) => setNumAgents(parseInt(e.target.value))}
-                className="control-slider"
-              />
-              <div className="control-description">
-                Agent density affects coordination complexity. More agents require larger communication radius.
+                How much information agents can share per interaction. High bandwidth = full context & attachments, low bandwidth = brief summaries only.
               </div>
             </div>
 
             <div className="control-group">
               <label htmlFor="task-complexity">
-                Task Complexity: <span className="value">{taskComplexity}%</span>
+                Task Complexity: <span className="value">{getComplexityLabel(taskComplexity)}</span>
               </label>
               <input
                 id="task-complexity"
@@ -337,7 +391,43 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
                 className="control-slider"
               />
               <div className="control-description">
-                Environmental complexity deforms the metric space, affecting coordination requirements.
+                Simple tasks like "sort emails" need minimal coordination. Complex tasks like "draft quarterly report" require extensive back-and-forth.
+              </div>
+            </div>
+
+            <div className="control-group">
+              <label htmlFor="agent-specialization">
+                Agent Specialization: <span className="value">{getSpecializationLabel(agentSpecialization)}</span>
+              </label>
+              <input
+                id="agent-specialization"
+                type="range"
+                min="0"
+                max="100"
+                value={agentSpecialization}
+                onChange={(e) => setAgentSpecialization(parseInt(e.target.value))}
+                className="control-slider"
+              />
+              <div className="control-description">
+                Specialists (legal, financial, writing agents) need more coordination but solve complex problems. Generalists coordinate easily but may miss insights.
+              </div>
+            </div>
+
+            <div className="control-group">
+              <label htmlFor="info-quality">
+                Information Quality: <span className="value">{getQualityLabel(informationQuality)}</span>
+              </label>
+              <input
+                id="info-quality"
+                type="range"
+                min="0"
+                max="100"
+                value={informationQuality}
+                onChange={(e) => setInformationQuality(parseInt(e.target.value))}
+                className="control-slider"
+              />
+              <div className="control-description">
+                Well-formatted corporate emails vs unclear customer complaints. Poor data quality forces agents to ask clarifying questions.
               </div>
             </div>
           </div>
@@ -346,7 +436,7 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
         {/* Middle: Visualization */}
         <div className="geometry-viz">
           <div className="viz-header">
-            <h4>Metric Space Dynamics</h4>
+            <h4>Real AI System Performance</h4>
             <div className="coordination-status">
               <div 
                 className="status-indicator"
@@ -364,8 +454,24 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
             viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
           />
           
-          <div className="coordination-description">
-            {getCoordinationDescription()}
+          <div className="real-metrics-display">
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-label">Task Success Rate</div>
+                <div className="metric-value">{realMetrics.taskSuccessRate}%</div>
+                <div className="metric-desc">Problems solved correctly</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Coordination Overhead</div>
+                <div className="metric-value">{realMetrics.coordinationOverhead}%</div>
+                <div className="metric-desc">Extra communication needed</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Adaptation Speed</div>
+                <div className="metric-value">{realMetrics.adaptationSpeed}%</div>
+                <div className="metric-desc">Network adjustment rate</div>
+              </div>
+            </div>
           </div>
         </div>
 

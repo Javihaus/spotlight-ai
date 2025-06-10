@@ -152,6 +152,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   }, [communicationRadius, agentStates]);
 
   const startSimulation = () => {
+    if (isPlaying) return; // Prevent multiple simultaneous runs
+    
     setIsPlaying(true);
     setSimulationComplete(false);
     
@@ -270,6 +272,11 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   const stopSimulation = () => {
     setIsPlaying(false);
     setSimulationComplete(false);
+  };
+
+  const refreshSimulation = () => {
+    setIsPlaying(false);
+    setSimulationComplete(false);
     setCurrentStep(0);
     setCommunicationLog([]);
     setProcessedEmails([]);
@@ -321,11 +328,17 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             ▶ Play
           </button>
           <button 
-            className={`control-btn stop-btn ${!isPlaying ? 'disabled' : ''}`}
+            className={`control-btn stop-btn`}
             onClick={stopSimulation}
             disabled={!isPlaying}
           >
             ⏸ Stop
+          </button>
+          <button 
+            className="control-btn refresh-btn"
+            onClick={refreshSimulation}
+          >
+            🔄 Refresh
           </button>
         </div>
       </div>
