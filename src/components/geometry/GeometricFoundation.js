@@ -30,9 +30,9 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
       description: "Group behavior emerges from local geometric constraints"
     },
     connectivity: {
-      title: "Network Connectivity",
+      title: "Network Resilience",
       equation: "λ₂(L) > 0 ⟺ Connected",
-      description: "Second eigenvalue of Laplacian determines coordination capability"
+      description: "Network resilience - how many backup communication paths exist between agents when connections fail"
     },
     phase: {
       title: "Phase Transition",
@@ -275,19 +275,18 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
   return (
     <div className="geometric-foundation">
       <div className="foundation-header">
-        <h3>The Mathematical Soul: Geometric Necessity in Agent Coordination</h3>
+        <h3>The geometry of agentic AI</h3>
         <p>
           True agency emerges not from programming, but from geometric constraints in metric spaces. 
           Adjust the parameters below to witness phase transitions in coordination behavior.
         </p>
       </div>
 
-      <div className="geometry-workspace">
-        {/* Left: Interactive Controls and Visualization */}
-        <div className="geometry-left">
-          <div className="geometry-controls">
-            <h4>Geometric Parameters</h4>
-            
+      <div className="geometry-workspace-new">
+        {/* Top: Interactive Controls */}
+        <div className="geometry-controls">
+          <h4>Geometric Parameters</h4>
+          <div className="controls-row">
             <div className="control-group">
               <label htmlFor="comm-radius">
                 Communication Radius: <span className="value">{communicationRadius}px</span>
@@ -342,77 +341,54 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="geometry-viz">
-            <div className="viz-header">
-              <h4>Metric Space Dynamics</h4>
-              <div className="coordination-status">
-                <div 
-                  className="status-indicator"
-                  style={{ backgroundColor: getPhaseColor() }}
-                />
-                <span className="status-text">{coordinationState.toUpperCase()}</span>
-              </div>
+        {/* Middle: Visualization */}
+        <div className="geometry-viz">
+          <div className="viz-header">
+            <h4>Metric Space Dynamics</h4>
+            <div className="coordination-status">
+              <div 
+                className="status-indicator"
+                style={{ backgroundColor: getPhaseColor() }}
+              />
+              <span className="status-text">{coordinationState.toUpperCase()}</span>
             </div>
-            
-            <svg
-              ref={svgRef}
-              width={dimensions.width}
-              height={dimensions.height}
-              className="geometry-svg"
-              viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-            />
-            
-            <div className="coordination-description">
-              {getCoordinationDescription()}
-            </div>
+          </div>
+          
+          <svg
+            ref={svgRef}
+            width={dimensions.width}
+            height={dimensions.height}
+            className="geometry-svg"
+            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+          />
+          
+          <div className="coordination-description">
+            {getCoordinationDescription()}
           </div>
         </div>
 
-        {/* Right: Mathematical Insights */}
-        <div className="geometry-right">
-          <div className="mathematical-insights">
-            <h4>The Geometric Necessity</h4>
-            <div className="insights-grid">
-              {Object.entries(insights).map(([key, insight]) => (
-                <motion.div
-                  key={key}
-                  className="insight-card"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="insight-title">{insight.title}</div>
-                  <div className="insight-equation">{insight.equation}</div>
-                  <div className="insight-description">{insight.description}</div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Revelation Section */}
-      <div className="geometric-revelation">
-        <div className="revelation-content">
-          <h4>🧠 The "Aha!" Moment</h4>
-          <div className="revelation-text">
-            <p>
-              <strong>You're witnessing mathematical emergence.</strong> The coordination you see isn't programmed - 
-              it's geometrically inevitable. When agents exist in the same metric space with overlapping 
-              communication radii, coordination emerges from pure mathematical necessity.
-            </p>
-            <p>
-              This is why some AI systems work beautifully while others fail catastrophically. 
-              It's not about better algorithms - it's about understanding the geometric constraints 
-              that govern information flow in multi-agent systems.
-            </p>
-            <div className="key-insight">
-              <strong>Mathematical revelation:</strong> Understanding the geometric structure beneath agent interactions 
-              transforms unpredictable AI behavior into predictable patterns that we can visualize, analyze, and control.
-            </div>
+        {/* Bottom: Mathematical Insights */}
+        <div className="mathematical-insights">
+          <h4>The Geometric Necessity</h4>
+          <div className="insights-row">
+            {Object.entries(insights).map(([key, insight]) => (
+              <motion.div
+                key={key}
+                className="insight-card-small"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="insight-title">{insight.title}</div>
+                <div className="insight-equation">{insight.equation}</div>
+                <div className="insight-description">{insight.description}</div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>
+
     </div>
   );
 };

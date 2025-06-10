@@ -70,7 +70,7 @@ const ThreeActs = () => {
       content: "traditional"
     },
     2: {
-      title: "The Mathematical Soul Revealed", 
+      title: "The geometry of agentic AI", 
       subtitle: "The Discovery Phase",
       description: "Watch real agents coordinate through geometric necessity. Above: practical scenario. Below: the mathematical truth that makes it inevitable.",
       content: "geometric"
@@ -95,10 +95,6 @@ const ThreeActs = () => {
     setProgress(currentAct * 33.33);
   };
 
-  const startEmailScenario = () => {
-    setEmailScenarioRunning(true);
-    handleInteraction();
-  };
 
   const onScenarioComplete = () => {
     // Scenario completed, user can move to Act 3
@@ -233,28 +229,10 @@ const ThreeActs = () => {
               </div>
             )}
 
-            {/* Act 2: Mathematical Soul - Distill.pub Style */}
+            {/* Act 2: Geometric AI - Distill.pub Style */}
             {currentAct === 2 && (
               <div className="act-2-content">
                 <div className="distill-demo">
-                  <div className="demo-introduction">
-                    <h3>The Mathematical Soul of Agentic AI</h3>
-                    <p>
-                      Below, watch a real email processing system where three agents coordinate autonomously. 
-                      Then discover the geometric necessity that makes this coordination mathematically inevitable.
-                    </p>
-                    
-                    <div className="start-demo-section">
-                      <button 
-                        className="start-demo-btn"
-                        onClick={startEmailScenario}
-                        disabled={emailScenarioRunning}
-                      >
-                        {emailScenarioRunning ? 'Scenario Running...' : 'Start Email Processing Demo'}
-                      </button>
-                    </div>
-                  </div>
-
                   {/* Upper Part: Email Agent Scenario */}
                   <EmailAgentScenario 
                     isRunning={emailScenarioRunning}

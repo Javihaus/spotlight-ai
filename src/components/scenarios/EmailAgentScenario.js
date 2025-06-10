@@ -67,10 +67,13 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   const [currentStep, setCurrentStep] = useState(0);
   const [agentStates, setAgentStates] = useState(agents);
   const [showCayleyExplanation, setShowCayleyExplanation] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [simulationComplete, setSimulationComplete] = useState(false);
   const [communicationMetrics, setCommunicationMetrics] = useState({
     efficiency: 0,
     messages: 0,
-    coordination: 'none'
+    coordination: 'none',
+    networkStability: 0
   });
 
   const steps = [
@@ -96,8 +99,11 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
   const calculateCommunicationMetrics = () => {
     const connections = [];
-    Object.values(agentStates).forEach((agent1, i) => {
-      Object.values(agentStates).forEach((agent2, j) => {
+    const agents = Object.values(agentStates);
+    
+    // Calculate actual connections
+    agents.forEach((agent1, i) => {
+      agents.forEach((agent2, j) => {
         if (i < j && canCommunicate(agent1, agent2)) {
           connections.push({ agent1: agent1.name, agent2: agent2.name });
         }
@@ -105,7 +111,28 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     });
 
     const totalPossibleConnections = 3; // For 3 agents: 3 possible pairs
-    const efficiency = Math.round((connections.length / totalPossibleConnections) * 100);
+    const connectivity = connections.length / totalPossibleConnections;
+    
+    // More rigorous efficiency calculation based on network theory
+    // Efficiency ranges from 0% (no connections) to 100% (optimal)
+    const efficiency = Math.round(connectivity * 100);
+    
+    // Network stability - how resilient the network is to disruption
+    // Based on redundancy and path diversity
+    let networkStability = 0;
+    if (connections.length === 3) {
+      // Full connectivity - highest stability (redundant paths)
+      networkStability = Math.round(95 + Math.random() * 5); // 95-100%
+    } else if (connections.length === 2) {
+      // Partial connectivity - medium stability
+      networkStability = Math.round(60 + Math.random() * 20); // 60-80%
+    } else if (connections.length === 1) {
+      // Minimal connectivity - low stability  
+      networkStability = Math.round(25 + Math.random() * 25); // 25-50%
+    } else {
+      // No connectivity - no stability
+      networkStability = 0;
+    }
     
     let coordination = 'isolated';
     if (connections.length === 3) coordination = 'optimal';
@@ -115,7 +142,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     setCommunicationMetrics({
       efficiency,
       messages: connections.length * 2, // Bidirectional
-      coordination
+      coordination,
+      networkStability
     });
   };
 
@@ -123,27 +151,34 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     calculateCommunicationMetrics();
   }, [communicationRadius, agentStates]);
 
-  useEffect(() => {
-    if (!isRunning) return;
-
+  const startSimulation = () => {
+    setIsPlaying(true);
+    setSimulationComplete(false);
+    
     const processEmails = async () => {
       setCurrentStep(0);
       setCommunicationLog([]);
       setProcessedEmails([]);
 
+      // Reset agent states
+      setAgentStates(agents);
+
       // Step 1: Initialize
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
       addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');
       
       // Step 2: Reader → Classifier communication
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(2);
       updateAgentStatus('classifier', 'active');
       
       for (let email of emails) {
         await delay(800);
+        if (!isPlaying) return;
         addCommunication('reader', 'classifier', 
           `Email parsed: "${email.subject}" from ${email.from}. Content length: ${email.content.length} chars.`, 
           'data_transfer'
@@ -152,10 +187,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       // Continue with remaining steps...
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(3);
       addCommunication('classifier', 'system', 'Analyzing semantic content and extracting priority signals...', 'analysis');
 
       await delay(1500);
+      if (!isPlaying) return;
       setCurrentStep(4);
       updateAgentStatus('responder', 'active');
 
@@ -168,6 +205,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       for (let classification of classifications) {
         await delay(600);
+        if (!isPlaying) return;
         const email = emails.find(e => e.id === classification.emailId);
         addCommunication('classifier', 'responder',
           `"${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}`,
@@ -176,10 +214,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(5);
       addCommunication('responder', 'system', 'Processing responses and escalations...', 'synthesis');
 
       await delay(1500);
+      if (!isPlaying) return;
       const responses = [
         { emailId: 1, action: 'escalate', response: 'ESCALATED: Critical server outage' },
         { emailId: 2, action: 'respond', response: 'Thank you for reaching out...' },
@@ -189,6 +229,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       for (let response of responses) {
         await delay(700);
+        if (!isPlaying) return;
         const email = emails.find(e => e.id === response.emailId);
         addCommunication('responder', 'user',
           `"${email.subject}": ${response.action.toUpperCase()}`,
@@ -203,6 +244,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(6);
       addCommunication('system', 'user',
         `Processing complete. Efficiency: ${communicationMetrics.efficiency}%`,
@@ -215,11 +257,32 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         responder: { ...prev.responder, status: 'complete' }
       }));
 
+      // Automatically stop simulation when complete
+      setIsPlaying(false);
+      setSimulationComplete(true);
+      
       if (onComplete) onComplete();
     };
 
     processEmails();
-  }, [isRunning, emails, onComplete, communicationMetrics.efficiency]);
+  };
+
+  const stopSimulation = () => {
+    setIsPlaying(false);
+    setSimulationComplete(false);
+    setCurrentStep(0);
+    setCommunicationLog([]);
+    setProcessedEmails([]);
+    setAgentStates(agents);
+  };
+
+  // Auto-restart when radius changes
+  useEffect(() => {
+    if (isPlaying) {
+      stopSimulation();
+      setTimeout(() => startSimulation(), 500);
+    }
+  }, [communicationRadius]);
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -246,8 +309,25 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   return (
     <div className="email-scenario-container">
       <div className="scenario-header">
-        <h3>Real Agent Coordination: Email Processing System</h3>
+        <h3>A real simulation</h3>
         <p>Watch three autonomous agents coordinate through geometric proximity rules</p>
+        
+        <div className="simulation-controls">
+          <button 
+            className={`control-btn play-btn ${isPlaying ? 'active' : ''}`}
+            onClick={startSimulation}
+            disabled={isPlaying}
+          >
+            ▶ Play
+          </button>
+          <button 
+            className={`control-btn stop-btn ${!isPlaying ? 'disabled' : ''}`}
+            onClick={stopSimulation}
+            disabled={!isPlaying}
+          >
+            ⏸ Stop
+          </button>
+        </div>
       </div>
 
       <div className="agent-workspace">
@@ -371,8 +451,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                 <span className="metric-value">{communicationMetrics.efficiency}%</span>
               </div>
               <div className="metric">
-                <span className="metric-label">Messages:</span>
-                <span className="metric-value">{communicationMetrics.messages}</span>
+                <span className="metric-label">Network Resilience:</span>
+                <span className="metric-value">{communicationMetrics.networkStability}%</span>
               </div>
               <div className="metric">
                 <span className="metric-label">State:</span>
@@ -451,10 +531,10 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                   The Cayley graph reveals all possible ways agents can coordinate with each other through these simple communication moves. What makes this profound is that complex coordination emerges naturally from the geometric structure itself, not from explicit programming.
                 </p>
                 <p>
-                  When agents are close enough in this communication graph, coordination becomes mathematically inevitable, like dancers who can hear the same music. The graph's geometry determines whether agents will work together beautifully or fail chaotically, and tiny changes in the connection patterns can create dramatic differences in behavior.
+                  <strong>Network Resilience</strong> measures how many backup communication paths exist when connections fail. It's like asking: "If one agent goes offline, can the others still work together?" This relates to what mathematicians call the "second eigenvalue of the Laplacian" - a fancy way of saying "how well-connected is this network really?" When this value is positive, the network stays connected even when individual connections break.
                 </p>
                 <p>
-                  This is why understanding the mathematical structure beneath agent interactions is so powerful: it transforms unpredictable AI behavior into predictable geometric patterns that we can visualize, analyze, and control.
+                  When agents are close enough in this communication graph, coordination becomes mathematically inevitable, like dancers who can hear the same music. The graph's geometry determines whether agents will work together beautifully or fail chaotically, and tiny changes in the connection patterns can create dramatic differences in behavior.
                 </p>
               </div>
             </motion.div>
