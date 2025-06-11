@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import './Homepage.css';
+import { FiArrowRight, FiTarget, FiZap, FiTrendingUp } from 'react-icons/fi';
+import './HomepageProfessional.css';
 
 const Homepage = () => {
   const [email, setEmail] = useState('');
@@ -35,185 +36,219 @@ const Homepage = () => {
   };
 
   return (
-    <div className="homepage">
+    <div className="homepage-professional">
       {/* Hero Section */}
-      <motion.section 
-        className="hero-section"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
+      <section className="hero-professional">
         <div className="hero-container">
-          <motion.div className="hero-content" variants={itemVariants}>
-            <h1 className="hero-title">
+          <motion.div 
+            className="hero-content"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h1>
               99% of AI's potential is 
               <span className="gradient-text"> agentic</span>
             </h1>
             <p className="hero-subtitle">
-              Discover how autonomous intelligence works through 
-              our three-act transformation guide. 
+              Transform your understanding from misconception to mastery through our interactive three-act experience. Discover the geometric necessity that makes coordination inevitable.
             </p>
-          </motion.div>
+            
+            <div className="hero-cta">
+              <Link to="/three-acts" className="cta-primary">
+                Start Transformation
+                <FiArrowRight />
+              </Link>
+              <a href="#newsletter" className="cta-secondary">
+                Join Newsletter
+              </a>
+            </div>
 
-          <motion.div className="hero-newsletter" variants={itemVariants}>
-            <div className="newsletter-card">
-              <div className="newsletter-header">
-                <h2>Join the SpotlightAI Newsletter</h2>
-                <p>Weekly insights on agentic AI - 5 minute read</p>
-                <div className="social-proof">
-                  <div className="reader-avatars">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <div key={i} className="avatar"></div>
-                    ))}
-                  </div>
-                  <span className="reader-count">Join our readers list</span>
-                </div>
+            <div className="hero-stats">
+              <div className="stat-item">
+                <span className="stat-number">3</span>
+                <span className="stat-label">Acts</span>
               </div>
-
-              {!isSubscribed ? (
-                <form onSubmit={handleNewsletterSignup} className="newsletter-form">
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
-                      required
-                      className="email-input"
-                    />
-                    <button type="submit" className="submit-btn">
-                      Subscribe
-                    </button>
-                  </div>
-                  <p className="privacy-text">
-                    No spam. Unsubscribe anytime. Privacy-first approach.
-                  </p>
-                </form>
-              ) : (
-                <div className="success-message">
-                  <div className="success-icon">✓</div>
-                  <h3>Welcome to SpotlightAI!</h3>
-                  <p>Check your email for confirmation and your first insights.</p>
-                </div>
-              )}
+              <div className="stat-item">
+                <span className="stat-number">30</span>
+                <span className="stat-label">Minutes</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-number">∞</span>
+                <span className="stat-label">Impact</span>
+              </div>
             </div>
           </motion.div>
+
+          <motion.div 
+            className="newsletter-professional"
+            id="newsletter"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          >
+            <div className="newsletter-header">
+              <h2>SpotlightAI Insights</h2>
+              <p>Weekly deep dives into agentic AI - 5 minute reads that transform understanding</p>
+              
+              <div className="social-proof">
+                <div className="reader-avatars">
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <div key={i} className="avatar"></div>
+                  ))}
+                </div>
+                <span className="reader-count">Join 1,000+ AI practitioners</span>
+              </div>
+            </div>
+
+            {!isSubscribed ? (
+              <form onSubmit={handleNewsletterSignup} className="newsletter-form">
+                <div className="form-group">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    required
+                    className="email-input"
+                  />
+                  <button type="submit" className="submit-btn">
+                    Subscribe
+                  </button>
+                </div>
+                <p className="privacy-text">
+                  No spam. Unsubscribe anytime. Privacy-first approach.
+                </p>
+              </form>
+            ) : (
+              <div className="success-message">
+                <div className="success-icon">✓</div>
+                <h3>Welcome to SpotlightAI!</h3>
+                <p>Check your email for confirmation and your first insights.</p>
+              </div>
+            )}
+          </motion.div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Three Acts Preview */}
-      <motion.section 
-        className="three-acts-preview"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={containerVariants}
-      >
+      <section className="three-acts-preview">
         <div className="section-container">
-          <motion.div className="section-header" variants={itemVariants}>
-            <h2 className="section-title">Agents in 3 Acts Transformation</h2>
+          <motion.div 
+            className="section-header"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="section-title">The Transformation Journey</h2>
             <p className="section-subtitle">
-              Experience the complete journey from zero to mastery
+              Three acts that completely change how you understand AI systems
             </p>
           </motion.div>
 
           <div className="acts-grid">
-            <motion.div className="act-card" variants={itemVariants}>
-              <div className="act-number">01</div>
-              <h3>What You Think You Know</h3>
-              <p>
-                Start with what people think agentic AI means - smarter chatbots, 
-                better automation. Then witness emergence that couldn't be programmed.
-              </p>
-              <div className="act-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '25%' }}></div>
+            {[
+              {
+                number: "01",
+                title: "Recognition",
+                content: "Start with what everyone thinks agentic AI means - smarter chatbots, better automation. Then witness emergence that couldn't be programmed.",
+                progress: 25,
+                label: "Setup"
+              },
+              {
+                number: "02", 
+                title: "Experience",
+                content: "Interactive simulation where you control real agent parameters. Watch coordination patterns emerge from pure geometric necessity.",
+                progress: 50,
+                label: "Discovery"
+              },
+              {
+                number: "03",
+                title: "Transformation", 
+                content: "Mathematical insights become intuitive. Connect geometric patterns to real AI system behavior and deployment success.",
+                progress: 100,
+                label: "Mastery"
+              }
+            ].map((act, index) => (
+              <motion.div 
+                key={act.number}
+                className="act-preview-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+              >
+                <div className="act-number">{act.number}</div>
+                <h3>{act.title}</h3>
+                <p>{act.content}</p>
+                <div className="act-progress">
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{ width: `${act.progress}%` }}></div>
+                  </div>
+                  <span>{act.label}</span>
                 </div>
-                <span>Setup</span>
-              </div>
-            </motion.div>
-
-            <motion.div className="act-card" variants={itemVariants}>
-              <div className="act-number">02</div>
-              <h3>The Game That Reveals Everything</h3>
-              <p>
-                Interactive experience where you deploy agents to solve complex problems. 
-                Watch strategies emerge that no human programmed.
-              </p>
-              <div className="act-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '50%' }}></div>
-                </div>
-                <span>Discovery</span>
-              </div>
-            </motion.div>
-
-            <motion.div className="act-card" variants={itemVariants}>
-              <div className="act-number">03</div>
-              <h3>What This Actually Means</h3>
-              <p>
-                Mathematical insights become accessible. Connect patterns to deeper 
-                principles - energy dynamics, coordination, emergent intelligence.
-              </p>
-              <div className="act-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '25%' }}></div>
-                </div>
-                <span>Transformation</span>
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
 
-          <motion.div className="cta-section" variants={itemVariants}>
-            <Link to="/three-acts" className="btn btn-primary">
-              Experience Agents in Action
+          <motion.div 
+            className="cta-section"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <Link to="/three-acts" className="cta-primary">
+              Begin Transformation
+              <FiArrowRight />
             </Link>
             <p className="cta-subtitle">
-              Transform your understanding in 30 minutes
+              Complete journey in under 30 minutes
             </p>
           </motion.div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Value Proposition */}
-      <motion.section 
-        className="value-section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        variants={containerVariants}
-      >
+      <section className="value-section">
         <div className="section-container">
-          <motion.div className="value-grid" variants={itemVariants}>
-            <div className="value-card">
-              <div className="value-icon">🧠</div>
-              <h3>Understanding, Not Just Information</h3>
-              <p>
-                Move beyond surface-level explanations to genuine comprehension 
-                of how autonomous agents coordinate and learn.
-              </p>
-            </div>
-            
-            <div className="value-card">
-              <div className="value-icon">🔬</div>
-              <h3>Mathematical Foundation</h3>
-              <p>
-                Discover the rigorous mathematical principles underlying 
-                emergent intelligence and agent coordination.
-              </p>
-            </div>
-            
-            <div className="value-card">
-              <div className="value-icon">⚡</div>
-              <h3>Immediate Application</h3>
-              <p>
-                Build your own basic agentic behaviors and see how they 
-                interact in real-time simulations.
-              </p>
-            </div>
-          </motion.div>
+          <div className="value-grid">
+            {[
+              {
+                icon: <FiTarget />,
+                title: "Deep Understanding",
+                content: "Move beyond surface explanations to genuine comprehension of how autonomous agents coordinate through mathematical necessity."
+              },
+              {
+                icon: <FiZap />,
+                title: "Interactive Learning", 
+                content: "Experience geometric constraints firsthand through real simulations that respond to your parameter adjustments."
+              },
+              {
+                icon: <FiTrendingUp />,
+                title: "Practical Application",
+                content: "Connect mathematical insights to real AI deployment decisions. Understand why some systems succeed while others fail."
+              }
+            ].map((value, index) => (
+              <motion.div 
+                key={value.title}
+                className="value-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -8 }}
+              >
+                <div className="value-icon">{value.icon}</div>
+                <h3>{value.title}</h3>
+                <p>{value.content}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 };
