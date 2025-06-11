@@ -184,9 +184,9 @@
 
 .submit-btn {
   padding: 0.875rem 2rem;
-  background: #000;
-  color: #fff;
-  border: none;
+  background: #fff;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   font-size: 0.95rem;
   font-weight: 400;
@@ -196,9 +196,11 @@
 }
 
 .submit-btn:hover {
-  background: #333;
+  background: #3c1199;
+  color: #fff;
+  border-color: #3c1199;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 25px rgba(60, 17, 153, 0.25);
 }
 
 .privacy-text {
