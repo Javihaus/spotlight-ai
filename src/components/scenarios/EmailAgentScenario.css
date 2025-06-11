@@ -226,17 +226,35 @@
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
-  background: linear-gradient(135deg, var(--primary-cyan), var(--primary-magenta));
+  background: #3c1199;
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid white;
-  box-shadow: 0 2px 6px rgba(0, 212, 255, 0.3);
+  box-shadow: 0 2px 6px rgba(60, 17, 153, 0.3);
   transition: all 0.2s ease;
 }
 
 .radius-slider::-webkit-slider-thumb:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 10px rgba(0, 212, 255, 0.5);
+  box-shadow: 0 4px 10px rgba(60, 17, 153, 0.5);
+}
+
+.param-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  background: #3c1199;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(60, 17, 153, 0.3);
+  transition: all 0.2s ease;
+}
+
+.param-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(60, 17, 153, 0.5);
 }
 
 .communication-metrics {

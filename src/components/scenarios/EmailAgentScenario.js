@@ -163,7 +163,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     calculateCommunicationMetrics();
   }, [communicationRadius, agentStates]);
 
-  const startSimulation = () => {
+  const startSimulation = async () => {
     if (isPlaying) return; // Prevent multiple simultaneous runs
     
     setIsPlaying(true);
@@ -277,7 +277,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       if (onComplete) onComplete();
     };
 
-    processEmails();
+    await processEmails();
   };
 
   const stopSimulation = () => {
@@ -395,14 +395,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         <div className="workspace-grid">
           {/* Left: Agent Network Visualization */}
           <div className="agent-network">
-            <div className="cayley-header">
-              <button 
-                className="cayley-annotation"
-                onClick={() => setShowCayleyExplanation(true)}
-              >
-                Cayley Graph
-              </button>
-            </div>
             
             <div className="radius-control">
               <label>
@@ -464,8 +456,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                   cx={agent.position.x}
                   cy={agent.position.y}
                   r={communicationRadius}
-                  fill="rgba(0, 212, 255, 0.1)"
-                  stroke="rgba(0, 212, 255, 0.3)"
+                  fill="rgba(60, 17, 153, 0.1)"
+                  stroke="rgba(60, 17, 153, 0.3)"
                   strokeWidth="1"
                   strokeDasharray="5,5"
                 />
@@ -482,7 +474,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                       y1={agent1.position.y}
                       x2={agent2.position.x}
                       y2={agent2.position.y}
-                      stroke={canComm ? "rgba(0, 212, 255, 0.6)" : "rgba(255, 255, 255, 0.1)"}
+                      stroke={canComm ? "rgba(60, 17, 153, 0.6)" : "rgba(0, 0, 0, 0.1)"}
                       strokeWidth={canComm ? "3" : "1"}
                       className={canComm ? "active-link" : ""}
                     />
@@ -533,8 +525,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               {/* Gradients */}
               <defs>
                 <linearGradient id="activeGradient">
-                  <stop offset="0%" stopColor="#00d4ff" />
-                  <stop offset="100%" stopColor="#ff006e" />
+                  <stop offset="0%" stopColor="#3c1199" />
+                  <stop offset="100%" stopColor="#6b46c1" />
                 </linearGradient>
                 <linearGradient id="completeGradient">
                   <stop offset="0%" stopColor="#4caf50" />
