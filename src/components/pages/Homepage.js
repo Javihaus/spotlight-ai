@@ -97,7 +97,7 @@ const Homepage = () => {
                     <div key={i} className="avatar"></div>
                   ))}
                 </div>
-                <span className="reader-count">Join 1,000+ AI practitioners</span>
+                <span className="reader-count">Join 1,200+ AI practitioners</span>
               </div>
             </div>
 
