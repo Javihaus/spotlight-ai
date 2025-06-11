@@ -36,7 +36,7 @@ const KonpoHeader = () => {
           <Link to="/" className="logo">
             <div className="logo-container">
               <img 
-                src="/SpotlightAI-logo-03.png" 
+                src="/SpotlightAI-logo_new-04.png" 
                 alt="SpotlightAI" 
                 className="logo-image"
                 onError={(e) => {
