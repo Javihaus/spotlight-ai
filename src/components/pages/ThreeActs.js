@@ -4,7 +4,7 @@ import { TfiArrowRight } from 'react-icons/tfi';
 import { FiPlay, FiSquare, FiRefreshCw } from 'react-icons/fi';
 import EmailAgentScenario from '../scenarios/EmailAgentScenario';
 import GeometricFoundation from '../geometry/GeometricFoundation';
-import './ThreeActsProfessional.css';
+import './ThreeActsKonpo.css';
 
 const ThreeActs = () => {
   const [currentAct, setCurrentAct] = useState(1);
@@ -121,7 +121,7 @@ const ThreeActs = () => {
   };
 
   return (
-    <div className="three-acts-professional">
+    <div className="three-acts-konpo">
       {/* Hero Section */}
       <section className="acts-hero">
         <div className="acts-hero-container">
@@ -249,7 +249,7 @@ const ThreeActs = () => {
 
             {/* Act 2: Geometric AI - Professional Design */}
             {currentAct === 2 && (
-              <div className="act-2-professional">
+              <div className="act-2-konpo">
                 {/* Email Agent Scenario */}
                 <EmailAgentScenario 
                   isRunning={emailScenarioRunning}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowRight, FiTarget, FiZap, FiTrendingUp } from 'react-icons/fi';
-import './HomepageProfessional.css';
+import './HomepageKonpo.css';
 
 const Homepage = () => {
   const [email, setEmail] = useState('');
@@ -36,9 +36,9 @@ const Homepage = () => {
   };
 
   return (
-    <div className="homepage-professional">
+    <div className="homepage-konpo">
       {/* Hero Section */}
-      <section className="hero-professional">
+      <section className="hero-konpo">
         <div className="hero-container">
           <motion.div 
             className="hero-content"
@@ -81,7 +81,7 @@ const Homepage = () => {
           </motion.div>
 
           <motion.div 
-            className="newsletter-professional"
+            className="newsletter-konpo"
             id="newsletter"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
