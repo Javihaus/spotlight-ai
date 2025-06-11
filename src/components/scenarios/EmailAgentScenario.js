@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TfiControlPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
 import './EmailAgentScenario.css';
@@ -109,7 +109,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     return distance <= communicationRadius;
   };
 
-  const calculateCommunicationMetrics = () => {
+  const calculateCommunicationMetrics = useCallback(() => {
     const connections = [];
     const agents = Object.values(agentStates);
     
@@ -157,43 +157,39 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       coordination,
       networkStability
     });
-  };
+  }, [agentStates, communicationRadius, canCommunicate]);
 
   useEffect(() => {
     calculateCommunicationMetrics();
-  }, [communicationRadius, agentStates]);
+  }, [communicationRadius, agentStates, calculateCommunicationMetrics]);
 
   const startSimulation = async () => {
+    console.log('Play button clicked, isPlaying:', isPlaying);
     if (isPlaying) return; // Prevent multiple simultaneous runs
     
     setIsPlaying(true);
     setSimulationComplete(false);
+    setCurrentStep(0);
+    setCommunicationLog([]);
+    setProcessedEmails([]);
+
+    // Reset agent states
+    setAgentStates(agents);
     
     try {
-      const processEmails = async () => {
-      setCurrentStep(0);
-      setCommunicationLog([]);
-      setProcessedEmails([]);
-
-      // Reset agent states
-      setAgentStates(agents);
-
       // Step 1: Initialize
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
       addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');
       
       // Step 2: Reader → Classifier communication
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(2);
       updateAgentStatus('classifier', 'active');
       
       for (let email of emails) {
         await delay(800);
-        if (!isPlaying) return;
         addCommunication('reader', 'classifier', 
           `Email parsed: "${email.subject}" from ${email.from}. Content length: ${email.content.length} chars.`, 
           'data_transfer'
@@ -202,12 +198,10 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       // Continue with remaining steps...
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(3);
       addCommunication('classifier', 'system', 'Analyzing semantic content and extracting priority signals...', 'analysis');
 
       await delay(1500);
-      if (!isPlaying) return;
       setCurrentStep(4);
       updateAgentStatus('responder', 'active');
 
@@ -220,7 +214,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       for (let classification of classifications) {
         await delay(600);
-        if (!isPlaying) return;
         const email = emails.find(e => e.id === classification.emailId);
         addCommunication('classifier', 'responder',
           `"${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}`,
@@ -229,12 +222,10 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(5);
       addCommunication('responder', 'system', 'Processing responses and escalations...', 'synthesis');
 
       await delay(1500);
-      if (!isPlaying) return;
       const responses = [
         { emailId: 1, action: 'escalate', response: 'ESCALATED: Critical server outage' },
         { emailId: 2, action: 'respond', response: 'Thank you for reaching out...' },
@@ -244,7 +235,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       for (let response of responses) {
         await delay(700);
-        if (!isPlaying) return;
         const email = emails.find(e => e.id === response.emailId);
         addCommunication('responder', 'user',
           `"${email.subject}": ${response.action.toUpperCase()}`,
@@ -259,7 +249,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       await delay(1000);
-      if (!isPlaying) return;
       setCurrentStep(6);
       addCommunication('system', 'user',
         `Processing complete. Efficiency: ${communicationMetrics.efficiency}%`,
@@ -277,9 +266,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       setSimulationComplete(true);
       
       if (onComplete) onComplete();
-    };
-
-      await processEmails();
     } catch (error) {
       console.error('Simulation error:', error);
       setIsPlaying(false);
@@ -287,11 +273,13 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   };
 
   const stopSimulation = () => {
+    console.log('Stop button clicked');
     setIsPlaying(false);
     setSimulationComplete(false);
   };
 
   const refreshSimulation = () => {
+    console.log('Refresh button clicked');
     setIsPlaying(false);
     setSimulationComplete(false);
     setCurrentStep(0);
@@ -308,10 +296,11 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         startSimulation();
       }, 500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [communicationRadius]);
 
   // Calculate real AI metrics matching GeometricFoundation
-  const calculateRealMetrics = () => {
+  const calculateRealMetrics = useCallback(() => {
     const bandwidthFactor = (communicationRadius - 50) / 150;
     const complexityPenalty = taskComplexity / 100;
     const specializationBalance = 1 - Math.abs(agentSpecialization - 50) / 50;
@@ -337,12 +326,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       coordinationOverhead: Math.round(coordinationOverhead),
       adaptationSpeed: Math.round(adaptationSpeed)
     });
-  };
+  }, [communicationRadius, taskComplexity, agentSpecialization, informationQuality]);
 
   // Update metrics when parameters change
   useEffect(() => {
     calculateRealMetrics();
-  }, [communicationRadius, taskComplexity, agentSpecialization, informationQuality]);
+  }, [communicationRadius, taskComplexity, agentSpecialization, informationQuality, calculateRealMetrics]);
 
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -375,23 +364,44 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         <div className="simulation-controls">
           <button 
             className={`pro-control-btn play-btn ${isPlaying ? 'active' : ''}`}
-            onClick={startSimulation}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Play button click handler fired');
+              startSimulation();
+            }}
+            onMouseDown={(e) => console.log('Play button mouse down')}
             disabled={isPlaying}
+            type="button"
           >
             <TfiControlPlay />
             <span>Play</span>
           </button>
           <button 
             className={`pro-control-btn stop-btn`}
-            onClick={stopSimulation}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Stop button click handler fired');
+              stopSimulation();
+            }}
+            onMouseDown={(e) => console.log('Stop button mouse down')}
             disabled={!isPlaying}
+            type="button"
           >
             <TfiControlStop />
             <span>Stop</span>
           </button>
           <button 
             className="pro-control-btn refresh-btn"
-            onClick={refreshSimulation}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Refresh button click handler fired');
+              refreshSimulation();
+            }}
+            onMouseDown={(e) => console.log('Refresh button mouse down')}
+            type="button"
           >
             <TfiReload />
             <span>Refresh</span>

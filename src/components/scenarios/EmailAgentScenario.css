@@ -35,6 +35,8 @@
   justify-content: center;
   gap: 1rem;
   margin-top: 1.5rem;
+  position: relative;
+  z-index: 101;
 }
 
 .pro-control-btn {
@@ -52,6 +54,9 @@
   transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
   font-family: 'Neue Haas Display Pro', sans-serif;
   letter-spacing: -0.01em;
+  position: relative;
+  z-index: 100;
+  pointer-events: auto;
 }
 
 .pro-control-btn:hover:not(:disabled) {
