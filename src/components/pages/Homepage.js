@@ -36,7 +36,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="homepage-konpo">
+    <div className="homepage-konpo" style={{ border: '5px solid #3c1199' }}>
       {/* Hero Section */}
       <section className="hero-konpo">
         <div className="hero-container">

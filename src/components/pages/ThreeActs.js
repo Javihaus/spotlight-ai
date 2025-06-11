@@ -121,7 +121,7 @@ const ThreeActs = () => {
   };
 
   return (
-    <div className="three-acts-konpo">
+    <div className="three-acts-konpo" style={{ border: '5px solid #3c1199' }}>
       {/* Hero Section */}
       <section className="acts-hero">
         <div className="acts-hero-container">

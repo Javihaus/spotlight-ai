@@ -30,6 +30,7 @@ const KonpoHeader = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+        style={{ boxShadow: '0 0 0 3px #3c1199' }}
       >
         <div className="header-inner">
           {/* Logo */}
@@ -45,6 +46,7 @@ const KonpoHeader = () => {
                 }}
               />
               <span className="logo-text">SpotlightAI</span>
+              <span style={{fontSize: '10px', color: '#3c1199', marginLeft: '10px'}}>v2.0-KONPO</span>
             </div>
           </Link>
 
