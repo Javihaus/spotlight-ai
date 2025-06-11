@@ -169,7 +169,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     setIsPlaying(true);
     setSimulationComplete(false);
     
-    const processEmails = async () => {
+    try {
+      const processEmails = async () => {
       setCurrentStep(0);
       setCommunicationLog([]);
       setProcessedEmails([]);
@@ -278,7 +279,11 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       if (onComplete) onComplete();
     };
 
-    await processEmails();
+      await processEmails();
+    } catch (error) {
+      console.error('Simulation error:', error);
+      setIsPlaying(false);
+    }
   };
 
   const stopSimulation = () => {
@@ -298,8 +303,10 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   // Auto-restart when radius changes
   useEffect(() => {
     if (isPlaying) {
-      stopSimulation();
-      setTimeout(() => startSimulation(), 500);
+      setIsPlaying(false);
+      setTimeout(() => {
+        startSimulation();
+      }, 500);
     }
   }, [communicationRadius]);
 
@@ -491,12 +498,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                     fill={
                       agent.status === 'active' ? "url(#activeGradient)" :
                       agent.status === 'complete' ? "url(#completeGradient)" :
-                      "rgba(255, 255, 255, 0.2)"
+                      "#ffffff"
                     }
                     stroke={
                       agent.status === 'active' ? "#00d4ff" :
                       agent.status === 'complete' ? "#4caf50" :
-                      "rgba(255, 255, 255, 0.3)"
+                      "#3c1199"
                     }
                     strokeWidth="2"
                     className="agent-node"
@@ -504,7 +511,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                   <text
                     textAnchor="middle"
                     dy="0.35em"
-                    fill="white"
+                    fill={agent.status === 'idle' ? "#3c1199" : "white"}
                     fontSize="8"
                     fontWeight="bold"
                   >

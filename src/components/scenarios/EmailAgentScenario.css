@@ -101,7 +101,7 @@
   padding: 1rem;
   overflow: hidden;
   position: relative;
-  height: 580px; /* Match communication panel height */
+  height: 480px; /* Reduced height for better screen fit */
   display: flex;
   flex-direction: column;
 }
@@ -361,7 +361,7 @@
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 1rem;
-  height: 580px; /* Fixed height to match agent network */
+  height: 480px; /* Reduced height for better screen fit */
   display: flex;
   flex-direction: column;
 }

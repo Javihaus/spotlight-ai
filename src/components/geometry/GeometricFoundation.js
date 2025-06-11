@@ -354,11 +354,53 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
         </p>
       </div>
 
-      <div className="geometry-workspace-new">
-        {/* Top: Interactive Controls */}
-        <div className="geometry-controls">
+      <div className="geometry-workspace-side-by-side">
+        {/* Left: Visualization and Performance Metrics */}
+        <div className="geometry-viz-section">
+          <div className="viz-header">
+            <h4>Real AI System Performance</h4>
+            <div className="coordination-status">
+              <div 
+                className="status-indicator"
+                style={{ backgroundColor: getPhaseColor() }}
+              />
+              <span className="status-text">{coordinationState.toUpperCase()}</span>
+            </div>
+          </div>
+          
+          <svg
+            ref={svgRef}
+            width={dimensions.width}
+            height={dimensions.height}
+            className="geometry-svg"
+            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+          />
+          
+          <div className="real-metrics-display">
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-label">Task Success Rate</div>
+                <div className="metric-value">{realMetrics.taskSuccessRate}%</div>
+                <div className="metric-desc">Problems solved correctly</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Coordination Overhead</div>
+                <div className="metric-value">{realMetrics.coordinationOverhead}%</div>
+                <div className="metric-desc">Extra communication needed</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Adaptation Speed</div>
+                <div className="metric-value">{realMetrics.adaptationSpeed}%</div>
+                <div className="metric-desc">Network adjustment rate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Interactive Controls */}
+        <div className="geometry-controls-sidebar">
           <h4>Real AI System Parameters</h4>
-          <div className="controls-row">
+          <div className="controls-column">
             <div className="control-group">
               <label htmlFor="coord-bandwidth">
                 Coordination Bandwidth: <span className="value">{communicationRadius}</span>
@@ -432,51 +474,10 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Middle: Visualization */}
-        <div className="geometry-viz">
-          <div className="viz-header">
-            <h4>Real AI System Performance</h4>
-            <div className="coordination-status">
-              <div 
-                className="status-indicator"
-                style={{ backgroundColor: getPhaseColor() }}
-              />
-              <span className="status-text">{coordinationState.toUpperCase()}</span>
-            </div>
-          </div>
-          
-          <svg
-            ref={svgRef}
-            width={dimensions.width}
-            height={dimensions.height}
-            className="geometry-svg"
-            viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
-          />
-          
-          <div className="real-metrics-display">
-            <div className="metrics-grid">
-              <div className="metric-card">
-                <div className="metric-label">Task Success Rate</div>
-                <div className="metric-value">{realMetrics.taskSuccessRate}%</div>
-                <div className="metric-desc">Problems solved correctly</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Coordination Overhead</div>
-                <div className="metric-value">{realMetrics.coordinationOverhead}%</div>
-                <div className="metric-desc">Extra communication needed</div>
-              </div>
-              <div className="metric-card">
-                <div className="metric-label">Adaptation Speed</div>
-                <div className="metric-value">{realMetrics.adaptationSpeed}%</div>
-                <div className="metric-desc">Network adjustment rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom: Mathematical Insights */}
-        <div className="mathematical-insights">
+      {/* Mathematical Insights - Full Width */}
+      <div className="mathematical-insights">
           <h4>The Geometric Necessity</h4>
           <div className="insights-row">
             {Object.entries(insights).map(([key, insight]) => (
@@ -493,8 +494,6 @@ const GeometricFoundation = ({ isActive, communicationRadius = 120, onRadiusChan
             ))}
           </div>
         </div>
-      </div>
-
     </div>
   );
 };

@@ -46,6 +46,33 @@
   align-items: center;
 }
 
+.geometry-workspace-side-by-side {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.geometry-viz-section {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.geometry-controls-sidebar {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.controls-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 .controls-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -494,6 +521,15 @@
   }
   
   .geometry-controls {
+    order: -1;
+  }
+
+  .geometry-workspace-side-by-side {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .geometry-controls-sidebar {
     order: -1;
   }
 }
