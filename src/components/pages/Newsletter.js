@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { TfiTarget, TfiThought, TfiStatsUp, TfiEmail, TfiArrowRight } from 'react-icons/tfi';
 import './Newsletter.css';
 
 const Newsletter = () => {
@@ -38,24 +39,30 @@ const Newsletter = () => {
     }
   };
 
-  const recentPosts = [
+  const latestNews = [
     {
-      title: "The Mathematics of Agent Coordination",
-      preview: "Deep dive into the energy dynamics that enable autonomous agents to self-organize...",
+      title: "Tracing the thoughts of a large language model",
+      description: "Anthropic researchers developed a new 'AI microscope' to understand Claude's internal mechanisms across languages and reasoning tasks.",
+      url: "https://www.anthropic.com/news/tracing-thoughts-language-model",
+      source: "Anthropic",
       date: "Dec 2024",
-      readTime: "5 min"
+      image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=600&fit=crop"
     },
     {
-      title: "Why 99% of AI Startups Miss the Point",
-      preview: "Most companies are building chatbots when they should be building coordination systems...",
-      date: "Nov 2024", 
-      readTime: "4 min"
+      title: "Accenture Launches Distiller Agentic AI Framework",
+      description: "Enterprise-grade platform to build, deploy, and scale advanced AI agents across various infrastructures with industrialized development tools.",
+      url: "https://newsroom.accenture.com/news/2025/accenture-launches-distiller-agentic-ai-framework-to-accelerate-scalable-industry-ai-solutions",
+      source: "Accenture",
+      date: "Jan 2025",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=600&fit=crop"
     },
     {
-      title: "Emergent Intelligence in Practice",
-      preview: "Real-world examples of how agent systems develop unexpected capabilities...",
-      date: "Nov 2024",
-      readTime: "6 min"
+      title: "What's next for the future of computing",
+      description: "IBM Research insights on emerging computational approaches including quantum computing and AI, featuring key industry leaders.",
+      url: "https://www.ibm.com/think/videos/think-keynotes/computing-future",
+      source: "IBM Think",
+      date: "May 2025",
+      image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop"
     }
   ];
 
@@ -77,15 +84,15 @@ const Newsletter = () => {
           
           <div className="value-props">
             <div className="value-prop">
-              <span className="value-icon">🧠</span>
+              <TfiTarget className="value-icon" />
               <span>Deep insights, not surface trends</span>
             </div>
             <div className="value-prop">
-              <span className="value-icon">⚡</span>
+              <TfiThought className="value-icon" />
               <span>5-minute weekly reads</span>
             </div>
             <div className="value-prop">
-              <span className="value-icon">🔬</span>
+              <TfiStatsUp className="value-icon" />
               <span>Mathematical foundations explained simply</span>
             </div>
           </div>
@@ -124,6 +131,7 @@ const Newsletter = () => {
                       className="submit-btn"
                       disabled={loading}
                     >
+                      <TfiEmail />
                       {loading ? 'Joining...' : 'Join Newsletter'}
                     </button>
                   </div>
@@ -154,26 +162,37 @@ const Newsletter = () => {
           </div>
         </motion.section>
 
-        {/* Recent Posts */}
-        <motion.section className="recent-posts" variants={itemVariants}>
-          <h2>Recent Insights</h2>
-          <p>Get a taste of what you'll receive weekly</p>
+        {/* Latest News */}
+        <motion.section className="latest-news" variants={itemVariants}>
+          <h2>Latest in Agentic AI</h2>
+          <p>Stay updated with cutting-edge developments in autonomous intelligence</p>
           
-          <div className="posts-grid">
-            {recentPosts.map((post, index) => (
+          <div className="news-grid">
+            {latestNews.map((news, index) => (
               <motion.article 
                 key={index}
-                className="post-card"
+                className="news-card"
                 variants={itemVariants}
-                whileHover={{ y: -4 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                onClick={() => window.open(news.url, '_blank')}
               >
-                <div className="post-meta">
-                  <span className="post-date">{post.date}</span>
-                  <span className="read-time">{post.readTime} read</span>
+                <div className="news-image">
+                  <img src={news.image} alt={news.title} />
+                  <div className="news-overlay">
+                    <h3 className="news-title">{news.title}</h3>
+                  </div>
                 </div>
-                <h3>{post.title}</h3>
-                <p>{post.preview}</p>
-                <button className="read-more">Read More →</button>
+                <div className="news-content">
+                  <div className="news-meta">
+                    <span className="news-source">{news.source}</span>
+                    <span className="news-date">{news.date}</span>
+                  </div>
+                  <p className="news-description">{news.description}</p>
+                  <div className="news-action">
+                    <span>Read Full Article</span>
+                    <TfiArrowRight />
+                  </div>
+                </div>
               </motion.article>
             ))}
           </div>
