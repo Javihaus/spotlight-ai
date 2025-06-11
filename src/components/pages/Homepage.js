@@ -16,24 +16,6 @@ const Homepage = () => {
     setEmail('');
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 }
-    }
-  };
 
   return (
     <div className="homepage-konpo" style={{ border: '5px solid #3c1199' }}>
@@ -187,7 +169,7 @@ const Homepage = () => {
           >
             <Link to="/three-acts" className="cta-primary">
               Begin Transformation
-              <FiArrowRight />
+              <TfiArrowRight />
             </Link>
             <p className="cta-subtitle">
               Complete journey in under 30 minutes

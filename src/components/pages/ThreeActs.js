@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TfiArrowRight } from 'react-icons/tfi';
-import { FiPlay, FiSquare, FiRefreshCw } from 'react-icons/fi';
 import EmailAgentScenario from '../scenarios/EmailAgentScenario';
 import GeometricFoundation from '../geometry/GeometricFoundation';
 import './ThreeActsKonpo.css';
