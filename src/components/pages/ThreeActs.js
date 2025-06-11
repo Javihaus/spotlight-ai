@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TfiArrowRight } from 'react-icons/tfi';
+import { TfiArrowRight, TfiBolt, TfiReload, TfiStatsUp, TfiTarget } from 'react-icons/tfi';
 import EmailAgentScenario from '../scenarios/EmailAgentScenario';
 import GeometricFoundation from '../geometry/GeometricFoundation';
-import './ThreeActsKonpo.css';
+import './ThreeActsSpotlight.css';
 
 const ThreeActs = () => {
   const [currentAct, setCurrentAct] = useState(1);
@@ -120,7 +120,7 @@ const ThreeActs = () => {
   };
 
   return (
-    <div className="three-acts-konpo" style={{ border: '5px solid #3c1199' }}>
+    <div className="three-acts-spotlight" style={{ border: '5px solid #3c1199' }}>
       {/* Hero Section */}
       <section className="acts-hero">
         <div className="acts-hero-container">
@@ -248,7 +248,7 @@ const ThreeActs = () => {
 
             {/* Act 2: Geometric AI - Professional Design */}
             {currentAct === 2 && (
-              <div className="act-2-konpo">
+              <div className="act-2-spotlight">
                 {/* Email Agent Scenario */}
                 <EmailAgentScenario 
                   isRunning={emailScenarioRunning}
@@ -300,9 +300,9 @@ const ThreeActs = () => {
                         onClick={() => setSelectedConcept(key)}
                       >
                         <div className="concept-icon">
-                          {key === 'energy' && '⚡'}
-                          {key === 'coordination' && '🔄'}
-                          {key === 'emergence' && '🎆'}
+                          {key === 'energy' && <TfiBolt />}
+                          {key === 'coordination' && <TfiReload />}
+                          {key === 'emergence' && <TfiStatsUp />}
                         </div>
                         <h4>{concept.title}</h4>
                         <p>{concept.description}</p>
@@ -361,7 +361,7 @@ const ThreeActs = () => {
                   )}
 
                   <div className="transformation-complete">
-                    <h3>🎯 Transformation Complete</h3>
+                    <h3><TfiTarget /> Transformation Complete</h3>
                     <p>
                       You now understand what agentic AI actually is: not just smarter software, 
                       but mathematical systems capable of genuine emergence and coordination. 

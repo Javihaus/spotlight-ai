@@ -176,11 +176,9 @@ const Newsletter = () => {
                 whileHover={{ y: -8, scale: 1.02 }}
                 onClick={() => window.open(news.url, '_blank')}
               >
+                <h3 className="news-title">{news.title}</h3>
                 <div className="news-image">
                   <img src={news.image} alt={news.title} />
-                  <div className="news-overlay">
-                    <h3 className="news-title">{news.title}</h3>
-                  </div>
                 </div>
                 <div className="news-content">
                   <div className="news-meta">

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import './KonpoHeader.css';
+import './SpotlightHeader.css';
 
-const KonpoHeader = () => {
+const SpotlightHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
@@ -27,7 +27,7 @@ const KonpoHeader = () => {
   return (
     <>
       <motion.header 
-        className={`konpo-header ${isScrolled ? 'scrolled' : ''}`}
+        className={`spotlight-header ${isScrolled ? 'scrolled' : ''}`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
@@ -47,7 +47,7 @@ const KonpoHeader = () => {
                 }}
               />
               <span className="logo-text">SpotlightAI</span>
-              <span style={{fontSize: '10px', color: '#3c1199', marginLeft: '10px'}}>v2.0-KONPO</span>
+              <span style={{fontSize: '10px', color: '#3c1199', marginLeft: '10px'}}>v2.0-SPOTLIGHT</span>
             </div>
           </Link>
 
@@ -120,4 +120,4 @@ const KonpoHeader = () => {
   );
 };
 
-export default KonpoHeader;
+export default SpotlightHeader;

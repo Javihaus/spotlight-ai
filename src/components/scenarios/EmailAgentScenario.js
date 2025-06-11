@@ -179,6 +179,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
       // Step 1: Initialize
       await delay(1000);
+      if (!isPlaying) return;
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
       addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');

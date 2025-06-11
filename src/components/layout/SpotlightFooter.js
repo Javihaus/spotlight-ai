@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './KonpoFooter.css';
+import './SpotlightFooter.css';
 
-const KonpoFooter = () => {
+const SpotlightFooter = () => {
   return (
-    <footer className="konpo-footer">
+    <footer className="spotlight-footer">
       <div className="footer-inner">
         {/* Main Footer Content */}
         <div className="footer-grid">
@@ -67,4 +67,4 @@ const KonpoFooter = () => {
   );
 };
 
-export default KonpoFooter;
+export default SpotlightFooter;

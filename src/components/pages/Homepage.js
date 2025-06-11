@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { TfiArrowRight, TfiTarget, TfiThought, TfiStatsUp } from 'react-icons/tfi';
-import './HomepageKonpo.css';
+import './HomepageSpotlight.css';
 
 const Homepage = () => {
   const [email, setEmail] = useState('');
@@ -18,9 +18,9 @@ const Homepage = () => {
 
 
   return (
-    <div className="homepage-konpo" style={{ border: '5px solid #3c1199' }}>
+    <div className="homepage-spotlight" style={{ border: '5px solid #3c1199' }}>
       {/* Hero Section */}
-      <section className="hero-konpo">
+      <section className="hero-spotlight">
         <div className="hero-container">
           <motion.div 
             className="hero-content"
@@ -48,7 +48,7 @@ const Homepage = () => {
           </motion.div>
 
           <motion.div 
-            className="newsletter-konpo"
+            className="newsletter-spotlight"
             id="newsletter"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}

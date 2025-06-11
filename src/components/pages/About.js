@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import './AboutKonpo.css';
+import './AboutSpotlight.css';
 
 const About = () => {
   return (
-    <div className="about-konpo">
+    <div className="about-spotlight">
       {/* Hero Section */}
       <section className="about-hero">
         <div className="container">

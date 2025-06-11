@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import KonpoLayout from './components/layout/KonpoLayout';
+import SpotlightLayout from './components/layout/SpotlightLayout';
 import Homepage from './components/pages/Homepage';
 import ThreeActs from './components/pages/ThreeActs';
 import About from './components/pages/About';
@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <KonpoLayout>
+        <SpotlightLayout>
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/three-acts" element={<ThreeActs />} />
@@ -20,7 +20,7 @@ function App() {
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/resources" element={<Resources />} />
           </Routes>
-        </KonpoLayout>
+        </SpotlightLayout>
       </Router>
     </div>
   );

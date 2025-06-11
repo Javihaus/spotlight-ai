@@ -1,6 +1,6 @@
-/* Konpo Studio Inspired Three Acts - Light Theme */
+/* Spotlight Studio Inspired Three Acts - Light Theme */
 
-.three-acts-konpo {
+.three-acts-spotlight {
   background: #ffffff;
   color: #000;
   min-height: 100vh;
@@ -281,7 +281,7 @@
 }
 
 /* Act 2 Content */
-.act-2-konpo {
+.act-2-spotlight {
   display: flex;
   flex-direction: column;
   gap: 4rem;

@@ -306,6 +306,9 @@
 .agent-svg {
   width: 100%;
   height: auto;
+  background: #f0f0f0;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .agent-node {

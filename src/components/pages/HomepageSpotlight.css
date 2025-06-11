@@ -1,6 +1,6 @@
 /* Konpo Studio Inspired Homepage - Light Theme */
 
-.homepage-konpo {
+.homepage-spotlight {
   min-height: 100vh;
   background: #ffffff;
   color: #000;
@@ -8,7 +8,7 @@
 }
 
 /* Hero Section */
-.hero-konpo {
+.hero-spotlight {
   padding: 6rem 0 8rem;
   background: #ffffff;
   position: relative;
@@ -98,7 +98,7 @@
 
 
 /* Newsletter Side Panel */
-.newsletter-konpo {
+.newsletter-spotlight {
   background: #f8f8f8;
   border-radius: 20px;
   padding: 2.5rem;
@@ -106,7 +106,7 @@
   transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
-.newsletter-konpo:hover {
+.newsletter-spotlight:hover {
   border-color: rgba(0, 0, 0, 0.12);
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
@@ -429,7 +429,7 @@
     order: 1;
   }
 
-  .newsletter-konpo {
+  .newsletter-spotlight {
     order: 2;
     max-width: 500px;
     margin: 0 auto;
@@ -443,7 +443,7 @@
 }
 
 @media (max-width: 768px) {
-  .hero-konpo {
+  .hero-spotlight {
     padding: 4rem 0 6rem;
   }
 
@@ -471,7 +471,7 @@
     gap: 1.5rem;
   }
 
-  .newsletter-konpo {
+  .newsletter-spotlight {
     padding: 2rem;
   }
 
@@ -485,7 +485,7 @@
 }
 
 @media (max-width: 480px) {
-  .hero-konpo {
+  .hero-spotlight {
     padding: 3rem 0 4rem;
   }
 
@@ -494,7 +494,7 @@
     padding: 0 1rem;
   }
 
-  .newsletter-konpo {
+  .newsletter-spotlight {
     padding: 1.5rem;
   }
 
