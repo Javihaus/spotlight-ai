@@ -20,7 +20,8 @@ const KonpoHeader = () => {
   const navigationLinks = [
     { path: '/', label: 'Home' },
     { path: '/three-acts', label: 'Experience' },
-    { path: '/about', label: 'About' }
+    { path: '/about', label: 'About' },
+    { path: '/newsletter', label: 'Newsletter' }
   ];
 
   return (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiArrowRight, FiTarget, FiZap, FiTrendingUp } from 'react-icons/fi';
+import { TfiArrowRight, TfiTarget, TfiThought, TfiStatsUp } from 'react-icons/tfi';
 import './HomepageKonpo.css';
 
 const Homepage = () => {
@@ -47,8 +47,7 @@ const Homepage = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <h1>
-              99% of AI's potential is 
-              <span className="gradient-text"> agentic</span>
+              99% of AI's potential is agentic
             </h1>
             <p className="hero-subtitle">
               Transform your understanding from misconception to mastery through our interactive three-act experience. Discover the geometric necessity that makes coordination inevitable.
@@ -57,27 +56,13 @@ const Homepage = () => {
             <div className="hero-cta">
               <Link to="/three-acts" className="cta-primary">
                 Start Transformation
-                <FiArrowRight />
+                <TfiArrowRight />
               </Link>
               <a href="#newsletter" className="cta-secondary">
                 Join Newsletter
               </a>
             </div>
 
-            <div className="hero-stats">
-              <div className="stat-item">
-                <span className="stat-number">3</span>
-                <span className="stat-label">Acts</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">30</span>
-                <span className="stat-label">Minutes</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-number">∞</span>
-                <span className="stat-label">Impact</span>
-              </div>
-            </div>
           </motion.div>
 
           <motion.div 
@@ -217,17 +202,17 @@ const Homepage = () => {
           <div className="value-grid">
             {[
               {
-                icon: <FiTarget />,
+                icon: <TfiTarget />,
                 title: "Deep Understanding",
                 content: "Move beyond surface explanations to genuine comprehension of how autonomous agents coordinate through mathematical necessity."
               },
               {
-                icon: <FiZap />,
+                icon: <TfiThought />,
                 title: "Interactive Learning", 
                 content: "Experience geometric constraints firsthand through real simulations that respond to your parameter adjustments."
               },
               {
-                icon: <FiTrendingUp />,
+                icon: <TfiStatsUp />,
                 title: "Practical Application",
                 content: "Connect mathematical insights to real AI deployment decisions. Understand why some systems succeed while others fail."
               }

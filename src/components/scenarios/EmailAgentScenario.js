@@ -1,9 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiPlay, FiSquare, FiRefreshCw } from 'react-icons/fi';
+import { TfiControlPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
 import './EmailAgentScenario.css';
 
 const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadiusChange }) => {
+  // Control parameters matching GeometricFoundation
+  const [taskComplexity, setTaskComplexity] = useState(50);
+  const [agentSpecialization, setAgentSpecialization] = useState(50);
+  const [informationQuality, setInformationQuality] = useState(75);
+  
+  // Real metrics matching GeometricFoundation
+  const [realMetrics, setRealMetrics] = useState({
+    taskSuccessRate: 0,
+    coordinationOverhead: 0,
+    adaptationSpeed: 0
+  });
   const [emails] = useState([
     {
       id: 1,
@@ -291,6 +302,40 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     }
   }, [communicationRadius]);
 
+  // Calculate real AI metrics matching GeometricFoundation
+  const calculateRealMetrics = () => {
+    const bandwidthFactor = (communicationRadius - 50) / 150;
+    const complexityPenalty = taskComplexity / 100;
+    const specializationBalance = 1 - Math.abs(agentSpecialization - 50) / 50;
+    const qualityBonus = informationQuality / 100;
+
+    // Task Success Rate: Higher with better communication, specialization balance, and information quality
+    const taskSuccessRate = Math.max(0, Math.min(100, 
+      (bandwidthFactor * 0.4 + specializationBalance * 0.3 + qualityBonus * 0.3) * 100 - complexityPenalty * 20
+    ));
+
+    // Coordination Overhead: Higher with more complex tasks and poor communication
+    const coordinationOverhead = Math.max(0, Math.min(100,
+      complexityPenalty * 60 + (1 - bandwidthFactor) * 30 + (1 - qualityBonus) * 10
+    ));
+
+    // Adaptation Speed: Faster with good communication and balanced specialization
+    const adaptationSpeed = Math.max(0, Math.min(100,
+      bandwidthFactor * 50 + specializationBalance * 30 + qualityBonus * 20
+    ));
+
+    setRealMetrics({
+      taskSuccessRate: Math.round(taskSuccessRate),
+      coordinationOverhead: Math.round(coordinationOverhead),
+      adaptationSpeed: Math.round(adaptationSpeed)
+    });
+  };
+
+  // Update metrics when parameters change
+  useEffect(() => {
+    calculateRealMetrics();
+  }, [communicationRadius, taskComplexity, agentSpecialization, informationQuality]);
+
   const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
   const updateAgentStatus = (agentId, status) => {
@@ -325,7 +370,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             onClick={startSimulation}
             disabled={isPlaying}
           >
-            <FiPlay />
+            <TfiControlPlay />
             <span>Play</span>
           </button>
           <button 
@@ -333,14 +378,14 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             onClick={stopSimulation}
             disabled={!isPlaying}
           >
-            <FiSquare />
+            <TfiControlStop />
             <span>Stop</span>
           </button>
           <button 
             className="pro-control-btn refresh-btn"
             onClick={refreshSimulation}
           >
-            <FiRefreshCw />
+            <TfiReload />
             <span>Refresh</span>
           </button>
         </div>
@@ -371,6 +416,44 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                 onChange={(e) => onRadiusChange && onRadiusChange(parseInt(e.target.value))}
                 className="radius-slider"
               />
+            </div>
+
+            <div className="control-parameters">
+              <div className="param-control">
+                <label>Task Complexity: <span className="param-value">{taskComplexity}</span></label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={taskComplexity}
+                  onChange={(e) => setTaskComplexity(parseInt(e.target.value))}
+                  className="param-slider"
+                />
+              </div>
+              
+              <div className="param-control">
+                <label>Agent Specialization: <span className="param-value">{agentSpecialization}</span></label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={agentSpecialization}
+                  onChange={(e) => setAgentSpecialization(parseInt(e.target.value))}
+                  className="param-slider"
+                />
+              </div>
+
+              <div className="param-control">
+                <label>Information Quality: <span className="param-value">{informationQuality}</span></label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={informationQuality}
+                  onChange={(e) => setInformationQuality(parseInt(e.target.value))}
+                  className="param-slider"
+                />
+              </div>
             </div>
 
             <svg width="400" height="280" className="agent-svg">
@@ -460,21 +543,19 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               </defs>
             </svg>
 
-            {/* Communication Metrics */}
+            {/* Real AI Metrics */}
             <div className="communication-metrics">
               <div className="metric">
-                <span className="metric-label">Efficiency:</span>
-                <span className="metric-value">{communicationMetrics.efficiency}%</span>
+                <span className="metric-label">Task Success Rate:</span>
+                <span className="metric-value">{realMetrics.taskSuccessRate}%</span>
               </div>
               <div className="metric">
-                <span className="metric-label">Network Resilience:</span>
-                <span className="metric-value">{communicationMetrics.networkStability}%</span>
+                <span className="metric-label">Coordination Overhead:</span>
+                <span className="metric-value">{realMetrics.coordinationOverhead}%</span>
               </div>
               <div className="metric">
-                <span className="metric-label">State:</span>
-                <span className={`metric-value state-${communicationMetrics.coordination}`}>
-                  {communicationMetrics.coordination}
-                </span>
+                <span className="metric-label">Adaptation Speed:</span>
+                <span className="metric-value">{realMetrics.adaptationSpeed}%</span>
               </div>
             </div>
           </div>
