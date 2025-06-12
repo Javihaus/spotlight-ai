@@ -64,7 +64,7 @@
   height: 4px;
   background: #999;
   border-radius: 50%;
-  opacity: 0.2;
+  opacity: 0.4;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   animation: heroFloat 4s ease-in-out infinite;
 }

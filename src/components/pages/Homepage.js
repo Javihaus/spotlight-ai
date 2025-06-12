@@ -24,7 +24,7 @@ const Homepage = () => {
     // Create dots
     const createDots = () => {
       dotsContainer.innerHTML = '';
-      const dotCount = 120;
+      const dotCount = 200;
       
       for (let i = 0; i < dotCount; i++) {
         const dot = document.createElement('div');
@@ -56,10 +56,10 @@ const Homepage = () => {
           const scale = 1 + influence * 2.5;
           
           dot.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale})`;
-          dot.style.opacity = 0.2 + influence * 0.6;
+          dot.style.opacity = 0.4 + influence * 0.6;
         } else {
           dot.style.transform = 'translate(0, 0) scale(1)';
-          dot.style.opacity = 0.2;
+          dot.style.opacity = 0.4;
         }
       });
     };
