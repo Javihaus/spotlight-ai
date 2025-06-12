@@ -189,7 +189,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     calculateCommunicationMetrics();
   }, [communicationRadius, agentStates, calculateCommunicationMetrics]);
 
-  const startSimulation = async () => {
+  const startSimulation = useCallback(async () => {
     console.log('Play button clicked, isPlaying:', isPlaying);
     if (isPlaying) return; // Prevent multiple simultaneous runs
     
@@ -382,7 +382,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       console.error('Simulation error:', error);
       setIsPlaying(false);
     }
-  };
+  }, [isPlaying, emails, onComplete]);
 
   const stopSimulation = () => {
     console.log('Stop button clicked');
@@ -390,7 +390,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     setSimulationComplete(false);
   };
 
-  const refreshSimulation = () => {
+  const refreshSimulation = useCallback(() => {
     console.log('Refresh button clicked');
     setIsPlaying(false);
     setSimulationComplete(false);
@@ -398,7 +398,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     setCommunicationLog([]);
     setProcessedEmails([]);
     setAgentStates(agents);
-  };
+  }, [agents]);
 
   // Auto-restart when radius changes
   useEffect(() => {
@@ -408,8 +408,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         startSimulation();
       }, 500);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [communicationRadius]);
+  }, [communicationRadius, isPlaying, startSimulation]);
 
   // Calculate real AI metrics matching GeometricFoundation
   const calculateRealMetrics = useCallback(() => {
