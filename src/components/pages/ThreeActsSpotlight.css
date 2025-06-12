@@ -276,19 +276,22 @@
   color: #fff;
   border: none;
   border-radius: 2rem;
-  padding: 1.25rem 3rem;
-  font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
   font-weight: 400;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   letter-spacing: -0.01em;
   font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .shatter-btn:hover {
   background: #333;
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* Act 2 Content */

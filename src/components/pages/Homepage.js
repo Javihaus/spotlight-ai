@@ -139,6 +139,7 @@ const Homepage = () => {
                   />
                   <button type="submit" className="submit-btn">
                     Subscribe
+                    <TfiArrowRight />
                   </button>
                 </div>
                 <p className="privacy-text">

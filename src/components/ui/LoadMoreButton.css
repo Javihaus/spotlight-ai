@@ -1,9 +1,9 @@
 /* Perfect Load More Button - Exact Spotlight Studio Style */
 
 .load-more-btn {
-  background: #f8f8f8;
-  color: #000;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #000;
+  color: #fff;
+  border: none;
   padding: 1rem 2.5rem;
   border-radius: 2rem;
   font-size: 0.95rem;
@@ -12,7 +12,7 @@
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
   position: relative;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Neue Haas Display Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   letter-spacing: -0.01em;
   white-space: nowrap;
   min-width: 140px;
@@ -38,10 +38,9 @@
 }
 
 .load-more-btn:hover {
-  background: #f0f0f0;
-  border-color: rgba(0, 0, 0, 0.15);
+  background: #333;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .load-more-btn:active {
@@ -56,8 +55,7 @@
 }
 
 .load-more-btn:disabled:hover {
-  background: #f8f8f8;
-  border-color: rgba(0, 0, 0, 0.1);
+  background: #000;
   transform: none;
   box-shadow: none;
 }
