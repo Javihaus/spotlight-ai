@@ -212,35 +212,40 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       if (!isPlaying) return;
       
       // Step 2: Scanning emails
-      await delay(8000);
-      if (!isPlaying) return;
       setCurrentStep(2);
       addCommunication('reader', 'reader', 'Scanning incoming email queue... 4 emails detected', 'analysis');
       
-      // Step 3: Parsing headers
       await delay(8000);
       if (!isPlaying) return;
+      
+      // Step 3: Parsing headers
       setCurrentStep(3);
       addCommunication('reader', 'reader', 'Parsing email headers and extracting metadata...', 'analysis');
       
-      // Step 4: Reader → Manager communication
       await delay(8000);
       if (!isPlaying) return;
+      
+      // Step 4: Reader → Manager communication
       setCurrentStep(4);
       updateAgentStatus('manager', 'active');
       addCommunication('reader', 'manager', 'Reporting: 4 emails detected - 1 critical, 1 high, 1 medium, 1 low priority', 'data_transfer');
       
-      // Step 5: Manager → Reader request
       await delay(8000);
       if (!isPlaying) return;
+      
+      // Step 5: Manager → Reader request
       setCurrentStep(5);
       addCommunication('manager', 'reader', 'Requesting detailed parsing of all email content for processing', 'coordination');
       
-      // Step 6: Reader → Classifier communication
       await delay(8000);
       if (!isPlaying) return;
+      
+      // Step 6: Reader → Classifier communication
       setCurrentStep(6);
       updateAgentStatus('classifier', 'active');
+      
+      await delay(8000);
+      if (!isPlaying) return;
       
       for (let email of emails) {
         if (!isPlaying) return;
@@ -252,20 +257,20 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       // Step 7: Semantic analysis
-      await delay(8000);
-      if (!isPlaying) return;
       setCurrentStep(7);
       addCommunication('classifier', 'classifier', 'Analyzing semantic content, keywords, and contextual urgency...', 'analysis');
 
-      // Step 8: Priority extraction
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 8: Priority extraction
       setCurrentStep(8);
       addCommunication('classifier', 'classifier', 'Extracting priority signals: revenue impact, deadlines, sender authority...', 'analysis');
 
-      // Step 9: Classifier → Manager
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 9: Classifier → Manager
       setCurrentStep(9);
 
       const classifications = [
@@ -286,69 +291,77 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       }
 
       // Step 10: Manager evaluation
-      await delay(8000);
-      if (!isPlaying) return;
       setCurrentStep(10);
       addCommunication('manager', 'manager', 'Evaluating response strategies and escalation priorities...', 'synthesis');
 
-      // Step 11: Manager → User escalation
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 11: Manager → User escalation
       setCurrentStep(11);
       updateAgentStatus('user', 'active');
       addCommunication('manager', 'user', 'URGENT ESCALATION: Server outage affecting revenue - immediate attention required', 'escalation');
 
-      // Step 12: User → Manager confirmation
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 12: User → Manager confirmation
       setCurrentStep(12);
       addCommunication('user', 'manager', 'Escalation acknowledged. Initiating emergency response protocol.', 'response');
 
-      // Step 13: Manager → Classifier re-evaluation request
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 13: Manager → Classifier re-evaluation request
       setCurrentStep(13);
       addCommunication('manager', 'classifier', 'Please re-evaluate medium priority items for potential batch processing', 'coordination');
 
-      // Step 14: Classifier → Manager confirmation
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 14: Classifier → Manager confirmation
       setCurrentStep(14);
       addCommunication('classifier', 'manager', 'Re-evaluation complete. Medium priority items confirmed for standard processing', 'data_transfer');
 
-      // Step 15: Manager generating responses
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 15: Manager generating responses
       setCurrentStep(15);
       addCommunication('manager', 'manager', 'Generating automated responses for low-priority communications...', 'synthesis');
 
-      // Step 16: Manager → Reader verification request
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 16: Manager → Reader verification request
       setCurrentStep(16);
       addCommunication('manager', 'reader', 'Please verify accuracy of generated response templates', 'coordination');
 
-      // Step 17: Reader → Manager verification
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 17: Reader → Manager verification
       setCurrentStep(17);
       addCommunication('reader', 'manager', 'Response templates verified. Grammar and tone appropriate for recipients', 'response');
 
-      // Step 18: Manager → User final report
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 18: Manager → User final report
       setCurrentStep(18);
       addCommunication('manager', 'user', 'Status Report: 1 escalated, 2 auto-responded, 1 queued. System efficiency: 94%', 'report');
 
-      // Step 19: User → Manager acknowledgment
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 19: User → Manager acknowledgment
       setCurrentStep(19);
       addCommunication('user', 'manager', 'Report received and processed. System performance satisfactory. Thank you.', 'response');
 
-      // Step 20: Final coordination
       await delay(8000);
       if (!isPlaying) return;
+
+      // Step 20: Final coordination (index 19 = step 20)
       setCurrentStep(19);
       addCommunication('manager', 'reader', 'All agents: Processing complete. Returning to idle state for next queue', 'coordination');
       addCommunication('manager', 'classifier', 'All agents: Processing complete. Returning to idle state for next queue', 'coordination');
