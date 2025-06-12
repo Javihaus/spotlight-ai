@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailAgentScenario Button Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 20px 0;
+        }
+        .test-btn {
+            padding: 10px 20px;
+            background: #3c1199;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .test-btn:hover {
+            background: #5a1bcc;
+        }
+        .test-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .log {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>EmailAgentScenario Button Debug Test</h1>
+    <p>This test replicates the button functionality from EmailAgentScenario to verify if click events work.</p>
+    
+    <div class="test-buttons">
+        <button class="test-btn" id="playBtn">▶️ Play</button>
+        <button class="test-btn" id="stopBtn" disabled>⏹️ Stop</button>
+        <button class="test-btn" id="refreshBtn">🔄 Refresh</button>
+    </div>
+    
+    <div class="log" id="logContainer">
+        <div class="log-entry">Debug log will appear here...</div>
+    </div>
+    
+    <script>
+        let isPlaying = false;
+        let logContainer = document.getElementById('logContainer');
+        
+        function addLog(message) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.style.color = isPlaying ? '#2196f3' : '#333';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function updateButtonStates() {
+            document.getElementById('playBtn').disabled = isPlaying;
+            document.getElementById('stopBtn').disabled = !isPlaying;
+        }
+        
+        function startSimulation() {
+            addLog('🎮 PLAY BUTTON CLICKED - Starting simulation...');
+            if (isPlaying) {
+                addLog('⚠️ Already playing, ignoring click');
+                return;
+            }
+            
+            isPlaying = true;
+            updateButtonStates();
+            addLog('✅ Simulation started, isPlaying = true');
+            
+            // Simulate the actual simulation process
+            setTimeout(() => {
+                addLog('🔄 Simulation step 1: Initializing...');
+                setTimeout(() => {
+                    addLog('🔄 Simulation step 2: Processing...');
+                    setTimeout(() => {
+                        addLog('✅ Simulation completed automatically');
+                        isPlaying = false;
+                        updateButtonStates();
+                    }, 2000);
+                }, 1000);
+            }, 1000);
+        }
+        
+        function stopSimulation() {
+            addLog('🛑 STOP BUTTON CLICKED - Stopping simulation...');
+            isPlaying = false;
+            updateButtonStates();
+            addLog('✅ Simulation stopped, isPlaying = false');
+        }
+        
+        function refreshSimulation() {
+            addLog('🔄 REFRESH BUTTON CLICKED - Refreshing simulation...');
+            isPlaying = false;
+            updateButtonStates();
+            addLog('✅ Simulation refreshed, state reset');
+        }
+        
+        // Add event listeners
+        document.getElementById('playBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addLog('🖱️ Mouse click detected on Play button');
+            startSimulation();
+        });
+        
+        document.getElementById('stopBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addLog('🖱️ Mouse click detected on Stop button');
+            stopSimulation();
+        });
+        
+        document.getElementById('refreshBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addLog('🖱️ Mouse click detected on Refresh button');
+            refreshSimulation();
+        });
+        
+        // Add mousedown listeners for additional debugging
+        document.getElementById('playBtn').addEventListener('mousedown', () => {
+            addLog('👆 Mouse down on Play button');
+        });
+        
+        document.getElementById('stopBtn').addEventListener('mousedown', () => {
+            addLog('👆 Mouse down on Stop button');
+        });
+        
+        document.getElementById('refreshBtn').addEventListener('mousedown', () => {
+            addLog('👆 Mouse down on Refresh button');
+        });
+        
+        addLog('🚀 Button test initialized');
+    </script>
+</body>
+</html>
