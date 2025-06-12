@@ -20,8 +20,8 @@ const SpotlightHeader = () => {
   const navigationLinks = [
     { path: '/', label: 'Home' },
     { path: '/three-acts', label: 'Experience' },
-    { path: '/about', label: 'About' },
-    { path: '/newsletter', label: 'Observatory' }
+    { path: '/newsletter', label: 'Observatory' },
+    { path: '/about', label: 'About' }
   ];
 
   return (
