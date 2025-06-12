@@ -392,6 +392,14 @@
   right: 1.5rem;
 }
 
+.act-icon {
+  font-size: 2.5rem;
+  color: #3c1199;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
 .act-preview-card h3 {
   font-size: 1.5rem;
   font-weight: 500;

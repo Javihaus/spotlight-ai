@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { TfiArrowRight, TfiTarget, TfiThought, TfiStatsUp } from 'react-icons/tfi';
+import { TfiArrowRight, TfiTarget, TfiThought, TfiStatsUp, TfiEye, TfiHandPointUp, TfiLightBulb } from 'react-icons/tfi';
 import './HomepageSpotlight.css';
 
 const Homepage = () => {
@@ -178,6 +178,7 @@ const Homepage = () => {
               {
                 number: "01",
                 title: "Recognition",
+                icon: <TfiEye />,
                 content: "Start with what everyone thinks agentic AI means - smarter chatbots, better automation. Then witness emergence that couldn't be programmed.",
                 progress: 25,
                 label: "Setup"
@@ -185,13 +186,15 @@ const Homepage = () => {
               {
                 number: "02", 
                 title: "Experience",
+                icon: <TfiHandPointUp />,
                 content: "Interactive simulation where you control real agent parameters. Watch coordination patterns emerge from pure geometric necessity.",
                 progress: 50,
                 label: "Discovery"
               },
               {
                 number: "03",
-                title: "Transformation", 
+                title: "Transformation",
+                icon: <TfiLightBulb />,
                 content: "Mathematical insights become intuitive. Connect geometric patterns to real AI system behavior and deployment success.",
                 progress: 100,
                 label: "Mastery"
@@ -207,6 +210,7 @@ const Homepage = () => {
                 whileHover={{ y: -8 }}
               >
                 <div className="act-number">{act.number}</div>
+                <div className="act-icon">{act.icon}</div>
                 <h3>{act.title}</h3>
                 <p>{act.content}</p>
                 <div className="act-progress">
