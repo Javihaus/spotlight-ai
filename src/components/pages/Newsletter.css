@@ -46,15 +46,33 @@
 
 .value-prop {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 0.5rem;
   color: #666;
   font-weight: 500;
+  padding: 1rem;
 }
 
 .value-icon {
-  font-size: 30px;
-  color: #3c1199;
+  width: 60px;
+  height: 60px;
+  background: #f8f8f8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 1.5rem;
+  color: #000;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.value-prop:hover .value-icon {
+  background: #3c1199;
+  color: #fff;
+  transform: scale(1.1);
 }
 
 /* Signup Section */
