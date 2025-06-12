@@ -75,95 +75,7 @@ const Newsletter = () => {
         animate="visible"
         variants={containerVariants}
       >
-        {/* Hero Section */}
-        <motion.section className="newsletter-hero" variants={itemVariants}>
-          <h1>SpotlightAI Newsletter</h1>
-          <p className="hero-subtitle">
-            Weekly insights on agentic AI that actually matter. Join 5,300+ readers 
-            understanding the mathematical foundations of autonomous intelligence.
-          </p>
-          
-          <div className="value-props">
-            <div className="value-prop">
-              <TfiTarget className="value-icon" />
-              <span>Deep insights, not surface trends</span>
-            </div>
-            <div className="value-prop">
-              <TfiThought className="value-icon" />
-              <span>5-minute weekly reads</span>
-            </div>
-            <div className="value-prop">
-              <TfiStatsUp className="value-icon" />
-              <span>Mathematical foundations explained simply</span>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Newsletter Signup */}
-        <motion.section className="signup-section" variants={itemVariants}>
-          <div className="signup-card">
-            {!isSubscribed ? (
-              <>
-                <h2>Join the Community</h2>
-                <p>Get weekly insights delivered to your inbox</p>
-                
-                <div className="social-proof">
-                  <div className="reader-avatars">
-                    {[1, 2, 3, 4, 5, 6].map(i => (
-                      <div key={i} className="avatar"></div>
-                    ))}
-                  </div>
-                  <span className="reader-count">5,300+ weekly readers</span>
-                </div>
-
-                <form onSubmit={handleSubmit} className="newsletter-form">
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Enter your email address"
-                      required
-                      className="email-input"
-                      disabled={loading}
-                    />
-                    <button 
-                      type="submit" 
-                      className="submit-btn"
-                      disabled={loading}
-                    >
-                      <TfiEmail />
-                      {loading ? 'Joining...' : 'Join Newsletter'}
-                    </button>
-                  </div>
-                  
-                  <div className="signup-benefits">
-                    <p>✓ No spam, ever</p>
-                    <p>✓ Unsubscribe anytime</p>
-                    <p>✓ Privacy-first approach</p>
-                  </div>
-                </form>
-              </>
-            ) : (
-              <div className="success-state">
-                <div className="success-icon">✓</div>
-                <h2>Welcome to SpotlightAI!</h2>
-                <p>
-                  Check your email for confirmation and your first weekly insights. 
-                  You'll receive deep dives into agentic AI every Tuesday.
-                </p>
-                <button 
-                  className="btn btn-secondary"
-                  onClick={() => setIsSubscribed(false)}
-                >
-                  Subscribe Another Email
-                </button>
-              </div>
-            )}
-          </div>
-        </motion.section>
-
-        {/* Latest News */}
+        {/* Latest News - Moved to beginning */}
         <motion.section className="latest-news" variants={itemVariants}>
           <h2>Latest in Agentic AI</h2>
           <p>Stay updated with cutting-edge developments in autonomous intelligence</p>
@@ -196,6 +108,95 @@ const Newsletter = () => {
             ))}
           </div>
         </motion.section>
+
+        {/* Newsletter Hero Section */}
+        <motion.section className="newsletter-hero" variants={itemVariants}>
+          <h1>SpotlightAI Observatory</h1>
+          <p className="hero-subtitle">
+            Weekly insights on agentic AI that actually matter. Join 5,300+ readers 
+            understanding the mathematical foundations of autonomous intelligence.
+          </p>
+          
+          <div className="value-props">
+            <div className="value-prop">
+              <TfiTarget className="value-icon" />
+              <span>Deep insights, not surface trends</span>
+            </div>
+            <div className="value-prop">
+              <TfiThought className="value-icon" />
+              <span>5-minute weekly reads</span>
+            </div>
+            <div className="value-prop">
+              <TfiStatsUp className="value-icon" />
+              <span>Mathematical foundations explained simply</span>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Newsletter Signup - Updated styling */}
+        <motion.section className="signup-section" variants={itemVariants}>
+          <div className="signup-card">
+            {!isSubscribed ? (
+              <>
+                <h2>SpotlightAI Observatory</h2>
+                <p>Weekly deep dives into agentic AI - 5 minute reads that transform understanding</p>
+                
+                <div className="social-proof">
+                  <div className="reader-avatars">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                      <div key={i} className="avatar"></div>
+                    ))}
+                  </div>
+                  <span className="reader-count">5,300+ weekly readers</span>
+                </div>
+
+                <form onSubmit={handleSubmit} className="newsletter-form">
+                  <div className="form-group">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email address"
+                      required
+                      className="email-input"
+                      disabled={loading}
+                    />
+                    <button 
+                      type="submit" 
+                      className="subscribe-button"
+                      disabled={loading}
+                    >
+                      <TfiEmail />
+                      {loading ? 'Joining...' : 'Subscribe'}
+                    </button>
+                  </div>
+                  
+                  <div className="signup-benefits">
+                    <p>✓ No spam, ever</p>
+                    <p>✓ Unsubscribe anytime</p>
+                    <p>✓ Privacy-first approach</p>
+                  </div>
+                </form>
+              </>
+            ) : (
+              <div className="success-state">
+                <div className="success-icon">✓</div>
+                <h2>Welcome to SpotlightAI!</h2>
+                <p>
+                  Check your email for confirmation and your first weekly insights. 
+                  You'll receive deep dives into agentic AI every Tuesday.
+                </p>
+                <button 
+                  className="btn btn-secondary"
+                  onClick={() => setIsSubscribed(false)}
+                >
+                  Subscribe Another Email
+                </button>
+              </div>
+            )}
+          </div>
+        </motion.section>
+
 
         {/* Newsletter Stats */}
         <motion.section className="newsletter-stats" variants={itemVariants}>

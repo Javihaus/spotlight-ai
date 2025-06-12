@@ -21,7 +21,7 @@ const SpotlightHeader = () => {
     { path: '/', label: 'Home' },
     { path: '/three-acts', label: 'Experience' },
     { path: '/about', label: 'About' },
-    { path: '/newsletter', label: 'Newsletter' }
+    { path: '/newsletter', label: 'Observatory' }
   ];
 
   return (
