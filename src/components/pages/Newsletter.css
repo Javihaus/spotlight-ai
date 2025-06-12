@@ -19,6 +19,87 @@
   margin-bottom: 3rem;
 }
 
+/* Animated Title with Dots Background */
+.animated-title-container {
+  position: relative;
+  display: inline-block;
+  padding: 2rem 3rem;
+  margin-bottom: 1.5rem;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.animated-title {
+  font-size: 3rem;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+  letter-spacing: -0.03em;
+  position: relative;
+  z-index: 2;
+}
+
+.dots-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.animated-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #3c1199;
+  border-radius: 50%;
+  opacity: 0.3;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation: float 3s ease-in-out infinite;
+}
+
+.animated-dot:nth-child(odd) {
+  background: #6E9911;
+}
+
+.animated-dot:nth-child(3n) {
+  background: #99112A;
+}
+
+.animated-dot:nth-child(4n) {
+  background: #119980;
+  width: 3px;
+  height: 3px;
+}
+
+.animated-dot:nth-child(5n) {
+  background: #3c1199;
+  width: 5px;
+  height: 5px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-10px) rotate(120deg);
+  }
+  66% {
+    transform: translateY(5px) rotate(240deg);
+  }
+}
+
+.animated-title-container:hover .dots-background {
+  background: linear-gradient(135deg, #f0f0f0 0%, #f8f9fa 100%);
+  border-color: rgba(60, 17, 153, 0.15);
+}
+
 .newsletter-hero h1 {
   font-size: 3rem;
   font-weight: 500;

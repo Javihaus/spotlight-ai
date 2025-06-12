@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { TfiTarget, TfiThought, TfiStatsUp, TfiEmail, TfiArrowRight } from 'react-icons/tfi';
 import './Newsletter.css';
@@ -19,6 +19,62 @@ const Newsletter = () => {
       setEmail('');
     }, 1500);
   };
+
+  // Animated dots background effect
+  useEffect(() => {
+    const dotsContainer = document.getElementById('dotsBackground');
+    if (!dotsContainer) return;
+
+    // Create dots
+    const createDots = () => {
+      dotsContainer.innerHTML = '';
+      const dotCount = 150;
+      
+      for (let i = 0; i < dotCount; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'animated-dot';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.top = Math.random() * 100 + '%';
+        dot.style.animationDelay = Math.random() * 2 + 's';
+        dotsContainer.appendChild(dot);
+      }
+    };
+
+    // Mouse move handler
+    const handleMouseMove = (e) => {
+      const rect = dotsContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      
+      const dots = dotsContainer.querySelectorAll('.animated-dot');
+      dots.forEach((dot, index) => {
+        const dotX = parseFloat(dot.style.left) / 100;
+        const dotY = parseFloat(dot.style.top) / 100;
+        
+        const distance = Math.sqrt((x - dotX) ** 2 + (y - dotY) ** 2);
+        const influence = Math.max(0, 1 - distance * 3);
+        
+        if (influence > 0) {
+          const moveX = (x - dotX) * influence * 20;
+          const moveY = (y - dotY) * influence * 20;
+          const scale = 1 + influence * 2;
+          
+          dot.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale})`;
+          dot.style.opacity = 0.3 + influence * 0.7;
+        } else {
+          dot.style.transform = 'translate(0, 0) scale(1)';
+          dot.style.opacity = 0.3;
+        }
+      });
+    };
+
+    createDots();
+    dotsContainer.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      dotsContainer.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -76,7 +132,10 @@ const Newsletter = () => {
       >
         {/* Hero Section */}
         <motion.section className="newsletter-hero" variants={itemVariants}>
-          <h1>SpotlightAI Newsletter</h1>
+          <div className="animated-title-container">
+            <h1 className="animated-title">SpotlightAI Newsletter</h1>
+            <div className="dots-background" id="dotsBackground"></div>
+          </div>
           <p className="hero-subtitle">
             Weekly insights on agentic AI that actually matter. Join 5,300+ readers 
             understanding the mathematical foundations of autonomous intelligence.
