@@ -11,6 +11,11 @@ const SpotlightFooter = () => {
           {/* Brand Section */}
           <div className="footer-brand">
             <Link to="/" className="footer-logo">
+              <img 
+                src="/SpotlightAI-logo_new-04.png" 
+                alt="SpotlightAI Logo" 
+                className="footer-logo-image"
+              />
               <span className="footer-logo-text">SpotlightAI</span>
             </Link>
             <p className="footer-description">

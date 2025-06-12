@@ -27,13 +27,21 @@
 
 .footer-logo {
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   margin-bottom: 1rem;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .footer-logo:hover {
   transform: translateY(-1px);
+}
+
+.footer-logo-image {
+  height: 32px;
+  width: auto;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .footer-logo-text {

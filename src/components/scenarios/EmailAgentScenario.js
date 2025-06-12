@@ -95,11 +95,16 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   const steps = [
     "Initializing agent network...",
     "MailReader: Scanning incoming emails...",
+    "MailReader: Parsing email headers and metadata...",
     "MailReader → Classifier: Sending parsed email data...",
-    "Classifier: Analyzing content and priority...", 
+    "Classifier: Analyzing semantic content...",
+    "Classifier: Extracting priority signals...", 
     "Classifier → Responder: Sending classification results...",
-    "Responder: Processing responses and escalations...",
-    "Generating user report for critical decisions..."
+    "Responder: Evaluating response strategies...",
+    "Responder: Processing escalation decisions...",
+    "Responder: Generating automated responses...",
+    "System: Coordinating final agent states...",
+    "Generating comprehensive user report..."
   ];
 
   const getAgentDistance = (agent1, agent2) => {
@@ -182,31 +187,47 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     
     try {
       // Step 1: Initialize
-      await delay(1000);
+      await delay(1500);
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
-      addCommunication('reader', 'system', 'Scanned 4 incoming emails. Parsing content...', 'analysis');
+      addCommunication('reader', 'system', 'Network initialized. Beginning email scan...', 'analysis');
       
-      // Step 2: Reader → Classifier communication
-      await delay(1000);
+      // Step 2: Scanning emails
+      await delay(1500);
       setCurrentStep(2);
+      addCommunication('reader', 'system', 'Scanned 4 incoming emails. Processing headers...', 'analysis');
+      
+      // Step 3: Parsing headers
+      await delay(1500);
+      setCurrentStep(3);
+      addCommunication('reader', 'system', 'Headers parsed. Extracting content and metadata...', 'analysis');
+      
+      // Step 4: Reader → Classifier communication
+      await delay(1500);
+      setCurrentStep(4);
       updateAgentStatus('classifier', 'active');
       
       for (let email of emails) {
-        await delay(800);
+        await delay(1000);
         addCommunication('reader', 'classifier', 
           `Email parsed: "${email.subject}" from ${email.from}. Content length: ${email.content.length} chars.`, 
           'data_transfer'
         );
       }
 
-      // Continue with remaining steps...
-      await delay(1000);
-      setCurrentStep(3);
-      addCommunication('classifier', 'system', 'Analyzing semantic content and extracting priority signals...', 'analysis');
-
+      // Step 5: Semantic analysis
       await delay(1500);
-      setCurrentStep(4);
+      setCurrentStep(5);
+      addCommunication('classifier', 'system', 'Analyzing semantic content and context...', 'analysis');
+
+      // Step 6: Priority extraction
+      await delay(1500);
+      setCurrentStep(6);
+      addCommunication('classifier', 'system', 'Extracting priority signals and urgency markers...', 'analysis');
+
+      // Step 7: Classifier → Responder
+      await delay(1500);
+      setCurrentStep(7);
       updateAgentStatus('responder', 'active');
 
       const classifications = [
@@ -217,7 +238,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       ];
 
       for (let classification of classifications) {
-        await delay(600);
+        await delay(800);
         const email = emails.find(e => e.id === classification.emailId);
         addCommunication('classifier', 'responder',
           `"${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}`,
@@ -225,11 +246,19 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         );
       }
 
-      await delay(1000);
-      setCurrentStep(5);
-      addCommunication('responder', 'system', 'Processing responses and escalations...', 'synthesis');
-
+      // Step 8: Response strategy evaluation
       await delay(1500);
+      setCurrentStep(8);
+      addCommunication('responder', 'system', 'Evaluating optimal response strategies...', 'synthesis');
+
+      // Step 9: Escalation decisions
+      await delay(1500);
+      setCurrentStep(9);
+      addCommunication('responder', 'system', 'Processing escalation decisions...', 'synthesis');
+
+      // Step 10: Response generation
+      await delay(1500);
+      setCurrentStep(10);
       const responses = [
         { emailId: 1, action: 'escalate', response: 'ESCALATED: Critical server outage' },
         { emailId: 2, action: 'respond', response: 'Thank you for reaching out...' },
@@ -238,7 +267,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       ];
 
       for (let response of responses) {
-        await delay(700);
+        await delay(800);
         const email = emails.find(e => e.id === response.emailId);
         addCommunication('responder', 'user',
           `"${email.subject}": ${response.action.toUpperCase()}`,
@@ -252,8 +281,14 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
         }]);
       }
 
-      await delay(1000);
-      setCurrentStep(6);
+      // Step 11: System coordination
+      await delay(1500);
+      setCurrentStep(11);
+      addCommunication('system', 'system', 'Coordinating final agent states and cleanup...', 'coordination');
+
+      // Step 12: Final report
+      await delay(1500);
+      setCurrentStep(11);
       addCommunication('system', 'user',
         `Processing complete. Efficiency: ${communicationMetrics.efficiency}%`,
         'report'
@@ -470,6 +505,33 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                 />
               </g>
             ))}
+
+            {/* Legend inside SVG */}
+            <g transform="translate(20, 350)">
+              <rect
+                x="0"
+                y="0"
+                width="180"
+                height="40"
+                fill="rgba(255, 255, 255, 0.9)"
+                stroke="rgba(0, 0, 0, 0.1)"
+                strokeWidth="1"
+                rx="6"
+              />
+              <text x="8" y="12" fontSize="10" fontWeight="600" fill="#000">Agent Types</text>
+              
+              {/* Reader legend */}
+              <circle cx="15" cy="22" r="6" fill="#99112A" stroke="#000" strokeWidth="1"/>
+              <text x="25" y="26" fontSize="9" fill="#000">Reader</text>
+              
+              {/* Classifier legend */}
+              <circle cx="70" cy="22" r="6" fill="#6E9911" stroke="#000" strokeWidth="1"/>
+              <text x="80" y="26" fontSize="9" fill="#000">Classifier</text>
+              
+              {/* Responder legend */}
+              <circle cx="135" cy="22" r="6" fill="#119980" stroke="#000" strokeWidth="1"/>
+              <text x="145" y="26" fontSize="9" fill="#000">Responder</text>
+            </g>
           </svg>
 
           {/* Current Communication Display */}
@@ -478,25 +540,6 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               <strong>{currentCommunication.from} → {currentCommunication.to}:</strong> {currentCommunication.message}
             </div>
           )}
-          
-          {/* Legend */}
-          <div className="agent-legend">
-            <h5>Agent Types</h5>
-            <div className="legend-items">
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#99112A' }}></div>
-                <span>Reader</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#6E9911' }}></div>
-                <span>Classifier</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color" style={{ backgroundColor: '#119980' }}></div>
-                <span>Responder</span>
-              </div>
-            </div>
-          </div>
 
           <div className="real-metrics-display">
             <div className="metrics-grid">
