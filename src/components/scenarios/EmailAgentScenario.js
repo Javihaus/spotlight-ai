@@ -55,7 +55,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       id: 'reader',
       name: 'Reader',
       role: 'Scans and parses incoming emails',
-      position: { x: 150, y: 200 },
+      position: { x: 120, y: 160 },
       status: 'idle',
       color: '#99112A'
     },
@@ -63,7 +63,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       id: 'classifier', 
       name: 'Classifier',
       role: 'Analyzes content and assigns priority levels',
-      position: { x: 300, y: 150 },
+      position: { x: 250, y: 120 },
       status: 'idle',
       color: '#6E9911'
     },
@@ -71,7 +71,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       id: 'responder',
       name: 'Responder', 
       role: 'Handles responses and escalations',
-      position: { x: 450, y: 250 },
+      position: { x: 380, y: 200 },
       status: 'idle',
       color: '#119980'
     }
@@ -396,10 +396,10 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
           </div>
           
           <svg
-            width="600"
-            height="600"
+            width="500"
+            height="400"
             className="agent-svg"
-            viewBox="0 0 600 600"
+            viewBox="0 0 500 400"
           >
             {/* Communication radius circles */}
             {Object.values(agentStates).map(agent => (
@@ -436,64 +436,32 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
             {/* Current Communication Line */}
             {currentCommunication && (
-              <g>
-                <line
-                  x1={agents[currentCommunication.from]?.position.x || 0}
-                  y1={agents[currentCommunication.from]?.position.y || 0}
-                  x2={agents[currentCommunication.to]?.position.x || 0}
-                  y2={agents[currentCommunication.to]?.position.y || 0}
-                  stroke="#ff4444"
-                  strokeWidth="4"
-                  strokeDasharray="10,5"
-                  className="communication-active"
-                />
-                <text
-                  x={(agents[currentCommunication.from]?.position.x + agents[currentCommunication.to]?.position.x) / 2 || 0}
-                  y={(agents[currentCommunication.from]?.position.y + agents[currentCommunication.to]?.position.y) / 2 || 0}
-                  textAnchor="middle"
-                  fill="#000"
-                  fontSize="12"
-                  fontWeight="bold"
-                  dy="-10"
-                >
-                  {currentCommunication.from} → {currentCommunication.to}
-                </text>
-                <text
-                  x={(agents[currentCommunication.from]?.position.x + agents[currentCommunication.to]?.position.x) / 2 || 0}
-                  y={(agents[currentCommunication.from]?.position.y + agents[currentCommunication.to]?.position.y) / 2 || 0}
-                  textAnchor="middle"
-                  fill="#000"
-                  fontSize="10"
-                  dy="10"
-                >
-                  {currentCommunication.message.substring(0, 50)}...
-                </text>
-              </g>
+              <line
+                x1={agents[currentCommunication.from]?.position.x || 0}
+                y1={agents[currentCommunication.from]?.position.y || 0}
+                x2={agents[currentCommunication.to]?.position.x || 0}
+                y2={agents[currentCommunication.to]?.position.y || 0}
+                stroke="#ff4444"
+                strokeWidth="4"
+                strokeDasharray="10,5"
+                className="communication-active"
+              />
             )}
 
             {/* Agent nodes */}
             {Object.values(agentStates).map(agent => (
               <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
                 <circle
-                  r="30"
+                  r="25"
                   fill={agent.color}
                   stroke="#000"
                   strokeWidth="2"
                   className="agent-node"
                 />
-                <text
-                  textAnchor="middle"
-                  dy="0.35em"
-                  fill="#000"
-                  fontSize="10"
-                  fontWeight="bold"
-                >
-                  {agent.name}
-                </text>
                 <circle
-                  cx="20"
-                  cy="-20"
-                  r="6"
+                  cx="18"
+                  cy="-18"
+                  r="5"
                   fill={
                     agent.status === 'active' ? "#ffc107" :
                     agent.status === 'complete' ? "#4caf50" :
@@ -503,6 +471,13 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               </g>
             ))}
           </svg>
+
+          {/* Current Communication Display */}
+          {currentCommunication && (
+            <div className="current-communication">
+              <strong>{currentCommunication.from} → {currentCommunication.to}:</strong> {currentCommunication.message}
+            </div>
+          )}
           
           {/* Legend */}
           <div className="agent-legend">
@@ -592,8 +567,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             </button>
           </div>
 
-          <div className="controls-column">
-            <div className="control-group">
+          <div className="controls-grid">
+            <div className="control-row">
               <label htmlFor="coord-bandwidth">
                 Coordination Bandwidth: <span className="value">{communicationRadius}</span>
               </label>
@@ -608,7 +583,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               />
             </div>
 
-            <div className="control-group">
+            <div className="control-row">
               <label htmlFor="task-complexity">
                 Task Complexity: <span className="value">{taskComplexity}</span>
               </label>
@@ -623,7 +598,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               />
             </div>
 
-            <div className="control-group">
+            <div className="control-row">
               <label htmlFor="agent-specialization">
                 Agent Specialization: <span className="value">{agentSpecialization}</span>
               </label>
@@ -638,7 +613,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
               />
             </div>
 
-            <div className="control-group">
+            <div className="control-row">
               <label htmlFor="info-quality">
                 Information Quality: <span className="value">{informationQuality}</span>
               </label>
