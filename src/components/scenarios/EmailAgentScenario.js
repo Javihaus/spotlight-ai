@@ -203,12 +203,13 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     setAgentStates(agents);
     
     try {
-      // Step 1: Initialize
-      await delay(8000);
-      if (!isPlaying) return;
+      // Step 1: Initialize (immediate start)
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
       addCommunication('reader', 'user', 'Network initialized. User interface ready. Beginning email scan...', 'analysis');
+      
+      await delay(8000);
+      if (!isPlaying) return;
       
       // Step 2: Scanning emails
       await delay(8000);
@@ -495,8 +496,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             className="agent-svg"
             viewBox="0 0 500 400"
           >
-            {/* Communication radius circles */}
-            {Object.values(agentStates).map(agent => (
+            {/* Communication radius circles - exclude user */}
+            {Object.values(agentStates).filter(agent => agent.id !== 'user').map(agent => (
               <circle
                 key={`radius-${agent.id}`}
                 cx={agent.position.x}
@@ -512,6 +513,29 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             {/* Communication links */}
             {Object.values(agentStates).map((agent1, i) => 
               Object.values(agentStates).slice(i + 1).map(agent2 => {
+                // Special handling for user - only connects to manager
+                if (agent1.id === 'user' || agent2.id === 'user') {
+                  const isUserManagerLink = (
+                    (agent1.id === 'user' && agent2.id === 'manager') ||
+                    (agent1.id === 'manager' && agent2.id === 'user')
+                  );
+                  if (!isUserManagerLink) return null;
+                  
+                  return (
+                    <line
+                      key={`link-${agent1.id}-${agent2.id}`}
+                      x1={agent1.position.x}
+                      y1={agent1.position.y}
+                      x2={agent2.position.x}
+                      y2={agent2.position.y}
+                      stroke="rgba(60, 17, 153, 0.6)"
+                      strokeWidth="3"
+                      className="active-link"
+                    />
+                  );
+                }
+                
+                // Normal agent-to-agent communication based on radius
                 const canComm = canCommunicate(agent1, agent2);
                 return (
                   <line

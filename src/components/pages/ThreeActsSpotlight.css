@@ -144,9 +144,13 @@
   margin: 0;
 }
 
-.act-nav-card.active .act-nav-content h3,
 .act-nav-card.active .act-nav-content p {
   color: #fff;
+  opacity: 1;
+}
+
+.act-nav-card.active .act-nav-content h3 {
+  color: #000;
   opacity: 1;
 }
 
