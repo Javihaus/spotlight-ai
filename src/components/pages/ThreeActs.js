@@ -249,17 +249,17 @@ const ThreeActs = () => {
             {/* Act 2: Geometric AI - Professional Design */}
             {currentAct === 2 && (
               <div className="act-2-spotlight">
-                {/* Email Agent Scenario */}
-                <EmailAgentScenario 
-                  isRunning={emailScenarioRunning}
-                  onComplete={onScenarioComplete}
+                {/* Geometric Foundation - Now First */}
+                <GeometricFoundation 
+                  isActive={currentAct === 2}
                   communicationRadius={communicationRadius}
                   onRadiusChange={setCommunicationRadius}
                 />
 
-                {/* Geometric Foundation */}
-                <GeometricFoundation 
-                  isActive={currentAct === 2}
+                {/* Email Agent Scenario - Now After Geometric Foundation */}
+                <EmailAgentScenario 
+                  isRunning={emailScenarioRunning}
+                  onComplete={onScenarioComplete}
                   communicationRadius={communicationRadius}
                   onRadiusChange={setCommunicationRadius}
                 />
@@ -268,7 +268,7 @@ const ThreeActs = () => {
                 <div className="act-transition">
                   <h4>Ready for the Final Insight?</h4>
                   <p>
-                    You've seen the practical coordination and the geometric necessity. 
+                    You've seen the geometric necessity and the practical coordination in action. 
                     Now discover what this means for the future of AI systems.
                   </p>
                   <motion.button 
