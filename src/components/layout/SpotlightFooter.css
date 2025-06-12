@@ -39,7 +39,7 @@
 }
 
 .footer-logo-image {
-  height: 32px;
+  height: 40px;
   width: auto;
   transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
 }

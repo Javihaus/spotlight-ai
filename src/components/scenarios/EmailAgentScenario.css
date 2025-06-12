@@ -110,8 +110,8 @@
 .control-slider::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 40px;
+  height: 40px;
   background: #3c1199;
   border-radius: 50%;
   cursor: pointer;
@@ -159,8 +159,8 @@
 }
 
 .legend-color {
-  width: 16px;
-  height: 16px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 1px solid #000;
 }
@@ -400,8 +400,8 @@
 .radius-slider::-webkit-slider-thumb {
   appearance: none;
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
+  width: 40px;
+  height: 40px;
   background: #3c1199;
   border-radius: 50%;
   cursor: pointer;
@@ -969,8 +969,8 @@
   padding: 0.25rem;
   border-radius: 4px;
   transition: all 0.3s ease;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;

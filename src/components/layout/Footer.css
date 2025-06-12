@@ -34,7 +34,7 @@
 }
 
 .footer-logo-image {
-  height: 64px;
+  height: 40px;
   width: auto;
   transition: all 0.3s ease;
 }
@@ -120,7 +120,7 @@
 }
 
 .genai-logo {
-  height: 24px;
+  height: 40px;
   width: auto;
   filter: brightness(0.8);
   transition: filter 0.3s ease;
@@ -168,7 +168,7 @@
   }
 
   .footer-logo-image {
-    height: 28px;
+    height: 40px;
   }
 
   .footer-cta {
