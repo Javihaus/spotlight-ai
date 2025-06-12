@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { TfiArrowRight, TfiTarget, TfiThought, TfiStatsUp } from 'react-icons/tfi';
@@ -16,6 +16,61 @@ const Homepage = () => {
     setEmail('');
   };
 
+  // Animated dots background effect with grey dots
+  useEffect(() => {
+    const dotsContainer = document.getElementById('heroDotsBackground');
+    if (!dotsContainer) return;
+
+    // Create dots
+    const createDots = () => {
+      dotsContainer.innerHTML = '';
+      const dotCount = 120;
+      
+      for (let i = 0; i < dotCount; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'hero-animated-dot';
+        dot.style.left = Math.random() * 100 + '%';
+        dot.style.top = Math.random() * 100 + '%';
+        dot.style.animationDelay = Math.random() * 3 + 's';
+        dotsContainer.appendChild(dot);
+      }
+    };
+
+    // Mouse move handler
+    const handleMouseMove = (e) => {
+      const rect = dotsContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = (e.clientY - rect.top) / rect.height;
+      
+      const dots = dotsContainer.querySelectorAll('.hero-animated-dot');
+      dots.forEach((dot, index) => {
+        const dotX = parseFloat(dot.style.left) / 100;
+        const dotY = parseFloat(dot.style.top) / 100;
+        
+        const distance = Math.sqrt((x - dotX) ** 2 + (y - dotY) ** 2);
+        const influence = Math.max(0, 1 - distance * 2.5);
+        
+        if (influence > 0) {
+          const moveX = (x - dotX) * influence * 25;
+          const moveY = (y - dotY) * influence * 25;
+          const scale = 1 + influence * 2.5;
+          
+          dot.style.transform = `translate(${moveX}px, ${moveY}px) scale(${scale})`;
+          dot.style.opacity = 0.2 + influence * 0.6;
+        } else {
+          dot.style.transform = 'translate(0, 0) scale(1)';
+          dot.style.opacity = 0.2;
+        }
+      });
+    };
+
+    createDots();
+    dotsContainer.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      dotsContainer.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   return (
     <div className="homepage-spotlight" style={{ border: '5px solid #3c1199' }}>
@@ -28,9 +83,12 @@ const Homepage = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <h1>
-              99% of AI's potential is agentic
-            </h1>
+            <div className="hero-animated-title-container">
+              <h1 className="hero-animated-title">
+                99% of AI's potential is agentic
+              </h1>
+              <div className="hero-dots-background" id="heroDotsBackground"></div>
+            </div>
             <p className="hero-subtitle">
               Transform your understanding from misconception to mastery through our interactive three-act experience. Discover the geometric necessity that makes coordination inevitable.
             </p>
