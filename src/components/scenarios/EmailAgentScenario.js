@@ -53,29 +53,33 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   const [agents] = useState({
     reader: {
       id: 'reader',
-      name: 'MailReader',
+      name: 'Reader',
       role: 'Scans and parses incoming emails',
-      position: { x: 80, y: 100 },
-      status: 'idle'
+      position: { x: 150, y: 200 },
+      status: 'idle',
+      color: '#99112A'
     },
     classifier: {
       id: 'classifier', 
       name: 'Classifier',
       role: 'Analyzes content and assigns priority levels',
-      position: { x: 200, y: 100 },
-      status: 'idle'
+      position: { x: 300, y: 150 },
+      status: 'idle',
+      color: '#6E9911'
     },
     responder: {
       id: 'responder',
       name: 'Responder', 
       role: 'Handles responses and escalations',
-      position: { x: 320, y: 100 },
-      status: 'idle'
+      position: { x: 450, y: 250 },
+      status: 'idle',
+      color: '#119980'
     }
   });
 
   const [processedEmails, setProcessedEmails] = useState([]);
   const [communicationLog, setCommunicationLog] = useState([]);
+  const [currentCommunication, setCurrentCommunication] = useState(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [agentStates, setAgentStates] = useState(agents);
   const [showCayleyExplanation, setShowCayleyExplanation] = useState(false);
@@ -353,6 +357,21 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       efficiency: communicationMetrics.efficiency
     };
     setCommunicationLog(prev => [...prev, newComm]);
+    
+    // Set current communication for real-time display on graph
+    if (from !== 'system' && to !== 'system') {
+      setCurrentCommunication({
+        from,
+        to,
+        message,
+        timestamp: Date.now()
+      });
+      
+      // Clear after 3 seconds
+      setTimeout(() => {
+        setCurrentCommunication(null);
+      }, 3000);
+    }
   };
 
   return (
@@ -360,294 +379,287 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       <div className="scenario-header">
         <h3>A real simulation</h3>
         <p>Watch three autonomous agents coordinate through geometric proximity rules</p>
-        
-        <div className="simulation-controls">
-          <button 
-            className={`pro-control-btn play-btn ${isPlaying ? 'active' : ''}`}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Play button click handler fired');
-              startSimulation();
-            }}
-            onMouseDown={(e) => console.log('Play button mouse down')}
-            disabled={isPlaying}
-            type="button"
-          >
-            <TfiControlPlay />
-            <span>Play</span>
-          </button>
-          <button 
-            className={`pro-control-btn stop-btn`}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Stop button click handler fired');
-              stopSimulation();
-            }}
-            onMouseDown={(e) => console.log('Stop button mouse down')}
-            disabled={!isPlaying}
-            type="button"
-          >
-            <TfiControlStop />
-            <span>Stop</span>
-          </button>
-          <button 
-            className="pro-control-btn refresh-btn"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('Refresh button click handler fired');
-              refreshSimulation();
-            }}
-            onMouseDown={(e) => console.log('Refresh button mouse down')}
-            type="button"
-          >
-            <TfiReload />
-            <span>Refresh</span>
-          </button>
-        </div>
       </div>
 
-      <div className="agent-workspace">
-        <div className="workspace-grid">
-          {/* Left: Agent Network Visualization */}
-          <div className="agent-network">
+      <div className="simulation-workspace-side-by-side">
+        {/* Left: Visualization and Performance Metrics */}
+        <div className="simulation-viz-section">
+          <div className="viz-header">
+            <h4>Real Agent Coordination</h4>
+            <div className="coordination-status">
+              <div 
+                className="status-indicator"
+                style={{ backgroundColor: isPlaying ? '#4caf50' : '#666' }}
+              />
+              <span className="status-text">{isPlaying ? 'RUNNING' : 'IDLE'}</span>
+            </div>
+          </div>
+          
+          <svg
+            width="600"
+            height="600"
+            className="agent-svg"
+            viewBox="0 0 600 600"
+          >
+            {/* Communication radius circles */}
+            {Object.values(agentStates).map(agent => (
+              <circle
+                key={`radius-${agent.id}`}
+                cx={agent.position.x}
+                cy={agent.position.y}
+                r={communicationRadius}
+                fill="rgba(60, 17, 153, 0.1)"
+                stroke="rgba(60, 17, 153, 0.3)"
+                strokeWidth="1"
+                strokeDasharray="5,5"
+              />
+            ))}
             
-            <div className="radius-control">
-              <label>
-                Communication Radius: <span className="radius-value">{communicationRadius}px</span>
+            {/* Communication links */}
+            {Object.values(agentStates).map((agent1, i) => 
+              Object.values(agentStates).slice(i + 1).map(agent2 => {
+                const canComm = canCommunicate(agent1, agent2);
+                return (
+                  <line
+                    key={`link-${agent1.id}-${agent2.id}`}
+                    x1={agent1.position.x}
+                    y1={agent1.position.y}
+                    x2={agent2.position.x}
+                    y2={agent2.position.y}
+                    stroke={canComm ? "rgba(60, 17, 153, 0.6)" : "rgba(0, 0, 0, 0.1)"}
+                    strokeWidth={canComm ? "3" : "1"}
+                    className={canComm ? "active-link" : ""}
+                  />
+                );
+              })
+            )}
+
+            {/* Current Communication Line */}
+            {currentCommunication && (
+              <g>
+                <line
+                  x1={agents[currentCommunication.from]?.position.x || 0}
+                  y1={agents[currentCommunication.from]?.position.y || 0}
+                  x2={agents[currentCommunication.to]?.position.x || 0}
+                  y2={agents[currentCommunication.to]?.position.y || 0}
+                  stroke="#ff4444"
+                  strokeWidth="4"
+                  strokeDasharray="10,5"
+                  className="communication-active"
+                />
+                <text
+                  x={(agents[currentCommunication.from]?.position.x + agents[currentCommunication.to]?.position.x) / 2 || 0}
+                  y={(agents[currentCommunication.from]?.position.y + agents[currentCommunication.to]?.position.y) / 2 || 0}
+                  textAnchor="middle"
+                  fill="#000"
+                  fontSize="12"
+                  fontWeight="bold"
+                  dy="-10"
+                >
+                  {currentCommunication.from} → {currentCommunication.to}
+                </text>
+                <text
+                  x={(agents[currentCommunication.from]?.position.x + agents[currentCommunication.to]?.position.x) / 2 || 0}
+                  y={(agents[currentCommunication.from]?.position.y + agents[currentCommunication.to]?.position.y) / 2 || 0}
+                  textAnchor="middle"
+                  fill="#000"
+                  fontSize="10"
+                  dy="10"
+                >
+                  {currentCommunication.message.substring(0, 50)}...
+                </text>
+              </g>
+            )}
+
+            {/* Agent nodes */}
+            {Object.values(agentStates).map(agent => (
+              <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
+                <circle
+                  r="30"
+                  fill={agent.color}
+                  stroke="#000"
+                  strokeWidth="2"
+                  className="agent-node"
+                />
+                <text
+                  textAnchor="middle"
+                  dy="0.35em"
+                  fill="#000"
+                  fontSize="10"
+                  fontWeight="bold"
+                >
+                  {agent.name}
+                </text>
+                <circle
+                  cx="20"
+                  cy="-20"
+                  r="6"
+                  fill={
+                    agent.status === 'active' ? "#ffc107" :
+                    agent.status === 'complete' ? "#4caf50" :
+                    "#666"
+                  }
+                />
+              </g>
+            ))}
+          </svg>
+          
+          {/* Legend */}
+          <div className="agent-legend">
+            <h5>Agent Types</h5>
+            <div className="legend-items">
+              <div className="legend-item">
+                <div className="legend-color" style={{ backgroundColor: '#99112A' }}></div>
+                <span>Reader</span>
+              </div>
+              <div className="legend-item">
+                <div className="legend-color" style={{ backgroundColor: '#6E9911' }}></div>
+                <span>Classifier</span>
+              </div>
+              <div className="legend-item">
+                <div className="legend-color" style={{ backgroundColor: '#119980' }}></div>
+                <span>Responder</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="real-metrics-display">
+            <div className="metrics-grid">
+              <div className="metric-card">
+                <div className="metric-label">Task Success Rate</div>
+                <div className="metric-value">{realMetrics.taskSuccessRate}%</div>
+                <div className="metric-desc">Problems solved correctly</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Coordination Overhead</div>
+                <div className="metric-value">{realMetrics.coordinationOverhead}%</div>
+                <div className="metric-desc">Extra communication needed</div>
+              </div>
+              <div className="metric-card">
+                <div className="metric-label">Adaptation Speed</div>
+                <div className="metric-value">{realMetrics.adaptationSpeed}%</div>
+                <div className="metric-desc">Network adjustment rate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Interactive Controls */}
+        <div className="simulation-controls-sidebar">
+          <h4>Simulation Controls</h4>
+          
+          <div className="simulation-buttons">
+            <button 
+              className={`pro-control-btn play-btn ${isPlaying ? 'active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Play button click handler fired');
+                startSimulation();
+              }}
+              disabled={isPlaying}
+              type="button"
+            >
+              <TfiControlPlay />
+              <span>Play</span>
+            </button>
+            <button 
+              className={`pro-control-btn stop-btn`}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Stop button click handler fired');
+                stopSimulation();
+              }}
+              disabled={!isPlaying}
+              type="button"
+            >
+              <TfiControlStop />
+              <span>Stop</span>
+            </button>
+            <button 
+              className="pro-control-btn refresh-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Refresh button click handler fired');
+                refreshSimulation();
+              }}
+              type="button"
+            >
+              <TfiReload />
+              <span>Refresh</span>
+            </button>
+          </div>
+
+          <div className="controls-column">
+            <div className="control-group">
+              <label htmlFor="coord-bandwidth">
+                Coordination Bandwidth: <span className="value">{communicationRadius}</span>
               </label>
               <input
+                id="coord-bandwidth"
                 type="range"
                 min="50"
                 max="200"
                 value={communicationRadius}
                 onChange={(e) => onRadiusChange && onRadiusChange(parseInt(e.target.value))}
-                className="radius-slider"
+                className="control-slider"
               />
             </div>
 
-            <div className="control-parameters">
-              <div className="param-control">
-                <label>Task Complexity: <span className="param-value">{taskComplexity}</span></label>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={taskComplexity}
-                  onChange={(e) => setTaskComplexity(parseInt(e.target.value))}
-                  className="param-slider"
-                />
-              </div>
-              
-              <div className="param-control">
-                <label>Agent Specialization: <span className="param-value">{agentSpecialization}</span></label>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={agentSpecialization}
-                  onChange={(e) => setAgentSpecialization(parseInt(e.target.value))}
-                  className="param-slider"
-                />
-              </div>
-
-              <div className="param-control">
-                <label>Information Quality: <span className="param-value">{informationQuality}</span></label>
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={informationQuality}
-                  onChange={(e) => setInformationQuality(parseInt(e.target.value))}
-                  className="param-slider"
-                />
-              </div>
+            <div className="control-group">
+              <label htmlFor="task-complexity">
+                Task Complexity: <span className="value">{taskComplexity}</span>
+              </label>
+              <input
+                id="task-complexity"
+                type="range"
+                min="0"
+                max="100"
+                value={taskComplexity}
+                onChange={(e) => setTaskComplexity(parseInt(e.target.value))}
+                className="control-slider"
+              />
             </div>
 
-            <svg width="400" height="280" className="agent-svg">
-              {/* Communication radius circles */}
-              {Object.values(agentStates).map(agent => (
-                <circle
-                  key={`radius-${agent.id}`}
-                  cx={agent.position.x}
-                  cy={agent.position.y}
-                  r={communicationRadius}
-                  fill="rgba(60, 17, 153, 0.1)"
-                  stroke="rgba(60, 17, 153, 0.3)"
-                  strokeWidth="1"
-                  strokeDasharray="5,5"
-                />
-              ))}
-              
-              {/* Communication links */}
-              {Object.values(agentStates).map((agent1, i) => 
-                Object.values(agentStates).slice(i + 1).map(agent2 => {
-                  const canComm = canCommunicate(agent1, agent2);
-                  return (
-                    <line
-                      key={`link-${agent1.id}-${agent2.id}`}
-                      x1={agent1.position.x}
-                      y1={agent1.position.y}
-                      x2={agent2.position.x}
-                      y2={agent2.position.y}
-                      stroke={canComm ? "rgba(60, 17, 153, 0.6)" : "rgba(0, 0, 0, 0.1)"}
-                      strokeWidth={canComm ? "3" : "1"}
-                      className={canComm ? "active-link" : ""}
-                    />
-                  );
-                })
-              )}
+            <div className="control-group">
+              <label htmlFor="agent-specialization">
+                Agent Specialization: <span className="value">{agentSpecialization}</span>
+              </label>
+              <input
+                id="agent-specialization"
+                type="range"
+                min="0"
+                max="100"
+                value={agentSpecialization}
+                onChange={(e) => setAgentSpecialization(parseInt(e.target.value))}
+                className="control-slider"
+              />
+            </div>
 
-              {/* Agent nodes */}
-              {Object.values(agentStates).map(agent => (
-                <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
-                  <circle
-                    r="25"
-                    fill={
-                      agent.status === 'active' ? "url(#activeGradient)" :
-                      agent.status === 'complete' ? "url(#completeGradient)" :
-                      "#ffffff"
-                    }
-                    stroke={
-                      agent.status === 'active' ? "#00d4ff" :
-                      agent.status === 'complete' ? "#4caf50" :
-                      "#3c1199"
-                    }
-                    strokeWidth="2"
-                    className="agent-node"
-                  />
-                  <text
-                    textAnchor="middle"
-                    dy="0.35em"
-                    fill={agent.status === 'idle' ? "#3c1199" : "white"}
-                    fontSize="8"
-                    fontWeight="bold"
-                  >
-                    {agent.name}
-                  </text>
-                  <circle
-                    cx="18"
-                    cy="-18"
-                    r="5"
-                    fill={
-                      agent.status === 'active' ? "#ffc107" :
-                      agent.status === 'complete' ? "#4caf50" :
-                      "#666"
-                    }
-                  />
-                </g>
-              ))}
-
-              {/* Gradients */}
-              <defs>
-                <linearGradient id="activeGradient">
-                  <stop offset="0%" stopColor="#3c1199" />
-                  <stop offset="100%" stopColor="#6b46c1" />
-                </linearGradient>
-                <linearGradient id="completeGradient">
-                  <stop offset="0%" stopColor="#4caf50" />
-                  <stop offset="100%" stopColor="#81c784" />
-                </linearGradient>
-              </defs>
-            </svg>
-
-            {/* Real AI Metrics */}
-            <div className="communication-metrics">
-              <div className="metric">
-                <span className="metric-label">Task Success Rate:</span>
-                <span className="metric-value">{realMetrics.taskSuccessRate}%</span>
-              </div>
-              <div className="metric">
-                <span className="metric-label">Coordination Overhead:</span>
-                <span className="metric-value">{realMetrics.coordinationOverhead}%</span>
-              </div>
-              <div className="metric">
-                <span className="metric-label">Adaptation Speed:</span>
-                <span className="metric-value">{realMetrics.adaptationSpeed}%</span>
-              </div>
+            <div className="control-group">
+              <label htmlFor="info-quality">
+                Information Quality: <span className="value">{informationQuality}</span>
+              </label>
+              <input
+                id="info-quality"
+                type="range"
+                min="0"
+                max="100"
+                value={informationQuality}
+                onChange={(e) => setInformationQuality(parseInt(e.target.value))}
+                className="control-slider"
+              />
             </div>
           </div>
 
-          {/* Right: Real-time Communication */}
-          <div className="communication-panel">
-            <h4>Real-time Agent Communication</h4>
-            <div className="current-step">
-              <div className="step-indicator">Step {currentStep + 1}/{steps.length}</div>
-              <div className="step-description">{steps[currentStep]}</div>
-            </div>
-            
-            <div className="communication-log">
-              {communicationLog.map(comm => (
-                <motion.div 
-                  key={comm.id}
-                  className={`communication-entry ${comm.type}`}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="comm-header">
-                    <span className="comm-from">{comm.from}</span>
-                    <span className="comm-arrow">→</span>
-                    <span className="comm-to">{comm.to}</span>
-                    <span className="comm-efficiency">E:{comm.efficiency}%</span>
-                  </div>
-                  <div className="comm-message">{comm.message}</div>
-                </motion.div>
-              ))}
-            </div>
+          <div className="current-step">
+            <div className="step-indicator">Step {currentStep + 1}/{steps.length}</div>
+            <div className="step-description">{steps[currentStep]}</div>
           </div>
         </div>
       </div>
-
-      {/* Cayley Graph Explanation Modal */}
-      <AnimatePresence>
-        {showCayleyExplanation && (
-          <motion.div
-            className="cayley-modal-overlay"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setShowCayleyExplanation(false)}
-          >
-            <motion.div
-              className="cayley-modal"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="modal-header">
-                <h3>Cayley Graph</h3>
-                <button 
-                  className="close-btn"
-                  onClick={() => setShowCayleyExplanation(false)}
-                >
-                  ×
-                </button>
-              </div>
-              <div className="modal-content">
-                <p>
-                  A Cayley graph is simply a mathematical map that shows all the possible ways things can connect and interact. Imagine you have a robot that can only make three basic moves: step left, step right, or step forward. If you draw a dot for every position the robot can reach and connect each dot with lines showing which moves are possible, you create a Cayley graph.
-                </p>
-                <p>
-                  The beautiful insight is that the shape of this graph tells you everything about what the robot can accomplish. In our agent system, each artificial agent is like that robot, but instead of physical steps, their basic moves are sending messages, receiving information, and updating their understanding.
-                </p>
-                <p>
-                  The Cayley graph reveals all possible ways agents can coordinate with each other through these simple communication moves. What makes this profound is that complex coordination emerges naturally from the geometric structure itself, not from explicit programming.
-                </p>
-                <p>
-                  <strong>Network Resilience</strong> measures how many backup communication paths exist when connections fail. It's like asking: "If one agent goes offline, can the others still work together?" This relates to what mathematicians call the "second eigenvalue of the Laplacian" - a fancy way of saying "how well-connected is this network really?" When this value is positive, the network stays connected even when individual connections break.
-                </p>
-                <p>
-                  When agents are close enough in this communication graph, coordination becomes mathematically inevitable, like dancers who can hear the same music. The graph's geometry determines whether agents will work together beautifully or fail chaotically, and tiny changes in the connection patterns can create dramatic differences in behavior.
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

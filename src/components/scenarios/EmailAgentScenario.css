@@ -11,6 +11,149 @@
   font-family: 'Neue Haas Display Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
+/* New Side-by-Side Layout */
+.simulation-workspace-side-by-side {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.simulation-viz-section {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.simulation-controls-sidebar {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.simulation-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.controls-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.control-group label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #000;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  color: #3c1199;
+  font-weight: 600;
+  background: rgba(60, 17, 153, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Consolas', monospace;
+}
+
+.control-slider {
+  width: 100%;
+  height: 4px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.control-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #3c1199;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(60, 17, 153, 0.3);
+  transition: all 0.2s ease;
+}
+
+.control-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(60, 17, 153, 0.5);
+}
+
+/* Agent Legend */
+.agent-legend {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f0f0f0;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.agent-legend h5 {
+  margin: 0 0 0.75rem 0;
+  color: #000;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.legend-items {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #000;
+  font-weight: 500;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid #000;
+}
+
+/* Communication Animation */
+.communication-active {
+  animation: pulse-communication 2s ease-in-out infinite;
+}
+
+@keyframes pulse-communication {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    stroke-width: 6;
+  }
+}
+
 .scenario-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -597,6 +740,17 @@
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+  .simulation-workspace-side-by-side {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .simulation-controls-sidebar {
+    order: -1;
+  }
+}
+
 @media (max-width: 768px) {
   .email-scenario-container {
     padding: 1rem;
@@ -604,6 +758,15 @@
 
   .agent-network {
     padding: 0.5rem;
+  }
+
+  .simulation-buttons {
+    flex-direction: column;
+  }
+
+  .legend-items {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .agent-svg {
