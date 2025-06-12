@@ -37,7 +37,7 @@
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: fit-content;
 }
 
@@ -125,21 +125,7 @@
   box-shadow: 0 4px 10px rgba(60, 17, 153, 0.5);
 }
 
-/* Current Communication Display */
-.current-communication {
-  background: #fff3cd;
-  border: 1px solid #ffeaa7;
-  border-radius: 8px;
-  padding: 0.75rem;
-  margin: 1rem 0;
-  font-size: 0.875rem;
-  color: #856404;
-  text-align: center;
-  min-height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+/* Current Communication Display - REMOVED - Now integrated into current-step */
 
 /* Agent Legend */
 .agent-legend {
@@ -564,25 +550,40 @@
 .current-step {
   background: #f0f0f0;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
+  border-radius: 12px;
+  padding: 1.5rem;
   text-align: center;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .step-indicator {
   color: #3c1199;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .step-description {
   color: #000;
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.current-communication-inline {
+  background: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #1565c0;
+  text-align: left;
+  margin-top: 1rem;
 }
 
 .communication-log {

@@ -67,13 +67,22 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       status: 'idle',
       color: '#6E9911'
     },
-    responder: {
-      id: 'responder',
-      name: 'Responder', 
-      role: 'Handles responses and escalations',
+    manager: {
+      id: 'manager',
+      name: 'Manager', 
+      role: 'Orchestrates agents and handles user communication',
       position: { x: 380, y: 200 },
       status: 'idle',
       color: '#119980'
+    },
+    user: {
+      id: 'user',
+      name: 'User',
+      role: 'Receives reports and provides feedback',
+      position: { x: 250, y: 300 },
+      status: 'idle',
+      color: '#3c1199',
+      shape: 'square'
     }
   });
 
@@ -93,18 +102,26 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   });
 
   const steps = [
-    "Initializing agent network...",
-    "MailReader: Scanning incoming emails...",
-    "MailReader: Parsing email headers and metadata...",
-    "MailReader → Classifier: Sending parsed email data...",
-    "Classifier: Analyzing semantic content...",
-    "Classifier: Extracting priority signals...", 
-    "Classifier → Responder: Sending classification results...",
-    "Responder: Evaluating response strategies...",
-    "Responder: Processing escalation decisions...",
-    "Responder: Generating automated responses...",
-    "System: Coordinating final agent states...",
-    "Generating comprehensive user report..."
+    "Initializing agent network and user interface...",
+    "Reader: Scanning incoming email queue...",
+    "Reader: Parsing email headers and metadata...",
+    "Reader → Manager: Reporting 4 emails detected...",
+    "Manager → Reader: Requesting detailed email parsing...",
+    "Reader → Classifier: Sending parsed email data...",
+    "Classifier: Analyzing semantic content and context...",
+    "Classifier: Extracting priority signals and urgency markers...", 
+    "Classifier → Manager: Sending classification results...",
+    "Manager: Evaluating response strategies and priorities...",
+    "Manager → User: Escalating critical server outage email...",
+    "User → Manager: Confirming escalation and requesting action...",
+    "Manager → Classifier: Requesting re-evaluation of medium priority items...",
+    "Classifier → Manager: Confirming priority assessments...",
+    "Manager: Generating automated responses for low-priority emails...",
+    "Manager → Reader: Requesting verification of response generation...",
+    "Reader → Manager: Confirming response accuracy...",
+    "Manager → User: Sending comprehensive status report...",
+    "User → Manager: Acknowledging report and system completion...",
+    "All agents: Finalizing coordination and returning to idle state..."
   ];
 
   const getAgentDistance = (agent1, agent2) => {
@@ -187,48 +204,68 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
     
     try {
       // Step 1: Initialize
-      await delay(1500);
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(1);
       updateAgentStatus('reader', 'active');
-      addCommunication('reader', 'system', 'Network initialized. Beginning email scan...', 'analysis');
+      addCommunication('reader', 'user', 'Network initialized. User interface ready. Beginning email scan...', 'analysis');
       
       // Step 2: Scanning emails
-      await delay(1500);
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(2);
-      addCommunication('reader', 'system', 'Scanned 4 incoming emails. Processing headers...', 'analysis');
+      addCommunication('reader', 'reader', 'Scanning incoming email queue... 4 emails detected', 'analysis');
       
       // Step 3: Parsing headers
-      await delay(1500);
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(3);
-      addCommunication('reader', 'system', 'Headers parsed. Extracting content and metadata...', 'analysis');
+      addCommunication('reader', 'reader', 'Parsing email headers and extracting metadata...', 'analysis');
       
-      // Step 4: Reader → Classifier communication
-      await delay(1500);
+      // Step 4: Reader → Manager communication
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(4);
+      updateAgentStatus('manager', 'active');
+      addCommunication('reader', 'manager', 'Reporting: 4 emails detected - 1 critical, 1 high, 1 medium, 1 low priority', 'data_transfer');
+      
+      // Step 5: Manager → Reader request
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(5);
+      addCommunication('manager', 'reader', 'Requesting detailed parsing of all email content for processing', 'coordination');
+      
+      // Step 6: Reader → Classifier communication
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(6);
       updateAgentStatus('classifier', 'active');
       
       for (let email of emails) {
-        await delay(1000);
+        if (!isPlaying) return;
+        await delay(2000);
         addCommunication('reader', 'classifier', 
-          `Email parsed: "${email.subject}" from ${email.from}. Content length: ${email.content.length} chars.`, 
+          `Email parsed: "${email.subject}" from ${email.from}. Content: ${email.content.length} chars`, 
           'data_transfer'
         );
       }
 
-      // Step 5: Semantic analysis
-      await delay(1500);
-      setCurrentStep(5);
-      addCommunication('classifier', 'system', 'Analyzing semantic content and context...', 'analysis');
-
-      // Step 6: Priority extraction
-      await delay(1500);
-      setCurrentStep(6);
-      addCommunication('classifier', 'system', 'Extracting priority signals and urgency markers...', 'analysis');
-
-      // Step 7: Classifier → Responder
-      await delay(1500);
+      // Step 7: Semantic analysis
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(7);
-      updateAgentStatus('responder', 'active');
+      addCommunication('classifier', 'classifier', 'Analyzing semantic content, keywords, and contextual urgency...', 'analysis');
+
+      // Step 8: Priority extraction
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(8);
+      addCommunication('classifier', 'classifier', 'Extracting priority signals: revenue impact, deadlines, sender authority...', 'analysis');
+
+      // Step 9: Classifier → Manager
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(9);
 
       const classifications = [
         { emailId: 1, priority: 'critical', confidence: 0.95, reasoning: 'Revenue impact detected' },
@@ -238,66 +275,88 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       ];
 
       for (let classification of classifications) {
-        await delay(800);
+        if (!isPlaying) return;
+        await delay(2000);
         const email = emails.find(e => e.id === classification.emailId);
-        addCommunication('classifier', 'responder',
+        addCommunication('classifier', 'manager',
           `"${email.subject}": Priority=${classification.priority}, Confidence=${classification.confidence}`,
           'coordination'
         );
       }
 
-      // Step 8: Response strategy evaluation
-      await delay(1500);
-      setCurrentStep(8);
-      addCommunication('responder', 'system', 'Evaluating optimal response strategies...', 'synthesis');
-
-      // Step 9: Escalation decisions
-      await delay(1500);
-      setCurrentStep(9);
-      addCommunication('responder', 'system', 'Processing escalation decisions...', 'synthesis');
-
-      // Step 10: Response generation
-      await delay(1500);
+      // Step 10: Manager evaluation
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(10);
-      const responses = [
-        { emailId: 1, action: 'escalate', response: 'ESCALATED: Critical server outage' },
-        { emailId: 2, action: 'respond', response: 'Thank you for reaching out...' },
-        { emailId: 3, action: 'escalate', response: 'ESCALATED: Contract review needed' },
-        { emailId: 4, action: 'respond', response: 'Received handbook update...' }
-      ];
+      addCommunication('manager', 'manager', 'Evaluating response strategies and escalation priorities...', 'synthesis');
 
-      for (let response of responses) {
-        await delay(800);
-        const email = emails.find(e => e.id === response.emailId);
-        addCommunication('responder', 'user',
-          `"${email.subject}": ${response.action.toUpperCase()}`,
-          response.action === 'escalate' ? 'escalation' : 'response'
-        );
-        
-        setProcessedEmails(prev => [...prev, {
-          ...email,
-          ...response,
-          processedAt: new Date().toISOString()
-        }]);
-      }
-
-      // Step 11: System coordination
-      await delay(1500);
+      // Step 11: Manager → User escalation
+      await delay(8000);
+      if (!isPlaying) return;
       setCurrentStep(11);
-      addCommunication('system', 'system', 'Coordinating final agent states and cleanup...', 'coordination');
+      updateAgentStatus('user', 'active');
+      addCommunication('manager', 'user', 'URGENT ESCALATION: Server outage affecting revenue - immediate attention required', 'escalation');
 
-      // Step 12: Final report
-      await delay(1500);
-      setCurrentStep(11);
-      addCommunication('system', 'user',
-        `Processing complete. Efficiency: ${communicationMetrics.efficiency}%`,
-        'report'
-      );
+      // Step 12: User → Manager confirmation
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(12);
+      addCommunication('user', 'manager', 'Escalation acknowledged. Initiating emergency response protocol.', 'response');
+
+      // Step 13: Manager → Classifier re-evaluation request
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(13);
+      addCommunication('manager', 'classifier', 'Please re-evaluate medium priority items for potential batch processing', 'coordination');
+
+      // Step 14: Classifier → Manager confirmation
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(14);
+      addCommunication('classifier', 'manager', 'Re-evaluation complete. Medium priority items confirmed for standard processing', 'data_transfer');
+
+      // Step 15: Manager generating responses
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(15);
+      addCommunication('manager', 'manager', 'Generating automated responses for low-priority communications...', 'synthesis');
+
+      // Step 16: Manager → Reader verification request
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(16);
+      addCommunication('manager', 'reader', 'Please verify accuracy of generated response templates', 'coordination');
+
+      // Step 17: Reader → Manager verification
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(17);
+      addCommunication('reader', 'manager', 'Response templates verified. Grammar and tone appropriate for recipients', 'response');
+
+      // Step 18: Manager → User final report
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(18);
+      addCommunication('manager', 'user', 'Status Report: 1 escalated, 2 auto-responded, 1 queued. System efficiency: 94%', 'report');
+
+      // Step 19: User → Manager acknowledgment
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(19);
+      addCommunication('user', 'manager', 'Report received and processed. System performance satisfactory. Thank you.', 'response');
+
+      // Step 20: Final coordination
+      await delay(8000);
+      if (!isPlaying) return;
+      setCurrentStep(19);
+      addCommunication('manager', 'reader', 'All agents: Processing complete. Returning to idle state for next queue', 'coordination');
+      addCommunication('manager', 'classifier', 'All agents: Processing complete. Returning to idle state for next queue', 'coordination');
 
       setAgentStates(prev => ({
         reader: { ...prev.reader, status: 'complete' },
         classifier: { ...prev.classifier, status: 'complete' },
-        responder: { ...prev.responder, status: 'complete' }
+        manager: { ...prev.manager, status: 'complete' },
+        user: { ...prev.user, status: 'complete' }
       }));
 
       // Automatically stop simulation when complete
@@ -486,13 +545,26 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             {/* Agent nodes */}
             {Object.values(agentStates).map(agent => (
               <g key={agent.id} transform={`translate(${agent.position.x}, ${agent.position.y})`}>
-                <circle
-                  r="25"
-                  fill={agent.color}
-                  stroke="#000"
-                  strokeWidth="2"
-                  className="agent-node"
-                />
+                {agent.shape === 'square' ? (
+                  <rect
+                    x="-25"
+                    y="-25"
+                    width="50"
+                    height="50"
+                    fill={agent.color}
+                    stroke="#000"
+                    strokeWidth="2"
+                    className="agent-node"
+                  />
+                ) : (
+                  <circle
+                    r="25"
+                    fill={agent.color}
+                    stroke="#000"
+                    strokeWidth="2"
+                    className="agent-node"
+                  />
+                )}
                 <circle
                   cx="18"
                   cy="-18"
@@ -507,39 +579,37 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             ))}
 
             {/* Legend inside SVG */}
-            <g transform="translate(20, 350)">
+            <g transform="translate(20, 340)">
               <rect
                 x="0"
                 y="0"
-                width="180"
-                height="40"
+                width="460"
+                height="50"
                 fill="rgba(255, 255, 255, 0.9)"
                 stroke="rgba(0, 0, 0, 0.1)"
                 strokeWidth="1"
                 rx="6"
               />
-              <text x="8" y="12" fontSize="10" fontWeight="600" fill="#000">Agent Types</text>
+              <text x="8" y="12" fontSize="10" fontWeight="600" fill="#000">Network Entities</text>
               
               {/* Reader legend */}
-              <circle cx="15" cy="22" r="6" fill="#99112A" stroke="#000" strokeWidth="1"/>
-              <text x="25" y="26" fontSize="9" fill="#000">Reader</text>
+              <circle cx="15" cy="28" r="6" fill="#99112A" stroke="#000" strokeWidth="1"/>
+              <text x="25" y="32" fontSize="9" fill="#000">Reader</text>
               
               {/* Classifier legend */}
-              <circle cx="70" cy="22" r="6" fill="#6E9911" stroke="#000" strokeWidth="1"/>
-              <text x="80" y="26" fontSize="9" fill="#000">Classifier</text>
+              <circle cx="80" cy="28" r="6" fill="#6E9911" stroke="#000" strokeWidth="1"/>
+              <text x="90" y="32" fontSize="9" fill="#000">Classifier</text>
               
-              {/* Responder legend */}
-              <circle cx="135" cy="22" r="6" fill="#119980" stroke="#000" strokeWidth="1"/>
-              <text x="145" y="26" fontSize="9" fill="#000">Responder</text>
+              {/* Manager legend */}
+              <circle cx="155" cy="28" r="6" fill="#119980" stroke="#000" strokeWidth="1"/>
+              <text x="165" y="32" fontSize="9" fill="#000">Manager</text>
+              
+              {/* User legend */}
+              <rect x="235" y="22" width="12" height="12" fill="#3c1199" stroke="#000" strokeWidth="1"/>
+              <text x="252" y="32" fontSize="9" fill="#000">User</text>
             </g>
           </svg>
 
-          {/* Current Communication Display */}
-          {currentCommunication && (
-            <div className="current-communication">
-              <strong>{currentCommunication.from} → {currentCommunication.to}:</strong> {currentCommunication.message}
-            </div>
-          )}
 
           <div className="real-metrics-display">
             <div className="metrics-grid">
@@ -675,6 +745,11 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
           <div className="current-step">
             <div className="step-indicator">Step {currentStep + 1}/{steps.length}</div>
             <div className="step-description">{steps[currentStep]}</div>
+            {currentCommunication && (
+              <div className="current-communication-inline">
+                <strong>Active Communication:</strong> {currentCommunication.from} → {currentCommunication.to}: {currentCommunication.message}
+              </div>
+            )}
           </div>
         </div>
       </div>
