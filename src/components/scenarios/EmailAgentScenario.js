@@ -515,6 +515,35 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
             className="agent-svg"
             viewBox="0 0 500 400"
           >
+            {/* Arrow marker definitions */}
+            <defs>
+              <marker
+                id="arrowhead"
+                markerWidth="10"
+                markerHeight="7"
+                refX="9"
+                refY="3.5"
+                orient="auto"
+              >
+                <polygon
+                  points="0 0, 10 3.5, 0 7"
+                  fill="rgba(60, 17, 153, 0.8)"
+                />
+              </marker>
+              <marker
+                id="arrowhead-active"
+                markerWidth="12"
+                markerHeight="8"
+                refX="11"
+                refY="4"
+                orient="auto"
+              >
+                <polygon
+                  points="0 0, 12 4, 0 8"
+                  fill="#ff4444"
+                />
+              </marker>
+            </defs>
             {/* Communication radius circles - exclude user */}
             {Object.values(agentStates).filter(agent => agent.id !== 'user').map(agent => (
               <circle
@@ -549,6 +578,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                       y2={agent2.position.y}
                       stroke="rgba(60, 17, 153, 0.6)"
                       strokeWidth="3"
+                      markerEnd="url(#arrowhead)"
                       className="active-link"
                     />
                   );
@@ -565,6 +595,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                     y2={agent2.position.y}
                     stroke={canComm ? "rgba(60, 17, 153, 0.6)" : "rgba(0, 0, 0, 0.1)"}
                     strokeWidth={canComm ? "3" : "1"}
+                    markerEnd={canComm ? "url(#arrowhead)" : ""}
                     className={canComm ? "active-link" : ""}
                   />
                 );
@@ -581,6 +612,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                 stroke="#ff4444"
                 strokeWidth="4"
                 strokeDasharray="10,5"
+                markerEnd="url(#arrowhead-active)"
                 className="communication-active"
               />
             )}
@@ -595,16 +627,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
                     width="50"
                     height="50"
                     fill={agent.color}
-                    stroke="#000"
-                    strokeWidth="2"
                     className="agent-node"
                   />
                 ) : (
                   <circle
                     r="25"
                     fill={agent.color}
-                    stroke="#000"
-                    strokeWidth="2"
                     className="agent-node"
                   />
                 )}

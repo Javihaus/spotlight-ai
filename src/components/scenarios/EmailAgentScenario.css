@@ -164,7 +164,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid #000;
+  border: none; /* Removed black border */
 }
 
 /* Communication Animation */
@@ -235,11 +235,16 @@
 }
 
 .pro-control-btn:hover:not(:disabled) {
-  background: #3c1199;
-  color: #fff;
-  border-color: #3c1199;
+  background: #fff;
+  color: #000;
+  border-color: rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(60, 17, 153, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pro-control-btn:hover:not(:disabled) svg {
+  color: rgb(60, 17, 153); /* Blue icon on hover */
+  transform: scale(1.15); /* 15% size increase */
 }
 
 .pro-control-btn:disabled {
@@ -249,18 +254,24 @@
 }
 
 .pro-control-btn.active {
-  background: #3c1199;
-  border-color: #3c1199;
-  color: white;
+  background: #f0f0f0;
+  border-color: rgba(0, 0, 0, 0.2);
+  color: #000;
+}
+
+.pro-control-btn.active svg {
+  color: rgb(60, 17, 153);
+  transform: scale(1.1);
 }
 
 .pro-control-btn.active:hover {
-  background: #3c1199;
-  box-shadow: 0 8px 20px rgba(60, 17, 153, 0.4);
+  background: #f0f0f0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .pro-control-btn svg {
-  font-size: 0.7rem; /* Further reduced icon size for single row */
+  font-size: 1rem; /* Increased icon size */
+  transition: all 0.3s ease;
 }
 
 .agent-workspace {
