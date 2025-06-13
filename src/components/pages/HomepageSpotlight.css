@@ -346,7 +346,7 @@
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  color: #000;
+  color: #000 !important;
   margin-bottom: 1rem;
   font-family: 'Neue Haas Display Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
