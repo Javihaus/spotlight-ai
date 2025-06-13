@@ -346,13 +346,26 @@
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.2;
-  color: #000;
+  color: #000 !important;
   margin-bottom: 1rem;
   font-family: 'Neue Haas Display Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: none;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-  background-clip: initial;
+  background: none !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  background-clip: initial !important;
+  text-fill-color: initial !important;
+}
+
+/* More specific selector to override any inherited gradient styles */
+.three-acts-preview .section-header .section-title,
+.homepage-spotlight .section-title {
+  color: #000 !important;
+  background: transparent !important;
+  background-image: none !important;
+  -webkit-background-clip: initial !important;
+  -webkit-text-fill-color: #000 !important;
+  background-clip: initial !important;
 }
 
 .section-subtitle {
