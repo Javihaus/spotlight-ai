@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TfiControlPlay, TfiControlStop, TfiReload } from 'react-icons/tfi';
 import './EmailAgentScenario.css';
@@ -93,6 +93,12 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   const [agentStates, setAgentStates] = useState(agents);
   const [showCayleyExplanation, setShowCayleyExplanation] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const isPlayingRef = useRef(false);
+  
+  // Keep ref in sync with state
+  useEffect(() => {
+    isPlayingRef.current = isPlaying;
+  }, [isPlaying]);
   const [simulationComplete, setSimulationComplete] = useState(false);
   const [communicationMetrics, setCommunicationMetrics] = useState({
     efficiency: 0,
@@ -190,8 +196,8 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
   }, [communicationRadius, agentStates, calculateCommunicationMetrics]);
 
   const startSimulation = useCallback(async () => {
-    console.log('Play button clicked, isPlaying:', isPlaying);
-    if (isPlaying) return; // Prevent multiple simultaneous runs
+    console.log('Play button clicked, isPlaying:', isPlayingRef.current);
+    if (isPlayingRef.current) return; // Prevent multiple simultaneous runs
     
     setIsPlaying(true);
     setSimulationComplete(false);
@@ -209,21 +215,21 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       addCommunication('reader', 'user', 'Network initialized. User interface ready. Beginning email scan...', 'analysis');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       // Step 2: Scanning emails
       setCurrentStep(2);
       addCommunication('reader', 'reader', 'Scanning incoming email queue... 4 emails detected', 'analysis');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       // Step 3: Parsing headers
       setCurrentStep(3);
       addCommunication('reader', 'reader', 'Parsing email headers and extracting metadata...', 'analysis');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       // Step 4: Reader → Manager communication
       setCurrentStep(4);
@@ -231,24 +237,24 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       addCommunication('reader', 'manager', 'Reporting: 4 emails detected - 1 critical, 1 high, 1 medium, 1 low priority', 'data_transfer');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       // Step 5: Manager → Reader request
       setCurrentStep(5);
       addCommunication('manager', 'reader', 'Requesting detailed parsing of all email content for processing', 'coordination');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       // Step 6: Reader → Classifier communication
       setCurrentStep(6);
       updateAgentStatus('classifier', 'active');
       
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
       
       for (let email of emails) {
-        if (!isPlaying) return;
+        if (!isPlayingRef.current) return;
         await delay(2000);
         addCommunication('reader', 'classifier', 
           `Email parsed: "${email.subject}" from ${email.from}. Content: ${email.content.length} chars`, 
@@ -261,14 +267,14 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       addCommunication('classifier', 'classifier', 'Analyzing semantic content, keywords, and contextual urgency...', 'analysis');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 8: Priority extraction
       setCurrentStep(8);
       addCommunication('classifier', 'classifier', 'Extracting priority signals: revenue impact, deadlines, sender authority...', 'analysis');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 9: Classifier → Manager
       setCurrentStep(9);
@@ -281,7 +287,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       ];
 
       for (let classification of classifications) {
-        if (!isPlaying) return;
+        if (!isPlayingRef.current) return;
         await delay(2000);
         const email = emails.find(e => e.id === classification.emailId);
         addCommunication('classifier', 'manager',
@@ -295,7 +301,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       addCommunication('manager', 'manager', 'Evaluating response strategies and escalation priorities...', 'synthesis');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 11: Manager → User escalation
       setCurrentStep(11);
@@ -303,63 +309,63 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       addCommunication('manager', 'user', 'URGENT ESCALATION: Server outage affecting revenue - immediate attention required', 'escalation');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 12: User → Manager confirmation
       setCurrentStep(12);
       addCommunication('user', 'manager', 'Escalation acknowledged. Initiating emergency response protocol.', 'response');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 13: Manager → Classifier re-evaluation request
       setCurrentStep(13);
       addCommunication('manager', 'classifier', 'Please re-evaluate medium priority items for potential batch processing', 'coordination');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 14: Classifier → Manager confirmation
       setCurrentStep(14);
       addCommunication('classifier', 'manager', 'Re-evaluation complete. Medium priority items confirmed for standard processing', 'data_transfer');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 15: Manager generating responses
       setCurrentStep(15);
       addCommunication('manager', 'manager', 'Generating automated responses for low-priority communications...', 'synthesis');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 16: Manager → Reader verification request
       setCurrentStep(16);
       addCommunication('manager', 'reader', 'Please verify accuracy of generated response templates', 'coordination');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 17: Reader → Manager verification
       setCurrentStep(17);
       addCommunication('reader', 'manager', 'Response templates verified. Grammar and tone appropriate for recipients', 'response');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 18: Manager → User final report
       setCurrentStep(18);
       addCommunication('manager', 'user', 'Status Report: 1 escalated, 2 auto-responded, 1 queued. System efficiency: 94%', 'report');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 19: User → Manager acknowledgment
       setCurrentStep(19);
       addCommunication('user', 'manager', 'Report received and processed. System performance satisfactory. Thank you.', 'response');
 
       await delay(8000);
-      if (!isPlaying) return;
+      if (!isPlayingRef.current) return;
 
       // Step 20: Final coordination (index 19 = step 20)
       setCurrentStep(19);
@@ -382,7 +388,7 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
       console.error('Simulation error:', error);
       setIsPlaying(false);
     }
-  }, [isPlaying, emails, onComplete]);
+  }, [emails, onComplete]);
 
   const stopSimulation = () => {
     console.log('Stop button clicked');
@@ -402,13 +408,14 @@ const EmailAgentScenario = ({ isRunning, onComplete, communicationRadius, onRadi
 
   // Auto-restart when radius changes
   useEffect(() => {
-    if (isPlaying) {
+    if (isPlayingRef.current) {
       setIsPlaying(false);
       setTimeout(() => {
         startSimulation();
       }, 500);
     }
-  }, [communicationRadius, isPlaying, startSimulation]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [communicationRadius]);
 
   // Calculate real AI metrics matching GeometricFoundation
   const calculateRealMetrics = useCallback(() => {
