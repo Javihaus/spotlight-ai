@@ -33,18 +33,20 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <h2>Our Mission</h2>
-            <p>
-              Most people think agentic AI is just smarter chatbots or better automation. 
-              This misconception limits our ability to build, deploy, and understand truly 
-              intelligent systems. We believe in the power of interactive experience to 
-              transform understanding from surface-level familiarity to mathematical intuition.
-            </p>
-            
-            <p>
-              Through our three-act experience, we guide you from common misconceptions 
-              to the geometric necessity that drives real agent coordination. This isn't 
-              just education—it's transformation that changes how you approach AI systems.
-            </p>
+            <div className="mission-highlight">
+              <p>
+                Most people think agentic AI is just smarter chatbots or better automation. 
+                This misconception limits our ability to build, deploy, and understand truly 
+                intelligent systems. We believe in the power of interactive experience to 
+                transform understanding from surface-level familiarity to mathematical intuition.
+              </p>
+              
+              <p>
+                Through our three-act experience, we guide you from common misconceptions 
+                to the geometric necessity that drives real agent coordination. This isn't 
+                just education—it's transformation that changes how you approach AI systems.
+              </p>
+            </div>
           </motion.div>
         </div>
       </section>
